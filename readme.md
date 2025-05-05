@@ -1,52 +1,72 @@
 [![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-22041afd0340ce965d47ae6ef1cefeee28c7c493a6346c4f15d667ab976d596c.svg)](https://classroom.github.com/a/tvZJeQ95)
-# Name der App
 
-**Füge hier einen kurzen, knackigen Slogan ein, um deine App zu bewerben.**
+# Lost & Found – "Finde, was verloren ging."
 
-Beschreibe hier in ein paar Sätzen, was deine App bietet.
+**Du hast etwas verloren oder gefunden? Unsere App verbindet Menschen, um verlorene Dinge wiederzufinden. Schnell, lokal und anonym.**
 
-Für wen ist sie geeignet? Welches Problem löst sie? Was macht deine App anders/besser als andere Apps?
-Vermeide es, hier allzusehr in technische Details zu gehen.
+**Lost & Found** ist eine schlanke Android-App, mit der du Gegenstände als *verloren* oder *gefunden* melden kannst. Du lädst ein Foto hoch, beschreibst den Gegenstand, gibst den Fund-/Verlustort an und hilfst damit anderen, ihre Sachen wiederzufinden.
 
+### 🎯 Für wen?
+Für ehrliche Finder:innen, verzweifelte Verlierer:innen – und alle, die gern helfen.
 
-## Design
-Füge hier am Ende die Screenshots deiner App ein.
+### ❓ Was macht die App besonders?
+- 💬 Klare Fokussierung auf einen Zweck – ohne Werbung, ohne Ablenkung  
+- 📍 Standortbasiert & visuell – einfach melden, einfach finden  
+- 🔐 Sicherer Login via Firebase  
+- 🎨 Intuitive Bedienung dank moderner Architektur und sauberem Design
 
-<p>
-  <img src="./img/screen1.png" width="200">
-  <img src="./img/screen2.png" width="200">
-  <img src="./img/screen3.png" width="200">
-</p>
+---
 
+## 📲 Features
 
-## Features
-Hier kommen alle Features rein, welche deine App bietet.
+-  📸 Gegenstand melden (Foto, Beschreibung, Standort, Zeit)
+-  🔐 Login / Registrierung via Firebase
+-  📍 Standortabfrage (GPS oder manuelle Eingabe)
+-  🗂️ Liste mit Filter (Verloren / Gefunden / Zeit)
+-  🧭 Navigation (Login → Dashboard → Details → Neue Meldung)
+-  💾 Datenspeicherung in Firestore
+-  🔎 API-Integration: Reverse-Geocoding (Ort aus Koordinaten)
+-  🛡️ Fehlerhandling bei Login, Upload & Netzwerk
+-  🧪 Testdaten, um die App zu demonstrieren
+-  🗨️ Kommentare unter Meldungen
+-  🌐 Mehrsprachigkeit (DE/EN)
 
-**Tipp: Du kannst diese Punkte mit der Zeit abhaken, sodass am Ende eine vollständige Liste entsteht.**
+---
 
-- [x] Feature 1
-- [x] Feature 2
-- [ ] ...
+## 🛠 Technischer Aufbau
 
+### 🧱 Projektstruktur & Architektur
+Die App folgt dem **MVVM-Pattern** mit **Repository Layer**, um eine saubere Trennung von Logik, UI und Datenzugriff zu gewährleisten.  
+Die Navigation erfolgt mit der Jetpack Navigation Component, und UI-Elemente sind in wiederverwendbare **Komponenten** ausgelagert.
 
-## Technischer Aufbau
+### 💾 Datenspeicherung
+Die App nutzt **Firebase Firestore** zur Speicherung von Meldungen und **Firebase Auth** für sichere Nutzeranmeldung.  
+Gründe für die Wahl:
+- Cloudbasiert & skalierbar
+- Echtzeit-Updates
+- Offline-Support mit automatischer Synchronisierung
 
-#### Projektaufbau
-Eine kurze Beschreibung deiner Ordnerstruktur und Architektur (MVVM, Repositories) um Außenstehenden zu helfen, sich in deinem Projekt zurecht zu finden.
+### 🌐 API Calls
+Für Standortdaten wird eine Reverse-Geocoding-API (z. B. **OpenCage Geocoder**) verwendet.  
+Die Anbindung erfolgt über **Retrofit** und **Moshi** für JSON-Verarbeitung.
 
-#### Datenspeicherung
-Welche Daten speicherst du? Wo und wie (Firebase, Core Data)? Erkläre hier auch, warum du den jeweiligen Dienst nutzt (offline-first, Sync usw.).
+### 📦 Verwendete Libraries
+- 🔥 Firebase Auth & Firestore  
+- 📡 Retrofit & Moshi  
+- 📍 Google Maps / Location Services  
+- 🧭 Jetpack Navigation  
+- 🧪 ggf. Room für spätere lokale Speicherung
 
-#### API Calls
-Welche APIs verwendest du?
+---
 
-#### 3rd-Party Frameworks
-Verwendest du Frameworks/Libraries, die nicht von dir stammen?
+## 🔮 Ausblick – Geplante Erweiterungen
 
+✨ Die Basis steht – aber Lost & Found soll weiter wachsen. Hier ein Blick in die Zukunft:
 
-## Ausblick
-Beschreibe hier, wo die Reise nach deinem Praxisprojekt hin geht. Was möchtest du in Zukunft noch ergänzen?
-
-- [ ] Geplantes Feature 1
-- [ ] Geplantes Feature 2
-- [ ] ...
+- 🚨 **Push-Benachrichtigungen**: Lass dich benachrichtigen, wenn ein passender Fund in deiner Nähe gemeldet wird.
+- 🗺️ **Kartendarstellung**: Alle Meldungen direkt auf einer Map anzeigen – visuelle Suche wird einfacher.
+- 🛡️ **Admin-Modus**: Unangemessene oder doppelte Inhalte moderieren.
+- 🧑‍🤝‍🧑 **Mehr Interaktion**: Bewertungen, Nachrichten oder Dankes-Funktion.
+- 🌓 **Dark Mode**: Für angenehmes Browsen auch nachts.
+- 📱 **iOS-Port (Kotlin Multiplatform)**: Damit niemand ausgeschlossen ist.
+- 🌐 **Internationalisierung (DE/EN/...)**: Damit auch Touristen verlorene Dinge melden können.
