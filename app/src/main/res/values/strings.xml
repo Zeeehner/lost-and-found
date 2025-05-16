@@ -1,3 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">AndroidAbschlussprojekt</string>
+    <!-- Allgemein -->
+    <string name="app_name">Lost &amp; Found</string>
+    <string name="back">Zurück</string>
+    <string name="map">Karte</string>
+    <string name="new_entry">Neuer Eintrag</string>
+
+    <!-- Auth -->
+    <string name="login">Einloggen</string>
+    <string name="register">Registrieren</string>
+    <string name="email">E-Mail</string>
+    <string name="password">Passwort</string>
+    <string name="name">Name</string>
+    <string name="login_prompt">Schon registriert? Login</string>
+    <string name="register_prompt">Noch kein Konto? Registrieren</string>
+    <string name="login_failed">Login fehlgeschlagen. Bitte überprüfe deine Anmeldedaten.</string>
+    <string name="registration_failed">Registrierung fehlgeschlagen. Bitte versuche es erneut.</string>
+    <string name="registration_failed_with_reason">Registrierung fehlgeschlagen: %1$s</string>
+    <string name="error_email_in_use">Diese E-Mail-Adresse wird bereits verwendet.</string>
+    <string name="error_weak_password">Das Passwort ist zu schwach. Bitte wähle ein stärkeres Passwort.</string>
+    <string name="error_invalid_email">Die E-Mail-Adresse ist ungültig.</string>
+    <string name="error_user_not_found">Kein Benutzer mit dieser E-Mail-Adresse gefunden.</string>
+    <string name="error_wrong_password">Falsches Passwort.</string>
+    <string name="error_network">Netzwerkfehler. Bitte überprüfe deine Internetverbindung.</string>
+    <string name="error_auth_generic">Authentifizierungsfehler: %1$s</string>
+
+
+    <!-- Eintrag -->
+    <string name="title">Titel</string>
+    <string name="description">Beschreibung</string>
+    <string name="status">Status</string>
+    <string name="select_image">Bild auswählen</string>
+    <string name="create_entry">Eintrag erstellen</string>
+    <string name="entry_created">Eintrag erstellt</string>
+    <string name="entry_failed">Fehler beim Speichern</string>
+    <string name="missing_image">Bitte ein Bild auswählen</string>
+    <string name="filter_status">Filter nach Status:</string>
+
+    <!-- Einstellungen -->
+    <string name="settings">Einstellungen</string>
+    <string name="dark_mode">Dark Mode</string>
+    <string name="dark_mode_sub">Dunklen Modus aktivieren</string>
+    <string name="location_permission">Standort</string>
+    <string name="location_permission_sub">Erlaube App den Zugriff auf deinen Standort</string>
+    <string name="current_location">Aktueller Standort: %1$s</string>
+    <string name="update_location">Standort aktualisieren</string>
+    <string name="notification_permission">Benachrichtigungen</string>
+    <string name="notification_permission_sub">Erlaube App Benachrichtigungen zu senden</string>
+    <string name="allow">Erlauben</string>
+    <string name="permission_granted">Berechtigungen erteilt</string>
+    <string name="permission_denied">Berechtigungen verweigert</string>
+    <string name="location_not_available">Nicht verfügbar</string>
+
+    <!-- Konto -->
+    <string name="account">Konto</string>
+    <string name="logout">Abmelden</string>
+    <string name="logout_confirm">Möchtest du dich wirklich abmelden?</string>
+    <string name="logout_success">Erfolgreich abgemeldet</string>
+    <string name="cancel">Abbrechen</string>
+    <string name="app_version">App-Version: %1$s</string>
+
+    <!-- Info -->
+    <string name="info">Info</string>
+
+    <!-- Listenstatus -->
+    <string name="no_items">Keine Einträge vorhanden</string>
+    <string name="add_item_hint">Füge einen neuen Gegenstand mit dem Plus-Button unten rechts hinzu.</string>
+    <string name="no_results_for_query">Keine Ergebnisse für "%1$s"</string>
+    <string name="no_results_for_filter">Keine %1$s Gegenstände gefunden</string>
+
+    <!-- LostItemListScreen Erweiterung -->
+    <string name="search_placeholder">Suchen...</string>
+    <string name="clear_search">Suche löschen</string>
+    <string name="screen_title">Lost &amp; Found</string>
+    <string name="add_entry_description">Neuen Eintrag hinzufügen</string>
+    <string name="filter_all">Alle</string>
+    <string name="filter_lost">Verloren</string>
+    <string name="filter_found">Gefunden</string>
+
+    <string name="choose_action">Aktion auswählen</string>
+    <string name="choose_action_message">Möchtest du diesen Eintrag bearbeiten oder löschen?</string>
+    <string name="edit">Bearbeiten</string>
+    <string name="delete">Löschen</string>
+
+    <string name="edit_entry">Eintrag bearbeiten</string>
+    <string name="save">Speichern</string>
+    <string name="entry_updated">Eintrag aktualisiert</string>
+    <string name="entry_update_failed">Fehler beim Aktualisieren</string>
+
+    <string name="details">Details</string>
+    <string name="chat">Chat</string>
+    <string name="write_message">Nachricht schreiben...</string>
+    <string name="send">Senden</string>
+
+    <!-- DetailScreen -->
+    <string name="view_on_map">Auf Karte anzeigen</string>
+    <string name="share">Teilen</string>
+    <string name="share_via">Teilen über</string>
+    <string name="share_item_format">Verlorener Gegenstand: %1$s&#10;&#10;Beschreibung: %2$s&#10;&#10;Gefunden bei: %3$s</string>
+    <string name="unknown_user">Unbekannter Benutzer</string>
+    <string name="unknown_date">Unbekanntes Datum</string>
+    <string name="unknown_location">Unbekannter Ort</string>
+    <string name="coordinates_format">Koordinaten: %1$.6f, %2$.6f</string>
+    <string name="category_label">Kategorie: %1$s</string>
+    <string name="retry">Wiederholen</string>
+    <string name="clear">Löschen</string>
+    <string name="anonymous_user">Anonymer Benutzer</string>
+    <string name="no_messages_yet">Noch keine Nachrichten in diesem Chat.</string>
+    <string name="item_not_found">Gegenstand nicht gefunden</string>
+
+    <!-- ItemDetailCard -->
+    <string name="status_lost">Verloren</string>
+    <string name="status_found">Gefunden</string>
+    <string name="close">Schließen</string>
+    <string name="item_image">Bild des Gegenstands</string>
+    <string name="date">Datum</string>
+    <string name="call">Anrufen</string>
+    <string name="message">Nachricht</string>
+
+    <!-- MapScreen -->
+    <string name="destination">Ziel</string>
+    <string name="direct_selected_location">Direkt ausgewählter Standort</string>
+    <string name="search">Suchen</string>
+
+    <!-- PhneNumberSettingsSection -->
+    <string name="phone_number">Telefonnummer</string>
+    <string name="no_phone_number">Keine Telefonnummer hinterlegt</string>
+    <string name="enter_phone_number">Telefonnummer eingeben</string>
+
+    <!-- OnboardingViewModel -->
+    <string name="invalid_phone_number">Bitte gib eine gültige Telefonnummer ein.</string>
+    <string name="save_failed">Speichern fehlgeschlagen. Bitte versuche es erneut.</string>
+    <string name="onboarding_welcome">Willkommen! 🎉</string>
+    <string name="onboarding_instruction">Lass uns deine Kontaktinformationen einrichten</string>
+    <string name="phone_number_optional">Telefonnummer (optional)</string>
+    <string name="phone_number_placeholder">z.B. +49 151 123456</string>
+    <string name="phone_number_info">Deine Nummer hilft uns, dich bei Fundgegenständen zu kontaktieren.</string>
+    <string name="continue_button">Weiter</string>
+
+
+    <string name="location_permission_needed">Standortberechtigung wird benötigt.</string>
+    <string name="title_too_short">Titel muss mindestens 3 Zeichen lang sein</string>
+    <string name="select_picture">Bild auswählen</string>"
+
+    <string name="location">Ort</string>
+    <string name="latitude">Breitengrad</string>
+    <string name="longitude">Längengrad</string>
+    <string name="more">Mehr</string>
+    <string name="less">Weniger</string>
+    <string name="set_coordinates_automatically">Koordinaten automatisch setzen</string>
+    <string name="set_location_automatically">Ort automatisch setzen</string>
+
+    <string name="nav_home">Funde</string>
+    <string name="nav_settings">Einstellungen</string>
+
 </resources>

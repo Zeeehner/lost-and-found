@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "5019001541",
+    "project_id": "lostundfound-d05f0",
+    "storage_bucket": "lostundfound-d05f0.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:5019001541:android:6127942a9a091ed392c6ac",
+        "android_client_info": {
+          "package_name": "de.syntax_institut.androidabschlussprojekt"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDyGAHyalwOC1tQHNxduGcWwL0u2VA09Ok"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
