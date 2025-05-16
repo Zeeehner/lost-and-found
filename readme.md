@@ -34,7 +34,7 @@ Für ehrliche Finder:innen, verzweifelte Verlierer:innen – und alle, die gern 
 ## 📸 Screenshots
 
 <p align="center">
-  <img src="example_login.png" alt="Login Screen" width="200"/>
+  <img src="exampleLogin.png" alt="Login Screen" width="200"/>
 </p>
 
 ---
