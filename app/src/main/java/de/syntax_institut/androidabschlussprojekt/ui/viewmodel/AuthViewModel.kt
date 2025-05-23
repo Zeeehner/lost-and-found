@@ -46,6 +46,9 @@ class AuthViewModel(private val repository: AuthRepository) : ViewModel() {
     val currentUser: FirebaseUser?
         get() = FirebaseAuth.getInstance().currentUser
 
+    fun getCurrentUserName(): String? = currentUser?.displayName
+    fun getCurrentUserEmail(): String? = currentUser?.email
+    fun getCurrentUserId(): String? = currentUser?.uid
 
     init {
         if (currentUser != null) {

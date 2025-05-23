@@ -13,11 +13,3 @@ data class Item(
     val imageUrl: String? = null,
     val timestamp: Long = System.currentTimeMillis()
 )
-
-// Dummy-Datenmodell
-data class LostItem(
-    val id: String = "",
-    val title: String = "",
-    val description: String = "",
-    val status: String = "" // "lost" oder "found"
-)

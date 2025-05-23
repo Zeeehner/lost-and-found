@@ -1,6 +1,8 @@
 package de.syntax_institut.androidabschlussprojekt.ui.screen
 
 import android.widget.Toast
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -13,12 +15,18 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import org.koin.androidx.compose.koinViewModel
 import de.syntax_institut.androidabschlussprojekt.R
+import de.syntax_institut.androidabschlussprojekt.ui.component.settings.DarkModeSetting
+import de.syntax_institut.androidabschlussprojekt.ui.component.settings.LocationSection
 import de.syntax_institut.androidabschlussprojekt.ui.component.settings.LogoutButton
 import de.syntax_institut.androidabschlussprojekt.ui.component.settings.LogoutDialog
-import de.syntax_institut.androidabschlussprojekt.ui.navigation.Screen
+import de.syntax_institut.androidabschlussprojekt.ui.component.settings.NotificationPermissionSection
+import de.syntax_institut.androidabschlussprojekt.ui.component.settings.PermissionInfoCard
+import de.syntax_institut.androidabschlussprojekt.ui.component.settings.PhoneNumberSection
+import de.syntax_institut.androidabschlussprojekt.ui.component.settings.ProfileSection
 import de.syntax_institut.androidabschlussprojekt.ui.viewmodel.SettingsViewModel
+import org.koin.androidx.compose.koinViewModel
+import de.syntax_institut.androidabschlussprojekt.ui.navigation.Screen
 
 @Composable
 fun SettingsScreen(
@@ -26,11 +34,41 @@ fun SettingsScreen(
     modifier: Modifier = Modifier,
     viewModel: SettingsViewModel = koinViewModel(),
 ) {
-
-    val context = LocalContext.current
     val uiState by viewModel.uiState.collectAsState()
+    val context = LocalContext.current
+    var showLocationRationale by remember { mutableStateOf(false) }
 
-    // Logout
+    val locationAction: () -> Unit = {
+        viewModel.updateLocation(context)
+    }
+
+    val requestLocationPermissionsLauncher = rememberLauncherForActivityResult(
+        ActivityResultContracts.RequestMultiplePermissions()
+    ) { permissions: Map<String, Boolean> ->
+        if (permissions.values.all { it }) {
+            viewModel.updatePermissionStatus(context, R.string.permission_granted)
+
+            locationAction()
+        } else {
+            viewModel.updatePermissionStatus(context, R.string.permission_denied)
+
+            showLocationRationale = true
+        }
+    }
+
+    val notificationPermissionLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.RequestPermission(),
+        onResult = { isGranted ->
+            if (isGranted) {
+                viewModel.onNotificationPermissionGranted(context)
+                Toast.makeText(context, "Benachrichtigungen aktiviert", Toast.LENGTH_SHORT).show()
+            } else {
+                viewModel.updatePermissionStatus(context, R.string.permission_denied)
+
+            }
+        }
+    )
+
     if (uiState.showLogoutDialog) {
         LogoutDialog(onConfirm = {
             viewModel.logout()
@@ -39,7 +77,6 @@ fun SettingsScreen(
             navController.navigate(Screen.Login.route) { popUpTo(0) { inclusive = true } }
         }, onDismiss = { viewModel.dismissLogoutDialog() })
     }
-
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -47,23 +84,38 @@ fun SettingsScreen(
             .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
+        ProfileSection(viewModel.authViewModel, uiState.cityName)
         Divider()
         Text(
             stringResource(R.string.settings),
             style = MaterialTheme.typography.titleMedium,
             fontWeight = FontWeight.Bold
         )
-        Spacer(modifier = Modifier.weight(1f))
+
+        DarkModeSetting(darkMode = uiState.darkMode, onToggle = { viewModel.toggleDarkMode() })
+        LocationSection(
+            viewModel,
+            requestLocationPermissionsLauncher = requestLocationPermissionsLauncher
+        )
+        NotificationPermissionSection(
+            viewModel = viewModel,
+            context = context,
+            notificationPermissionLauncher = notificationPermissionLauncher
+        )
+        if (uiState.permissionStatus.isNotEmpty()) {
+            PermissionInfoCard(uiState.permissionStatus)
+        }
         Divider(modifier = Modifier.padding(vertical = 8.dp))
         Text(
             stringResource(R.string.account),
             style = MaterialTheme.typography.titleMedium,
             fontWeight = FontWeight.Bold
         )
+        Spacer(modifier = Modifier.weight(1f))
+
+        PhoneNumberSection(authViewModel = viewModel.authViewModel)
 
         LogoutButton(onClick = { viewModel.showLogoutDialog() })
-
-        Spacer(modifier = Modifier.weight(1f))
 
         Row(
             modifier = Modifier.align(Alignment.CenterHorizontally)

@@ -1,57 +1,84 @@
 package de.syntax_institut.androidabschlussprojekt.ui.screen
 
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
+import org.koin.androidx.compose.koinViewModel
 import androidx.compose.runtime.*
-import androidx.compose.ui.unit.dp
-import de.syntax_institut.androidabschlussprojekt.data.local.LostItem
-import de.syntax_institut.androidabschlussprojekt.ui.component.list.ItemCard
-import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.ExperimentalMaterial3Api
+import de.syntax_institut.androidabschlussprojekt.data.local.Item
+import de.syntax_institut.androidabschlussprojekt.ui.component.list.ItemActionDialog
+import de.syntax_institut.androidabschlussprojekt.ui.component.list.ItemListContent
+import de.syntax_institut.androidabschlussprojekt.ui.component.list.ItemListTopBar
+import de.syntax_institut.androidabschlussprojekt.ui.viewmodel.AuthViewModel
+import de.syntax_institut.androidabschlussprojekt.ui.viewmodel.LostItemViewModel
 
-@OptIn(ExperimentalMaterial3Api::class)
+
 @Composable
-fun LostItemListScreen(
-    navController: NavController) {
+fun ItemListScreen(
+    navController: NavController,
+    viewModel: LostItemViewModel = koinViewModel(),
+    authViewModel: AuthViewModel = koinViewModel()
+) {
+    val lostItems by viewModel.items.collectAsState()
+    val currentUserId = authViewModel.currentUser?.uid
+    var selectedFilter by remember { mutableStateOf("all") }
     var searchQuery by remember { mutableStateOf("") }
-
-    // Dummy-Daten
-    val lostItems = remember {
-        listOf(
-            LostItem("1", "Schlüssel", "Silberner Haustürschlüssel", "lost"),
-            LostItem("2", "Handy", "Schwarzes Samsung Galaxy", "found"),
-            LostItem("3", "Rucksack", "Blauer Eastpak Rucksack", "lost")
-        )
-    }
+    var showSearch by remember { mutableStateOf(false) }
+    var showItemActionDialog by remember { mutableStateOf(false) }
+    var selectedItem by remember { mutableStateOf<Item?>(null) }
 
     Scaffold(
         topBar = {
-            TopAppBar(
-                title = { Text("Lost & Found") }
+            ItemListTopBar(
+                showSearch = showSearch,
+                searchQuery = searchQuery,
+                onToggleSearch = { showSearch = !showSearch },
+                onSearchChange = { searchQuery = it },
+                onClearSearch = { searchQuery = "" },
+                onNavigateToMap = { navController.navigate("map") }
             )
         },
-    ) { padding ->
-        LazyColumn(
-            contentPadding = padding,
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(16.dp)
-        ) {
-            items(lostItems.filter { it.title.contains(searchQuery, ignoreCase = true) }) { item ->
-                ItemCard(item)
-                Spacer(modifier = Modifier.height(8.dp))
+        floatingActionButton = {
+            FloatingActionButton(onClick = { navController.navigate("create") }) {
+                Icon(Icons.Default.Add, contentDescription = null)
             }
         }
+    ) { padding ->
+        ItemListContent(
+            items = lostItems,
+            searchQuery = searchQuery,
+            selectedFilter = selectedFilter,
+            onFilterChange = { selectedFilter = it },
+            onItemClick = { navController.navigate("detail/${it.id}") },
+            onItemLongClick = {
+                selectedItem = it
+                showItemActionDialog = true
+            },
+            currentUserId = currentUserId,
+            modifier = Modifier.padding(padding)
+        )
+    }
+
+    if (showItemActionDialog && selectedItem != null) {
+        ItemActionDialog(
+            onDismiss = { showItemActionDialog = false },
+            onEdit = {
+                navController.navigate("edit/${selectedItem!!.id}")
+                showItemActionDialog = false
+            },
+            onDelete = {
+                viewModel.deleteItem(selectedItem!!.id)
+                showItemActionDialog = false
+            }
+        )
     }
 }

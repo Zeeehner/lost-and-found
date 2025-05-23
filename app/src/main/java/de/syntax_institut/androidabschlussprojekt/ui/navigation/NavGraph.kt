@@ -9,6 +9,7 @@ import de.syntax_institut.androidabschlussprojekt.ui.screen.LoginScreen
 import de.syntax_institut.androidabschlussprojekt.ui.screen.OnboardingScreen
 import de.syntax_institut.androidabschlussprojekt.ui.screen.SettingsScreen
 import androidx.navigation.compose.composable
+import de.syntax_institut.androidabschlussprojekt.ui.screen.ItemCreateScreen
 
 @Composable
 fun NavGraph(modifier: Modifier = Modifier) {
@@ -47,12 +48,17 @@ fun NavGraph(modifier: Modifier = Modifier) {
             )
         }
 
-        // 2️⃣ MainNavigation (mit BottomNav)
+        // 2️⃣ MainNavigation (BottomNav)
         composable(Screen.List.route) {
             MainNavigation(rootNavController)
         }
         composable(Screen.Settings.route) {
             SettingsScreen(rootNavController)
+        }
+
+        // 3️⃣ CreateNavigation
+        composable(Screen.Create.route) {
+            ItemCreateScreen(rootNavController)
         }
     }
 }
