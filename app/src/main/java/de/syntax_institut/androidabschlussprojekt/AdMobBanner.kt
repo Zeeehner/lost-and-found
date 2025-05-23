@@ -12,7 +12,7 @@ import androidx.compose.ui.platform.LocalContext
 fun AdMobBanner(modifier: Modifier = Modifier) {
     val context = LocalContext.current
     val adView = remember {
-        AdView(context).apply { adUnitId = "ca-app-pub-3940256099942544/6300978111"
+        AdView(context).apply { adUnitId = "ca-app-pub-8139090832536639/6363342729"
         }
     }
     val adSize = remember {
