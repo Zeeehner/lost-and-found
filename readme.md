@@ -31,6 +31,14 @@ Für ehrliche Finder:innen, verzweifelte Verlierer:innen – und alle, die gern 
 
 ---
 
+## 📸 Screenshots
+
+<p align="center">
+  <img src="img/exampleLogin.png" alt="Login Screen" width="200"/>
+</p>
+
+---
+
 ## 🛠 Technischer Aufbau
 
 ### 🧱 Projektstruktur & Architektur
