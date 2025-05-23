@@ -87,59 +87,66 @@ fun ItemCreateContent(
             )
         }
     ) { padding ->
-        Column(
-            modifier = Modifier
-                .padding(padding)
-                .fillMaxSize()
-                .verticalScroll(scrollState)
-                .padding(16.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
+        Box(modifier = Modifier
+            .fillMaxSize()
+            .padding(padding)
         ) {
-            ItemStatusSelector(
-                status = formState.status,
-                onStatusChange = { viewModel.updateField { copy(status = it) } }
-            )
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(bottom = 60.dp)
+                    .verticalScroll(scrollState)
+                    .padding(16.dp),
+                verticalArrangement = Arrangement.spacedBy(16.dp)
+            ) {
+                ItemStatusSelector(
+                    status = formState.status,
+                    onStatusChange = { viewModel.updateField { copy(status = it) } }
+                )
 
-            ItemImagePicker(bitmap = bitmap, onClick = {
-                imagePickerLauncher.launch("image/*")
-            })
+                ItemImagePicker(bitmap = bitmap, onClick = {
+                    imagePickerLauncher.launch("image/*")
+                })
 
-            LostItemForm(
-                title = formState.title,
-                description = formState.description,
-                onTitleChange = { viewModel.updateField { copy(title = it) } },
-                onDescChange = { viewModel.updateField { copy(description = it) } }
-            )
+                LostItemForm(
+                    title = formState.title,
+                    description = formState.description,
+                    onTitleChange = { viewModel.updateField { copy(title = it) } },
+                    onDescChange = { viewModel.updateField { copy(description = it) } }
+                )
 
-            ItemLocationSection(
-                location = formState.location,
-                latitude = formState.latitude,
-                longitude = formState.longitude,
-                onLocationChange = { viewModel.updateField { copy(location = it) } },
-                onLatChange = { viewModel.updateField { copy(latitude = it) } },
-                onLongChange = { viewModel.updateField { copy(longitude = it) } },
-                showDetails = formState.showLocationDetails,
-                onToggleDetails = { viewModel.toggleLocationDetails() },
-                onAutoLocate = { viewModel.fetchCurrentLocation(context) }
-            )
+                ItemLocationSection(
+                    location = formState.location,
+                    latitude = formState.latitude,
+                    longitude = formState.longitude,
+                    onLocationChange = { viewModel.updateField { copy(location = it) } },
+                    onLatChange = { viewModel.updateField { copy(latitude = it) } },
+                    onLongChange = { viewModel.updateField { copy(longitude = it) } },
+                    showDetails = formState.showLocationDetails,
+                    onToggleDetails = { viewModel.toggleLocationDetails() },
+                    onAutoLocate = { viewModel.fetchCurrentLocation(context) }
+                )
+
+                Button(
+                    onClick = {
+                        viewModel.submit(
+                            userId = authViewModel.getCurrentUserId() ?: "unknown",
+                            userName = currentUserName
+                        ) {}
+                    },
+                    enabled = !isLoading,
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text(stringResource(R.string.save))
+                }
+            }
+
             AdMobBanner(
                 modifier = Modifier
+                    .align(Alignment.BottomCenter)
                     .fillMaxWidth()
                     .height(50.dp)
             )
-
-            Button(
-                onClick = {
-                    viewModel.submit(
-                        userId = authViewModel.getCurrentUserId() ?: "unknown",
-                        userName = currentUserName
-                    ) {}
-                },
-                enabled = !isLoading,
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Text(stringResource(R.string.save))
-            }
         }
     }
 }

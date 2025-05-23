@@ -48,11 +48,9 @@ fun SettingsScreen(
     ) { permissions: Map<String, Boolean> ->
         if (permissions.values.all { it }) {
             viewModel.updatePermissionStatus(context, R.string.permission_granted)
-
             locationAction()
         } else {
             viewModel.updatePermissionStatus(context, R.string.permission_denied)
-
             showLocationRationale = true
         }
     }
@@ -65,71 +63,62 @@ fun SettingsScreen(
                 Toast.makeText(context, "Benachrichtigungen aktiviert", Toast.LENGTH_SHORT).show()
             } else {
                 viewModel.updatePermissionStatus(context, R.string.permission_denied)
-
             }
         }
     )
 
     if (uiState.showLogoutDialog) {
-        LogoutDialog(onConfirm = {
-            viewModel.logout()
-            Toast.makeText(context, context.getString(R.string.logout_success), Toast.LENGTH_SHORT)
-                .show()
-            navController.navigate(Screen.Login.route) { popUpTo(0) { inclusive = true } }
-        }, onDismiss = { viewModel.dismissLogoutDialog() })
+        LogoutDialog(
+            onConfirm = {
+                viewModel.logout()
+                Toast.makeText(context, context.getString(R.string.logout_success), Toast.LENGTH_SHORT).show()
+                navController.navigate(Screen.Login.route) { popUpTo(0) { inclusive = true } }
+            },
+            onDismiss = { viewModel.dismissLogoutDialog() }
+        )
     }
-    Column(
-        modifier = modifier
-            .fillMaxSize()
-            .verticalScroll(rememberScrollState())
-            .padding(16.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp)
-    ) {
-        ProfileSection(viewModel.authViewModel, uiState.cityName)
-        Divider()
-        Text(
-            stringResource(R.string.settings),
-            style = MaterialTheme.typography.titleMedium,
-            fontWeight = FontWeight.Bold
-        )
 
-        DarkModeSetting(darkMode = uiState.darkMode, onToggle = { viewModel.toggleDarkMode() })
-        LocationSection(
-            viewModel,
-            requestLocationPermissionsLauncher = requestLocationPermissionsLauncher
-        )
-        NotificationPermissionSection(
-            viewModel = viewModel,
-            context = context,
-            notificationPermissionLauncher = notificationPermissionLauncher
-        )
-        if (uiState.permissionStatus.isNotEmpty()) {
-            PermissionInfoCard(uiState.permissionStatus)
-        }
-        Divider(modifier = Modifier.padding(vertical = 8.dp))
-        Text(
-            stringResource(R.string.account),
-            style = MaterialTheme.typography.titleMedium,
-            fontWeight = FontWeight.Bold
-        )
-        Spacer(modifier = Modifier.weight(1f))
-
-        PhoneNumberSection(authViewModel = viewModel.authViewModel)
-
-        LogoutButton(onClick = { viewModel.showLogoutDialog() })
-
-        Row(
-            modifier = Modifier.align(Alignment.CenterHorizontally)
+    Box(modifier = modifier.fillMaxSize()) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(bottom = 60.dp)
+                .verticalScroll(rememberScrollState())
+                .padding(16.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
+            ProfileSection(viewModel.authViewModel, uiState.cityName)
+            Divider()
+            Text(
+                stringResource(R.string.settings),
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.Bold
+            )
+            DarkModeSetting(darkMode = uiState.darkMode, onToggle = { viewModel.toggleDarkMode() })
+            LocationSection(viewModel, requestLocationPermissionsLauncher)
+            NotificationPermissionSection(viewModel, context, notificationPermissionLauncher)
+            if (uiState.permissionStatus.isNotEmpty()) {
+                PermissionInfoCard(uiState.permissionStatus)
+            }
+            Divider(modifier = Modifier.padding(vertical = 8.dp))
+            Text(
+                stringResource(R.string.account),
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.Bold
+            )
+            PhoneNumberSection(authViewModel = viewModel.authViewModel)
+            LogoutButton(onClick = { viewModel.showLogoutDialog() })
+
             Text(
                 stringResource(R.string.app_version, "1.0.0"),
                 style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)
+                color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f),
+                modifier = Modifier.align(Alignment.CenterHorizontally)
             )
         }
         AdMobBanner(
             modifier = Modifier
-                .align(Alignment.CenterHorizontally)
+                .align(Alignment.BottomCenter)
                 .fillMaxWidth()
                 .height(50.dp)
         )
