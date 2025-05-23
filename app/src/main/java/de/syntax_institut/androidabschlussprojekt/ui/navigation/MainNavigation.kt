@@ -12,7 +12,7 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.*
 import de.syntax_institut.androidabschlussprojekt.R
-import de.syntax_institut.androidabschlussprojekt.ui.screen.ItemListScreen
+import de.syntax_institut.androidabschlussprojekt.ui.screen.ListScreen
 import de.syntax_institut.androidabschlussprojekt.ui.screen.SettingsScreen
 
 sealed class BottomNavScreen(val route: String, val icon: androidx.compose.ui.graphics.vector.ImageVector) {
@@ -42,7 +42,7 @@ fun MainNavigation(rootNavController: NavHostController, modifier: Modifier = Mo
                     startDestination = BottomNavScreen.Home.route
                 ) {
                     composable(BottomNavScreen.Home.route) {
-                        ItemListScreen(rootNavController)
+                        ListScreen(rootNavController)
                     }
                     composable(BottomNavScreen.Settings.route) {
                         SettingsScreen(rootNavController)

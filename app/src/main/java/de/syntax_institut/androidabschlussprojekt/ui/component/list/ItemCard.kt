@@ -62,7 +62,6 @@ fun ItemCard(
                     onClick = onClick,
                     onLongClick = {
                         if (canDelete) {
-                            visible = false
                             onLongClick()
                         }
                     }
@@ -183,4 +182,3 @@ fun ItemCard(
         }
     }
 }
-

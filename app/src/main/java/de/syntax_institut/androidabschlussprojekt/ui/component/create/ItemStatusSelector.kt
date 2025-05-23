@@ -36,7 +36,7 @@ fun ItemStatusSelector(status: String, onStatusChange: (String) -> Unit) {
                     .background(MaterialTheme.colorScheme.surface),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                listOf("Lost", "Found").forEach { option ->
+                listOf("lost", "found").forEach { option ->
                     val isSelected = status == option
                     Box(
                         modifier = Modifier
@@ -45,7 +45,7 @@ fun ItemStatusSelector(status: String, onStatusChange: (String) -> Unit) {
                             .clip(RoundedCornerShape(20.dp))
                             .background(
                                 if (isSelected) {
-                                    if (option == "Lost") MaterialTheme.colorScheme.errorContainer
+                                    if (option == "lost") MaterialTheme.colorScheme.errorContainer
                                     else MaterialTheme.colorScheme.tertiaryContainer
                                 } else MaterialTheme.colorScheme.surface
                             )
@@ -54,7 +54,7 @@ fun ItemStatusSelector(status: String, onStatusChange: (String) -> Unit) {
                     ) {
                         Row(verticalAlignment = Alignment.CenterVertically) {
                             Icon(
-                                imageVector = if (option == "Lost") Icons.Default.Search else Icons.Default.CheckCircle,
+                                imageVector = if (option == "lost") Icons.Default.Search else Icons.Default.CheckCircle,
                                 contentDescription = null
                             )
                             Spacer(modifier = Modifier.width(4.dp))

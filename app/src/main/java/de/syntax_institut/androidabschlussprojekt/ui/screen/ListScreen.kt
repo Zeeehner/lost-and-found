@@ -23,7 +23,7 @@ import de.syntax_institut.androidabschlussprojekt.ui.viewmodel.LostItemViewModel
 
 
 @Composable
-fun ItemListScreen(
+fun ListScreen(
     navController: NavController,
     viewModel: LostItemViewModel = koinViewModel(),
     authViewModel: AuthViewModel = koinViewModel()
@@ -35,6 +35,12 @@ fun ItemListScreen(
     var showSearch by remember { mutableStateOf(false) }
     var showItemActionDialog by remember { mutableStateOf(false) }
     var selectedItem by remember { mutableStateOf<Item?>(null) }
+
+    val filteredItems = when (selectedFilter.lowercase()) {
+        "lost" -> lostItems.filter { it.status.lowercase() == "lost" }
+        "found" -> lostItems.filter { it.status.lowercase() == "found" }
+        else -> lostItems
+    }
 
     Scaffold(
         topBar = {
@@ -54,7 +60,7 @@ fun ItemListScreen(
         }
     ) { padding ->
         ItemListContent(
-            items = lostItems,
+            items = filteredItems,
             searchQuery = searchQuery,
             selectedFilter = selectedFilter,
             onFilterChange = { selectedFilter = it },

@@ -1,3 +1,12 @@
+import java.util.Properties
+import java.io.FileInputStream
+
+val localProperties = Properties()
+val localPropertiesFile = rootProject.file("local.properties")
+if (localPropertiesFile.exists()) {
+    localProperties.load(FileInputStream(localPropertiesFile))
+}
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -19,8 +28,10 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
-        val apiKey: String? = project.findProperty("OPENCAGE_API_KEY") as String?
-        buildConfigField("String", "OPENCAGE_API_KEY", "\"${apiKey}\"")
+        val apiKey: String = localProperties.getProperty("OPENCAGE_API_KEY")
+            ?: throw GradleException("OPENCAGE_API_KEY not found in local.properties")
+
+        buildConfigField("String", "OPENCAGE_API_KEY", "\"$apiKey\"")
     }
 
     buildTypes {
