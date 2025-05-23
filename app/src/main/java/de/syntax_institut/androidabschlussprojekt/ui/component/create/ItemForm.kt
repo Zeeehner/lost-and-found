@@ -1,8 +1,10 @@
 package de.syntax_institut.androidabschlussprojekt.ui.component.create
 
+import android.R.attr.minLines
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Info
@@ -50,7 +52,7 @@ fun LostItemForm(
                 onValueChange = onDescChange,
                 label = { Text(stringResource(R.string.description)) },
                 leadingIcon = { Icon(Icons.Outlined.Info, contentDescription = null) },
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth().heightIn(min = 20.dp),
                 minLines = 3
             )
         }

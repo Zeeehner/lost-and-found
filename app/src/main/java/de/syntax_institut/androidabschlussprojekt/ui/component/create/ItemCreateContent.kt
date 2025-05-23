@@ -15,11 +15,13 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import de.syntax_institut.androidabschlussprojekt.AdMobBanner
 import de.syntax_institut.androidabschlussprojekt.ui.viewmodel.AuthViewModel
 import de.syntax_institut.androidabschlussprojekt.R
 import de.syntax_institut.androidabschlussprojekt.ui.viewmodel.CreateViewModel
@@ -119,6 +121,11 @@ fun ItemCreateContent(
                 showDetails = formState.showLocationDetails,
                 onToggleDetails = { viewModel.toggleLocationDetails() },
                 onAutoLocate = { viewModel.fetchCurrentLocation(context) }
+            )
+            AdMobBanner(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(50.dp)
             )
 
             Button(

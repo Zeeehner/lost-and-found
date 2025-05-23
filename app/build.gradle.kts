@@ -80,6 +80,9 @@ dependencies {
     implementation(libs.google.maps)
     implementation(libs.play.services.location)
 
+    // Google AdMob
+    implementation("com.google.android.gms:play-services-ads:22.6.0")
+
     // Room (Persistence)
     implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.room.ktx)

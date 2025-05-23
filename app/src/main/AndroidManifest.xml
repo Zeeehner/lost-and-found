@@ -3,6 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <!-- Automatisch bei der Installation freigegeben -->
+    <uses-feature
+        android:name="android.hardware.telephony"
+        android:required="false" />
     <uses-permission android:name="android.permission.INTERNET"/>
 
     <!-- Notification -->
@@ -11,6 +14,14 @@
     <!-- Muss explizit vom User freigegeben werden -->
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+
+    <!-- Call Permission -->
+    <uses-permission android:name="android.permission.CALL_PHONE" />
+
+
+    <!-- Permissions -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
         android:name=".di.MyApp"
@@ -23,6 +34,17 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AndroidAbschlussprojekt"
         tools:targetApi="31">
+
+        <!-- Google AdMob App-ID -->
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="ca-app-pub-8139090832536639~3598412735"/>
+
+        <!-- Google Maps API Key -->
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyDa91e0UYipsHmjf7DYRKKmpw4IEKbMdMo" />
+
         <activity
             android:name=".MainActivity"
             android:exported="true"

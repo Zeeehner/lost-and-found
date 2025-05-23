@@ -15,6 +15,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import de.syntax_institut.androidabschlussprojekt.AdMobBanner
 import de.syntax_institut.androidabschlussprojekt.R
 import de.syntax_institut.androidabschlussprojekt.ui.component.settings.DarkModeSetting
 import de.syntax_institut.androidabschlussprojekt.ui.component.settings.LocationSection
@@ -126,5 +127,11 @@ fun SettingsScreen(
                 color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)
             )
         }
+        AdMobBanner(
+            modifier = Modifier
+                .align(Alignment.CenterHorizontally)
+                .fillMaxWidth()
+                .height(50.dp)
+        )
     }
 }
