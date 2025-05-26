@@ -9,7 +9,6 @@ import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import java.util.*
-import kotlin.jvm.java
 
 class PrivateChatRepository {
 
@@ -55,6 +54,8 @@ class PrivateChatRepository {
             userId = message.receiverId,
             userName = receiverName,
             lastMessage = message.message,
+            lastMessageTime = message.timestamp,
+            unreadCount = 0
         )
         firestore.collection("chat_partners")
             .document(message.senderId)
@@ -62,17 +63,23 @@ class PrivateChatRepository {
             .document(message.receiverId)
             .set(senderPartner)
 
-        // 3. ChatPartner für Empfänger aktualisieren
-        val receiverPartner = ChatPartner(
-            userId = message.senderId,
-            userName = senderName,
-            lastMessage = message.message,
-        )
-        firestore.collection("chat_partners")
+        // 3. ChatPartner für Empfänger aktualisieren (unread + 1)
+        val receiverDocRef = firestore.collection("chat_partners")
             .document(message.receiverId)
             .collection("partners")
             .document(message.senderId)
-            .set(receiverPartner)
+
+        receiverDocRef.get().addOnSuccessListener { doc ->
+            val currentUnread = doc.toObject(ChatPartner::class.java)?.unreadCount ?: 0
+            val receiverPartner = ChatPartner(
+                userId = message.senderId,
+                userName = senderName,
+                lastMessage = message.message,
+                lastMessageTime = message.timestamp,
+                unreadCount = currentUnread + 1
+            )
+            receiverDocRef.set(receiverPartner)
+        }
     }
 
     fun getChatPartners(currentUserId: String): Flow<List<ChatPartner>> = callbackFlow {
@@ -80,15 +87,21 @@ class PrivateChatRepository {
             .document(currentUserId)
             .collection("partners")
             .addSnapshotListener { snapshot, _ ->
-                Log.d("PrivateChatRepository", "Snapshot received: ${snapshot?.documents}")
                 val list = snapshot?.toObjects(ChatPartner::class.java) ?: emptyList()
-                Log.d("PrivateChatRepository", "List: $list")
                 trySend(list).isSuccess
             }
 
         awaitClose {
             listener.remove()
         }
+    }
+
+    fun resetUnreadCount(currentUserId: String, partnerId: String) {
+        firestore.collection("chat_partners")
+            .document(currentUserId)
+            .collection("partners")
+            .document(partnerId)
+            .update("unreadCount", 0)
     }
 
     fun stopObserving() {

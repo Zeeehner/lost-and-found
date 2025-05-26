@@ -18,15 +18,14 @@ class PrivateChatViewModel(
     private val _chatPartners = MutableStateFlow<List<ChatPartner>>(emptyList())
     val chatPartners: StateFlow<List<ChatPartner>> = _chatPartners
 
+    val unreadCount: StateFlow<Int> = chatPartners
+        .map { list -> list.sumOf { it.unreadCount } }
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), 0)
+
     fun loadMessages(currentUserId: String, partnerId: String) {
         repository.observeMessages(currentUserId, partnerId) { msgList ->
             _messages.value = msgList
         }
-    }
-
-    override fun onCleared() {
-        super.onCleared()
-        repository.stopObserving()
     }
 
     fun loadChatPartners(currentUserId: String) {
@@ -39,5 +38,14 @@ class PrivateChatViewModel(
 
     fun sendMessage(message: PrivateChatMessage, senderName: String, receiverName: String) {
         repository.sendMessage(message, senderName, receiverName)
+    }
+
+    fun resetUnread(currentUserId: String, partnerId: String) {
+        repository.resetUnreadCount(currentUserId, partnerId)
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        repository.stopObserving()
     }
 }

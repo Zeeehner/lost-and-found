@@ -18,6 +18,7 @@ import de.syntax_institut.androidabschlussprojekt.ui.screen.ListScreen
 import de.syntax_institut.androidabschlussprojekt.ui.screen.PrivateChatListScreen
 import de.syntax_institut.androidabschlussprojekt.ui.screen.SettingsScreen
 import de.syntax_institut.androidabschlussprojekt.ui.viewmodel.AuthViewModel
+import de.syntax_institut.androidabschlussprojekt.ui.viewmodel.PrivateChatViewModel
 import org.koin.androidx.compose.koinViewModel
 
 sealed class BottomNavScreen(val route: String, val icon: ImageVector) {
@@ -43,6 +44,15 @@ fun MainNavigation(rootNavController: NavHostController, modifier: Modifier = Mo
     val authViewModel: AuthViewModel = koinViewModel()
     val currentUserId = authViewModel.currentUser?.uid ?: ""
 
+    val chatViewModel: PrivateChatViewModel = koinViewModel()
+    val unreadCount by chatViewModel.unreadCount.collectAsState()
+
+    LaunchedEffect(currentUserId) {
+        if (currentUserId.isNotEmpty()) {
+            chatViewModel.loadChatPartners(currentUserId)
+        }
+    }
+
     Box(modifier = modifier.fillMaxSize()) {
         Column(modifier = Modifier.fillMaxSize()) {
             Box(modifier = Modifier.weight(1f)) {
@@ -57,12 +67,16 @@ fun MainNavigation(rootNavController: NavHostController, modifier: Modifier = Mo
                         PrivateChatListScreen(
                             currentUserId = currentUserId,
                             onChatSelected = { partner ->
+                                chatViewModel.resetUnread(currentUserId, partner.userId)
                                 rootNavController.navigate(
-                                    Screen.PrivateChat.createRoute(partnerName = partner.userName, partnerId = partner.userId)
+                                    Screen.PrivateChat.createRoute(
+                                        partnerName = partner.userName,
+                                        partnerId = partner.userId
+                                    )
                                 )
                             },
                             navController = rootNavController,
-                            viewModel = koinViewModel()
+                            viewModel = chatViewModel
                         )
                     }
                     composable(BottomNavScreen.Settings.route) {
@@ -75,10 +89,19 @@ fun MainNavigation(rootNavController: NavHostController, modifier: Modifier = Mo
                 items.forEach { screen ->
                     NavigationBarItem(
                         icon = {
-                            Icon(
-                                screen.icon,
-                                contentDescription = stringResource(getLabelRes(screen))
-                            )
+                            if (screen == BottomNavScreen.Chat && unreadCount > 0) {
+                                BadgedBox(
+                                    badge = {
+                                        Badge {
+                                            Text(unreadCount.toString())
+                                        }
+                                    }
+                                ) {
+                                    Icon(screen.icon, contentDescription = stringResource(getLabelRes(screen)))
+                                }
+                            } else {
+                                Icon(screen.icon, contentDescription = stringResource(getLabelRes(screen)))
+                            }
                         },
                         label = { Text(stringResource(getLabelRes(screen))) },
                         selected = currentRoute == screen.route,
