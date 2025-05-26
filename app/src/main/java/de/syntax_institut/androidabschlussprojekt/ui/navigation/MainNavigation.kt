@@ -10,7 +10,6 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.*
@@ -20,7 +19,6 @@ import de.syntax_institut.androidabschlussprojekt.ui.screen.PrivateChatListScree
 import de.syntax_institut.androidabschlussprojekt.ui.screen.SettingsScreen
 import de.syntax_institut.androidabschlussprojekt.ui.viewmodel.AuthViewModel
 import org.koin.androidx.compose.koinViewModel
-
 
 sealed class BottomNavScreen(val route: String, val icon: ImageVector) {
     object Home : BottomNavScreen("home", Icons.Default.Home)
@@ -44,7 +42,6 @@ fun MainNavigation(rootNavController: NavHostController, modifier: Modifier = Mo
 
     val authViewModel: AuthViewModel = koinViewModel()
     val currentUserId = authViewModel.currentUser?.uid ?: ""
-    val currentUserName = authViewModel.currentUser?.displayName ?: "Unbekannt"
 
     Box(modifier = modifier.fillMaxSize()) {
         Column(modifier = Modifier.fillMaxSize()) {

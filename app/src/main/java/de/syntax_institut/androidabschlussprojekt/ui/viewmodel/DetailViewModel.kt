@@ -99,14 +99,6 @@ class DetailViewModel(
         }
     }
 
-    fun onMapClick(navController: NavController, item: Item) {
-        navController.navigate("map/${item.id}")
-    }
-
-    fun onEditClick(navController: NavController, itemId: String) {
-        navController.navigate(Screen.edit(itemId))
-    }
-
     fun sendMessage(itemId: String, userName: String, text: String) {
         val chat = ChatMessage(userName = userName, message = text)
         repository.sendChatMessage(itemId, chat)

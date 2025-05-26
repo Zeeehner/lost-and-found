@@ -3,6 +3,7 @@ package de.syntax_institut.androidabschlussprojekt.ui.component.detail
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Share
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -22,7 +23,8 @@ fun DetailTopAppBar(
     isOwner: Boolean,
     onBackClick: () -> Unit,
     onEditClick: () -> Unit,
-    onShareClick: () -> Unit
+    onShareClick: () -> Unit,
+    onMessageClick: () -> Unit
 ) {
     CenterAlignedTopAppBar(
         title = {
@@ -47,6 +49,14 @@ fun DetailTopAppBar(
                     Icon(
                         Icons.Default.Edit,
                         contentDescription = stringResource(R.string.edit),
+                        tint = MaterialTheme.colorScheme.primary
+                    )
+                }
+            } else {
+                IconButton(onClick = onMessageClick) {
+                    Icon(
+                        Icons.Default.Email,
+                        contentDescription = stringResource(R.string.message),
                         tint = MaterialTheme.colorScheme.primary
                     )
                 }

@@ -30,21 +30,13 @@ fun LostItemCard(
     item: Item,
     onMapClick: () -> Unit
 ) {
-    val dateFormatter = remember {
-        SimpleDateFormat("dd MMM yyyy, HH:mm", Locale.getDefault())
-    }
-
+    val dateFormatter = remember { SimpleDateFormat("dd MMM yyyy, HH:mm", Locale.getDefault()) }
     val imageBitmap = remember(item.imageUrl) {
         item.imageUrl?.let {
             val decoded = Base64.decode(it, Base64.DEFAULT)
             BitmapFactory.decodeByteArray(decoded, 0, decoded.size)?.asImageBitmap()
         }
     }
-
-    var expanded by remember { mutableStateOf(false) }
-    val rotationState by animateFloatAsState(
-        targetValue = if (expanded) 180f else 0f
-    )
 
     Card(
         modifier = Modifier

@@ -98,21 +98,6 @@ fun NavGraph(modifier: Modifier = Modifier) {
             MapScreen(navController = rootNavController, lat = lat, lon = lon)
         }
 
-        // Chat-Screen mit Übergabe von itemId, userId, userName
-        composable(
-            route = Screen.Chat.route,
-            arguments = listOf(
-                navArgument("itemId") { type = NavType.StringType },
-                navArgument("userId") { type = NavType.StringType },
-                navArgument("userName") { type = NavType.StringType }
-            )
-        ) { backStackEntry ->
-            val itemId = backStackEntry.arguments?.getString("itemId") ?: return@composable
-            val userId = backStackEntry.arguments?.getString("userId") ?: return@composable
-            val userName = backStackEntry.arguments?.getString("userName") ?: return@composable
-            ChatDetailScreen(itemId = itemId, userId = userId, userName = userName)
-        }
-
         composable(
             route = Screen.PrivateChat.route,
             arguments = listOf(

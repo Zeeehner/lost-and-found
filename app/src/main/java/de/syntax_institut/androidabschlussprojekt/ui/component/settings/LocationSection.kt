@@ -141,4 +141,4 @@ fun LocationSection(
             }
         }
     }
-    }
+}

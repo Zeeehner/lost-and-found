@@ -24,7 +24,6 @@ fun LoginScreen(
         }
     }
 
-
     // Login erfolgreich → Direkt ins Dashboard
     LaunchedEffect(loginResult) {
         if (loginResult == true) {

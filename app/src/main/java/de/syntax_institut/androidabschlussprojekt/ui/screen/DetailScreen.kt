@@ -74,7 +74,6 @@ fun DetailScreen(
         }
     }
 
-    // 👉 Scaffold + Hauptinhalt
     Scaffold(
         topBar = {
             DetailTopAppBar(
@@ -85,7 +84,14 @@ fun DetailScreen(
                         isEditSheetOpen.value = true
                     }
                 },
-                onShareClick = { viewModel.onShareClick(context, item) }
+                onShareClick = { viewModel.onShareClick(context, item) },
+                onMessageClick = {
+                    if (item!!.userId != currentUserId) {
+                        navController.navigate(Screen.PrivateChat.createRoute(item!!.userId, item!!.userName ?: "Unbekannt"))
+                    } else {
+                        Toast.makeText(context, "Du kannst dir selbst keine Nachricht schicken", Toast.LENGTH_SHORT).show()
+                    }
+                }
             )
         }
     ) { paddingValues ->
@@ -207,7 +213,7 @@ fun DetailScreen(
         }
     }
 
-    // 👉 ModalBottomSheet außerhalb von Scaffold!
+    // ModalBottomSheet außerhalb von Scaffold
     if (isEditSheetOpen.value && editItem != null) {
         ModalBottomSheet(
             onDismissRequest = { isEditSheetOpen.value = false },

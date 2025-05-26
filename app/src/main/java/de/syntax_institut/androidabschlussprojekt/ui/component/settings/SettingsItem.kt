@@ -90,8 +90,6 @@ fun SettingsItem(
                     )
                 }
             }
-
-            // Messanger Button -> TODO
             if (trailingContent != null) {
                 Spacer(modifier = Modifier.width(8.dp))
                 trailingContent()
