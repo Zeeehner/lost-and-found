@@ -61,7 +61,7 @@ class DetailViewModel(
         repository.observeChatMessages(itemId) {
             _chatMessages.value = it
         }
-//        loadCreatorPhoneNumber(itemId)
+        loadCreatorPhoneNumber(itemId)
     }
 
     fun loadCreatorPhoneNumber(userId: String) {

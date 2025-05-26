@@ -3,16 +3,22 @@ package de.syntax_institut.androidabschlussprojekt.di
 import androidx.room.Room
 import de.syntax_institut.androidabschlussprojekt.data.local.AppDatabase
 import de.syntax_institut.androidabschlussprojekt.repository.AuthRepository
+import de.syntax_institut.androidabschlussprojekt.repository.ChatRepository
 import de.syntax_institut.androidabschlussprojekt.repository.DetailRepository
+import de.syntax_institut.androidabschlussprojekt.repository.EditRepository
 import de.syntax_institut.androidabschlussprojekt.repository.ItemCreateRepository
 import de.syntax_institut.androidabschlussprojekt.repository.LocationRepository
 import de.syntax_institut.androidabschlussprojekt.repository.LostItemRepository
+import de.syntax_institut.androidabschlussprojekt.repository.MapRepository
 import de.syntax_institut.androidabschlussprojekt.repository.PreferencesRepository
 import de.syntax_institut.androidabschlussprojekt.repository.SettingsRepository
 import de.syntax_institut.androidabschlussprojekt.ui.viewmodel.AuthViewModel
+import de.syntax_institut.androidabschlussprojekt.ui.viewmodel.ChatViewModel
 import de.syntax_institut.androidabschlussprojekt.ui.viewmodel.CreateViewModel
 import de.syntax_institut.androidabschlussprojekt.ui.viewmodel.DetailViewModel
+import de.syntax_institut.androidabschlussprojekt.ui.viewmodel.EditViewModel
 import de.syntax_institut.androidabschlussprojekt.ui.viewmodel.LostItemViewModel
+import de.syntax_institut.androidabschlussprojekt.ui.viewmodel.MapViewModel
 import de.syntax_institut.androidabschlussprojekt.ui.viewmodel.OnboardingViewModel
 import de.syntax_institut.androidabschlussprojekt.ui.viewmodel.SettingsViewModel
 import org.koin.android.ext.koin.androidContext
@@ -36,9 +42,21 @@ val appModule = module {
     viewModel { DetailViewModel(get()) }
     single { DetailRepository() }
 
+    // MapScreen
+    viewModel { MapViewModel(get()) }
+    single { MapRepository() }
+
     // CreateScreen
     viewModel { CreateViewModel(get()) }
     single { ItemCreateRepository() }
+
+    // EditScreen
+    viewModel { EditViewModel(get()) }
+    single { EditRepository() }
+
+    // ChatScreen
+    viewModel { ChatViewModel(get()) }
+    single { ChatRepository() }
 
     // SettingsScreen
     viewModel { SettingsViewModel(get(), get(), get()) }

@@ -13,6 +13,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import de.syntax_institut.androidabschlussprojekt.ui.screen.DetailScreen
 import de.syntax_institut.androidabschlussprojekt.ui.screen.ItemCreateScreen
+import de.syntax_institut.androidabschlussprojekt.ui.screen.MapScreen
+import de.syntax_institut.androidabschlussprojekt.ui.screen.*
 
 @Composable
 fun NavGraph(modifier: Modifier = Modifier) {
@@ -40,7 +42,7 @@ fun NavGraph(modifier: Modifier = Modifier) {
             )
         }
 
-        // Onboarding after register
+        // Onboarding nach Registrierung
         composable(Screen.Onboarding.route) {
             OnboardingScreen(
                 onFinish = {
@@ -55,22 +57,66 @@ fun NavGraph(modifier: Modifier = Modifier) {
         composable(Screen.List.route) {
             MainNavigation(rootNavController)
         }
-        composable(Screen.Settings.route) {
-            SettingsScreen(rootNavController)
-        }
 
-        // 3️⃣ CreateNavigation
+        // 3️⃣ Create-Screen
         composable(Screen.Create.route) {
-            ItemCreateScreen(rootNavController)
+            ItemCreateScreen(navController = rootNavController)
         }
 
-        // 4️⃣ DetailNavigation
+        // 4️⃣ Kartenansicht (allgemein)
+        composable(Screen.Map.route) {
+            MapScreen(navController = rootNavController)
+        }
+
+        // 5️⃣ Einstellungen
+        composable(Screen.Settings.route) {
+            SettingsScreen(navController = rootNavController)
+        }
+
+        // 6️⃣ Bearbeiten-Screen mit Übergabe der itemId
+        composable(
+            route = Screen.Edit.route,
+            arguments = listOf(navArgument("itemId") { type = NavType.StringType })
+        ) { backStackEntry ->
+            val itemId = backStackEntry.arguments?.getString("itemId") ?: return@composable
+            EditScreen(itemId = itemId, navController = rootNavController)
+        }
+
+        // 7️⃣ Detailansicht eines Items mit Übergabe der itemId
         composable(
             route = Screen.Detail.route,
             arguments = listOf(navArgument("itemId") { type = NavType.StringType })
         ) { backStackEntry ->
             val itemId = backStackEntry.arguments?.getString("itemId") ?: return@composable
             DetailScreen(itemId = itemId, navController = rootNavController)
+        }
+
+        // 8️⃣ Kartenansicht mit spezifischer Location
+        composable(
+            route = Screen.MapWithLocation.route,
+            arguments = listOf(
+                navArgument("lat") { type = NavType.StringType },
+                navArgument("lon") { type = NavType.StringType }
+            )
+        ) { backStackEntry ->
+            val lat = backStackEntry.arguments?.getString("lat")?.toDoubleOrNull()
+            val lon = backStackEntry.arguments?.getString("lon")?.toDoubleOrNull()
+            MapScreen(navController = rootNavController, lat = lat, lon = lon)
+        }
+
+        // 9️⃣ Chat-Screen mit Übergabe von itemId, userId, userName
+        composable(
+            route = Screen.Chat.route,
+            arguments = listOf(
+                navArgument("itemId") { type = NavType.StringType },
+                navArgument("userId") { type = NavType.StringType },
+                navArgument("userName") { type = NavType.StringType }
+            )
+        ) { backStackEntry ->
+            val itemId = backStackEntry.arguments?.getString("itemId") ?: return@composable
+            val userId = backStackEntry.arguments?.getString("userId") ?: return@composable
+            val userName = backStackEntry.arguments?.getString("userName") ?: return@composable
+            ChatDetailScreen(itemId = itemId, userId = userId, userName = userName)
         }
     }
 }

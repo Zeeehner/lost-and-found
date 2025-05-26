@@ -122,6 +122,7 @@
     <string name="destination">Ziel</string>
     <string name="direct_selected_location">Direkt ausgewählter Standort</string>
     <string name="search">Suchen</string>
+    <string name="call_failed">Anruf konnte nicht gestartet werden.</string>
 
     <!-- PhneNumberSettingsSection -->
     <string name="phone_number">Telefonnummer</string>

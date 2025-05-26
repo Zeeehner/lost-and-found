@@ -1,18 +1,24 @@
 package de.syntax_institut.androidabschlussprojekt.ui.navigation
 
+import android.net.Uri
+
 sealed class Screen(val route: String) {
     object Login : Screen("login")
     object Onboarding : Screen("onboarding")
     object List : Screen("list")
-    object Detail : Screen("detail/{itemId}")
     object Create : Screen("create")
+    object Map : Screen("map")
     object Settings : Screen("settings")
-
+    object Edit : Screen("edit/{itemId}")
+    object Detail : Screen("detail/{itemId}")
+    object MapWithLocation : Screen("map/{lat}/{lon}") {
+        fun createRoute(lat: Double, lon: Double): String = "map/$lat/$lon"
+    }
     companion object {
         fun edit(itemId: String) = "edit/$itemId"
     }
-
-    object MapWithLocation : Screen("map/{lat}/{lon}") {
-        fun createRoute(lat: Double, lon: Double): String = "map/$lat/$lon"
+    object Chat : Screen("chat/{itemId}/{userId}/{userName}") {
+        fun createRoute(itemId: String, userId: String, userName: String): String =
+            "chat/$itemId/$userId/${Uri.encode(userName)}"
     }
 }
