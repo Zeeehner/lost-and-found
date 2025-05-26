@@ -4,7 +4,7 @@ import android.graphics.Bitmap
 import android.util.Base64
 import de.syntax_institut.androidabschlussprojekt.BuildConfig
 import com.google.firebase.firestore.FirebaseFirestore
-import de.syntax_institut.androidabschlussprojekt.data.local.Item
+import de.syntax_institut.androidabschlussprojekt.data.local.model.Item
 import de.syntax_institut.androidabschlussprojekt.data.remote.api.GeocodingApiClient
 import java.io.ByteArrayOutputStream
 import java.util.UUID

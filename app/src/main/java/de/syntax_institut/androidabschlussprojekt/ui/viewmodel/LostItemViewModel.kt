@@ -2,7 +2,7 @@ package de.syntax_institut.androidabschlussprojekt.ui.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import de.syntax_institut.androidabschlussprojekt.data.local.Item
+import de.syntax_institut.androidabschlussprojekt.data.local.model.Item
 import de.syntax_institut.androidabschlussprojekt.repository.LostItemRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

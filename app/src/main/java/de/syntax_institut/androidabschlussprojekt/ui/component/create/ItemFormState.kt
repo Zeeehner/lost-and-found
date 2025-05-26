@@ -6,7 +6,7 @@ import android.net.Uri
 import androidx.annotation.RequiresPermission
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.Priority
-import de.syntax_institut.androidabschlussprojekt.data.local.Item
+import de.syntax_institut.androidabschlussprojekt.data.local.model.Item
 import de.syntax_institut.androidabschlussprojekt.repository.ItemCreateRepository
 import kotlinx.coroutines.tasks.await
 

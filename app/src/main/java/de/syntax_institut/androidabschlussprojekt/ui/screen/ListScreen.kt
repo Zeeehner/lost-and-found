@@ -21,7 +21,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.unit.dp
 import de.syntax_institut.androidabschlussprojekt.AdMobBanner
-import de.syntax_institut.androidabschlussprojekt.data.local.Item
+import de.syntax_institut.androidabschlussprojekt.data.local.model.Item
 import de.syntax_institut.androidabschlussprojekt.ui.component.list.ItemActionDialog
 import de.syntax_institut.androidabschlussprojekt.ui.component.list.ItemListContent
 import de.syntax_institut.androidabschlussprojekt.ui.component.list.ItemListTopBar

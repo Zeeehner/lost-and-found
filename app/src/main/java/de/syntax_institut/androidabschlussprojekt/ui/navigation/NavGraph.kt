@@ -3,12 +3,15 @@ package de.syntax_institut.androidabschlussprojekt.ui.navigation
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import de.syntax_institut.androidabschlussprojekt.ui.screen.LoginScreen
 import de.syntax_institut.androidabschlussprojekt.ui.screen.OnboardingScreen
 import de.syntax_institut.androidabschlussprojekt.ui.screen.SettingsScreen
 import androidx.navigation.compose.composable
+import androidx.navigation.navArgument
+import de.syntax_institut.androidabschlussprojekt.ui.screen.DetailScreen
 import de.syntax_institut.androidabschlussprojekt.ui.screen.ItemCreateScreen
 
 @Composable
@@ -59,6 +62,15 @@ fun NavGraph(modifier: Modifier = Modifier) {
         // 3️⃣ CreateNavigation
         composable(Screen.Create.route) {
             ItemCreateScreen(rootNavController)
+        }
+
+        // 4️⃣ DetailNavigation
+        composable(
+            route = Screen.Detail.route,
+            arguments = listOf(navArgument("itemId") { type = NavType.StringType })
+        ) { backStackEntry ->
+            val itemId = backStackEntry.arguments?.getString("itemId") ?: return@composable
+            DetailScreen(itemId = itemId, navController = rootNavController)
         }
     }
 }

@@ -1,4 +1,4 @@
-package de.syntax_institut.androidabschlussprojekt.data.local
+package de.syntax_institut.androidabschlussprojekt.data.local.model
 
 data class Item(
     val id: String = "",

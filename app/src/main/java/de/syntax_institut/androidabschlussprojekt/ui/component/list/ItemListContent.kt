@@ -12,11 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import de.syntax_institut.androidabschlussprojekt.R
-import de.syntax_institut.androidabschlussprojekt.data.local.Item
-import de.syntax_institut.androidabschlussprojekt.ui.component.list.EmptyStateMessage
-import de.syntax_institut.androidabschlussprojekt.ui.component.list.ItemCard
-import de.syntax_institut.androidabschlussprojekt.ui.component.list.NoResultsMessage
-import kotlin.collections.filter
+import de.syntax_institut.androidabschlussprojekt.data.local.model.Item
 
 @Composable
 fun ItemListContent(

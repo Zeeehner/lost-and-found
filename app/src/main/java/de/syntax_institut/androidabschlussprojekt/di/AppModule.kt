@@ -3,6 +3,7 @@ package de.syntax_institut.androidabschlussprojekt.di
 import androidx.room.Room
 import de.syntax_institut.androidabschlussprojekt.data.local.AppDatabase
 import de.syntax_institut.androidabschlussprojekt.repository.AuthRepository
+import de.syntax_institut.androidabschlussprojekt.repository.DetailRepository
 import de.syntax_institut.androidabschlussprojekt.repository.ItemCreateRepository
 import de.syntax_institut.androidabschlussprojekt.repository.LocationRepository
 import de.syntax_institut.androidabschlussprojekt.repository.LostItemRepository
@@ -10,6 +11,7 @@ import de.syntax_institut.androidabschlussprojekt.repository.PreferencesReposito
 import de.syntax_institut.androidabschlussprojekt.repository.SettingsRepository
 import de.syntax_institut.androidabschlussprojekt.ui.viewmodel.AuthViewModel
 import de.syntax_institut.androidabschlussprojekt.ui.viewmodel.CreateViewModel
+import de.syntax_institut.androidabschlussprojekt.ui.viewmodel.DetailViewModel
 import de.syntax_institut.androidabschlussprojekt.ui.viewmodel.LostItemViewModel
 import de.syntax_institut.androidabschlussprojekt.ui.viewmodel.OnboardingViewModel
 import de.syntax_institut.androidabschlussprojekt.ui.viewmodel.SettingsViewModel
@@ -30,6 +32,10 @@ val appModule = module {
     viewModel { LostItemViewModel(get()) }
     single { LostItemRepository() }
 
+    // DetailScreen
+    viewModel { DetailViewModel(get()) }
+    single { DetailRepository() }
+
     // CreateScreen
     viewModel { CreateViewModel(get()) }
     single { ItemCreateRepository() }
@@ -43,6 +49,4 @@ val appModule = module {
     // Room
     single { Room.databaseBuilder(androidContext(), AppDatabase::class.java, "app_db").build() }
     single { get<AppDatabase>().settingsDao() }
-
-
 }

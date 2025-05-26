@@ -1,7 +1,7 @@
 package de.syntax_institut.androidabschlussprojekt.repository
 
 import android.graphics.Bitmap
-import de.syntax_institut.androidabschlussprojekt.data.local.Item
+import de.syntax_institut.androidabschlussprojekt.data.local.model.Item
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlin.coroutines.resume
 
