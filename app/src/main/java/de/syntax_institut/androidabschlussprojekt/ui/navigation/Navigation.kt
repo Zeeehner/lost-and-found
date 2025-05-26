@@ -9,7 +9,6 @@ sealed class Screen(val route: String) {
     object Create : Screen("create")
     object Map : Screen("map")
     object Settings : Screen("settings")
-    object Edit : Screen("edit/{itemId}")
     object Detail : Screen("detail/{itemId}")
     object MapWithLocation : Screen("map/{lat}/{lon}") {
         fun createRoute(lat: Double, lon: Double): String = "map/$lat/$lon"

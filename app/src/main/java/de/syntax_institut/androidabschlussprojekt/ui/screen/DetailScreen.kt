@@ -19,6 +19,7 @@ import de.syntax_institut.androidabschlussprojekt.AdMobBanner
 import de.syntax_institut.androidabschlussprojekt.R
 import de.syntax_institut.androidabschlussprojekt.ui.component.detail.*
 import de.syntax_institut.androidabschlussprojekt.ui.component.edit.EditScreenContent
+import de.syntax_institut.androidabschlussprojekt.ui.navigation.Screen
 import de.syntax_institut.androidabschlussprojekt.ui.viewmodel.AuthViewModel
 import de.syntax_institut.androidabschlussprojekt.ui.viewmodel.DetailViewModel
 import de.syntax_institut.androidabschlussprojekt.ui.viewmodel.EditViewModel
@@ -117,7 +118,7 @@ fun DetailScreen(
                             LostItemCard(
                                 item = item!!,
                                 onMapClick = {
-                                    navController.navigate("map_with_location/${item!!.latitude}/${item!!.longitude}")
+                                    navController.navigate(Screen.MapWithLocation.createRoute(item!!.latitude, item!!.longitude))
                                 }
                             )
                         }
