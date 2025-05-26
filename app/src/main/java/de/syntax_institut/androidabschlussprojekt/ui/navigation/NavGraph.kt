@@ -11,10 +11,13 @@ import de.syntax_institut.androidabschlussprojekt.ui.screen.OnboardingScreen
 import de.syntax_institut.androidabschlussprojekt.ui.screen.SettingsScreen
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import de.syntax_institut.androidabschlussprojekt.data.local.model.ChatPartner
 import de.syntax_institut.androidabschlussprojekt.ui.screen.DetailScreen
 import de.syntax_institut.androidabschlussprojekt.ui.screen.ItemCreateScreen
 import de.syntax_institut.androidabschlussprojekt.ui.screen.MapScreen
 import de.syntax_institut.androidabschlussprojekt.ui.screen.*
+import de.syntax_institut.androidabschlussprojekt.ui.viewmodel.AuthViewModel
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun NavGraph(modifier: Modifier = Modifier) {
@@ -108,6 +111,32 @@ fun NavGraph(modifier: Modifier = Modifier) {
             val userId = backStackEntry.arguments?.getString("userId") ?: return@composable
             val userName = backStackEntry.arguments?.getString("userName") ?: return@composable
             ChatDetailScreen(itemId = itemId, userId = userId, userName = userName)
+        }
+
+        composable(
+            route = Screen.PrivateChat.route,
+            arguments = listOf(
+                navArgument("partnerId") { type = NavType.StringType },
+                navArgument("partnerName") { type = NavType.StringType }
+            )
+        ) { backStackEntry ->
+            val partnerId = backStackEntry.arguments?.getString("partnerId") ?: return@composable
+            val partnerName = backStackEntry.arguments?.getString("partnerName") ?: return@composable
+
+            val authViewModel: AuthViewModel = koinViewModel()
+            val currentUserId = authViewModel.currentUser?.uid ?: ""
+            val currentUserName = authViewModel.currentUser?.displayName ?: "Unbekannt"
+
+            PrivateChatDetailScreen(
+                currentUserId = currentUserId,
+                currentUserName = currentUserName,
+                chatPartner = ChatPartner(
+                    userId = partnerId,
+                    userName = partnerName
+                ),
+                onBackPressed = { rootNavController.popBackStack() },
+                viewModel = koinViewModel()
+            )
         }
     }
 }

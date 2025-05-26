@@ -11,6 +11,7 @@ import de.syntax_institut.androidabschlussprojekt.repository.LocationRepository
 import de.syntax_institut.androidabschlussprojekt.repository.LostItemRepository
 import de.syntax_institut.androidabschlussprojekt.repository.MapRepository
 import de.syntax_institut.androidabschlussprojekt.repository.PreferencesRepository
+import de.syntax_institut.androidabschlussprojekt.repository.PrivateChatRepository
 import de.syntax_institut.androidabschlussprojekt.repository.SettingsRepository
 import de.syntax_institut.androidabschlussprojekt.ui.viewmodel.AuthViewModel
 import de.syntax_institut.androidabschlussprojekt.ui.viewmodel.ChatViewModel
@@ -20,6 +21,7 @@ import de.syntax_institut.androidabschlussprojekt.ui.viewmodel.EditViewModel
 import de.syntax_institut.androidabschlussprojekt.ui.viewmodel.LostItemViewModel
 import de.syntax_institut.androidabschlussprojekt.ui.viewmodel.MapViewModel
 import de.syntax_institut.androidabschlussprojekt.ui.viewmodel.OnboardingViewModel
+import de.syntax_institut.androidabschlussprojekt.ui.viewmodel.PrivateChatViewModel
 import de.syntax_institut.androidabschlussprojekt.ui.viewmodel.SettingsViewModel
 import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
@@ -57,6 +59,8 @@ val appModule = module {
     // ChatScreen
     viewModel { ChatViewModel(get()) }
     single { ChatRepository() }
+    viewModel { PrivateChatViewModel(get()) }
+    single { PrivateChatRepository() }
 
     // SettingsScreen
     viewModel { SettingsViewModel(get(), get(), get()) }

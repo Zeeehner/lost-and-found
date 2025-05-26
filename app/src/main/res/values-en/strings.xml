@@ -155,4 +155,9 @@
     <string name="nav_home">Findings</string>
     <string name="nav_settings">Settings</string>
 
+    <string name="nav_chat">Chat</string>
+    <string name="own_item_cannot_message">You can not send yourself an message</string>
+    <string name="user_info_missing">User information missing</string>
+
+
 </resources>

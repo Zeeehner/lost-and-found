@@ -18,6 +18,7 @@ import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material3.*
+import androidx.compose.material3.OutlinedTextFieldDefaults.contentPadding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -250,17 +251,25 @@ fun ItemDetailsCard(
                 OutlinedButton(
                     onClick = {
                         if (!userId.isNullOrBlank() && !userName.isNullOrBlank()) {
-                            navController.navigate(
-                                Screen.Chat.createRoute(
-                                    itemId = item.id,
-                                    userId = userId,
-                                    userName = userName
+                            val partnerId = item.userId
+                            val partnerName = item.userName ?: "Unbekannt"
+
+                            // Verhindere, dass man sich selbst schreibt
+                            if (partnerId != userId) {
+                                navController.navigate(
+                                    Screen.PrivateChat.createRoute(
+                                        partnerId = partnerId,
+                                        partnerName = partnerName
+                                    )
                                 )
-                            )
+                            } else {
+                                Toast.makeText(context, context.getString(R.string.own_item_cannot_message), Toast.LENGTH_SHORT).show()
+                            }
                         } else {
-                            Toast.makeText(context, "User info missing", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(context, context.getString(R.string.user_info_missing), Toast.LENGTH_SHORT).show()
                         }
                     },
+
                     modifier = Modifier.weight(1f),
                     shape = RoundedCornerShape(12.dp),
                     contentPadding = PaddingValues(vertical = 12.dp),

@@ -20,4 +20,8 @@ sealed class Screen(val route: String) {
         fun createRoute(itemId: String, userId: String, userName: String): String =
             "chat/$itemId/$userId/${Uri.encode(userName)}"
     }
+    object PrivateChat : Screen("private_chat/{partnerId}/{partnerName}") {
+        fun createRoute(partnerId: String, partnerName: String): String =
+            "private_chat/$partnerId/${Uri.encode(partnerName)}"
+    }
 }

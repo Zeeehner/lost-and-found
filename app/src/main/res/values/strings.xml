@@ -155,5 +155,9 @@
     <string name="nav_home">Funde</string>
     <string name="nav_settings">Einstellungen</string>
 
+    <string name="nav_chat">Chat</string>
+    <string name="own_item_cannot_message">Du kannst dir selbst keine Nachricht schicken</string>
+    <string name="user_info_missing">Benutzerinformationen fehlen</string>
+
 
 </resources>
