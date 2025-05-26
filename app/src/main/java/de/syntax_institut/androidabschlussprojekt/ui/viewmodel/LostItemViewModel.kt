@@ -23,7 +23,7 @@ class LostItemViewModel(private val repository: LostItemRepository) : ViewModel(
 
     fun loadItems() {
         repository.getLostItems { result ->
-            _items.value = result
+            _items.value = result.sortedByDescending { it.timestamp }
         }
     }
 

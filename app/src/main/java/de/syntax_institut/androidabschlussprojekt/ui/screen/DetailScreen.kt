@@ -1,8 +1,10 @@
 package de.syntax_institut.androidabschlussprojekt.ui.screen
 
+import android.widget.Toast
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -10,25 +12,26 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import de.syntax_institut.androidabschlussprojekt.AdMobBanner
-import de.syntax_institut.androidabschlussprojekt.ui.viewmodel.AuthViewModel
 import de.syntax_institut.androidabschlussprojekt.R
-import de.syntax_institut.androidabschlussprojekt.ui.component.detail.DetailTopAppBar
-import de.syntax_institut.androidabschlussprojekt.ui.component.detail.LostItemCard
-import de.syntax_institut.androidabschlussprojekt.ui.component.detail.MessageInputField
-import de.syntax_institut.androidabschlussprojekt.ui.component.detail.MessageList
-import de.syntax_institut.androidabschlussprojekt.ui.navigation.Screen
+import de.syntax_institut.androidabschlussprojekt.ui.component.detail.*
+import de.syntax_institut.androidabschlussprojekt.ui.component.edit.EditScreenContent
+import de.syntax_institut.androidabschlussprojekt.ui.viewmodel.AuthViewModel
 import de.syntax_institut.androidabschlussprojekt.ui.viewmodel.DetailViewModel
+import de.syntax_institut.androidabschlussprojekt.ui.viewmodel.EditViewModel
 import org.koin.androidx.compose.koinViewModel
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DetailScreen(
     itemId: String,
     navController: NavController,
     viewModel: DetailViewModel = koinViewModel(),
-    authViewModel: AuthViewModel = koinViewModel()
+    authViewModel: AuthViewModel = koinViewModel(),
+    editViewModel: EditViewModel = koinViewModel()
 ) {
     val context = LocalContext.current
     val currentUser = authViewModel.currentUser
@@ -38,17 +41,49 @@ fun DetailScreen(
     val chatMessages by viewModel.chatMessages.collectAsState()
     var message by remember { mutableStateOf("") }
 
+    val editItem by editViewModel.item.collectAsState()
+    val isEditSheetOpen = remember { mutableStateOf(false) }
+    var title by remember { mutableStateOf(TextFieldValue("")) }
+    var description by remember { mutableStateOf(TextFieldValue("")) }
+
+    // Detail-Item laden
     LaunchedEffect(itemId) {
         viewModel.loadItem(itemId)
-        viewModel.loadCreatorPhoneNumber(item?.userId ?: "")
     }
 
+    // Wenn das Item geladen ist, dann auch fürs Bearbeiten vorbereiten
+    LaunchedEffect(item) {
+        item?.let {
+            viewModel.loadCreatorPhoneNumber(it.userId)
+        }
+    }
+
+    // Wenn das Edit-BottomSheet geöffnet wird, Item fürs Bearbeiten laden
+    LaunchedEffect(isEditSheetOpen.value) {
+        if (isEditSheetOpen.value) {
+            editViewModel.loadItem(itemId)
+        }
+    }
+
+    // Wenn das Edit-Item geladen ist, Felder befüllen
+    LaunchedEffect(editItem) {
+        editItem?.let {
+            title = TextFieldValue(it.title)
+            description = TextFieldValue(it.description)
+        }
+    }
+
+    // 👉 Scaffold + Hauptinhalt
     Scaffold(
         topBar = {
             DetailTopAppBar(
                 isOwner = item?.userId == currentUserId,
                 onBackClick = { navController.popBackStack() },
-                onEditClick = { viewModel.onEditClick(navController, itemId) },
+                onEditClick = {
+                    if (item?.userId == currentUserId) {
+                        isEditSheetOpen.value = true
+                    }
+                },
                 onShareClick = { viewModel.onShareClick(context, item) }
             )
         }
@@ -82,9 +117,7 @@ fun DetailScreen(
                             LostItemCard(
                                 item = item!!,
                                 onMapClick = {
-                                    navController.navigate(
-                                        Screen.MapWithLocation.createRoute(item!!.latitude, item!!.longitude)
-                                    )
+                                    navController.navigate("map_with_location/${item!!.latitude}/${item!!.longitude}")
                                 }
                             )
                         }
@@ -117,7 +150,10 @@ fun DetailScreen(
                                             text = "${chatMessages.size}",
                                             style = MaterialTheme.typography.labelSmall,
                                             color = MaterialTheme.colorScheme.onPrimary,
-                                            modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp)
+                                            modifier = Modifier.padding(
+                                                horizontal = 6.dp,
+                                                vertical = 2.dp
+                                            )
                                         )
                                     }
                                 }
@@ -126,7 +162,10 @@ fun DetailScreen(
                             if (chatMessages.isEmpty()) {
                                 Text(
                                     text = stringResource(R.string.no_messages_yet),
-                                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
+                                    modifier = Modifier.padding(
+                                        horizontal = 16.dp,
+                                        vertical = 8.dp
+                                    ),
                                     style = MaterialTheme.typography.bodyMedium,
                                     color = MaterialTheme.colorScheme.onSurfaceVariant
                                 )
@@ -162,6 +201,52 @@ fun DetailScreen(
                         .align(Alignment.BottomCenter)
                         .fillMaxWidth()
                         .height(50.dp)
+                )
+            }
+        }
+    }
+
+    // 👉 ModalBottomSheet außerhalb von Scaffold!
+    if (isEditSheetOpen.value && editItem != null) {
+        ModalBottomSheet(
+            onDismissRequest = { isEditSheetOpen.value = false },
+            dragHandle = null,
+            shape = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp)
+        ) {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(300.dp)
+            ) {
+                EditScreenContent(
+                    title = title,
+                    onTitleChange = { title = it },
+                    description = description,
+                    onDescriptionChange = { description = it },
+                    onSave = {
+                        editViewModel.updateItem(
+                            title = title.text,
+                            description = description.text,
+                            onSuccess = {
+                                isEditSheetOpen.value = false
+                                viewModel.loadItem(itemId)
+                                Toast.makeText(
+                                    context,
+                                    context.getString(R.string.entry_updated),
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            },
+                            onFailure = {
+                                isEditSheetOpen.value = false
+                                Toast.makeText(
+                                    context,
+                                    context.getString(R.string.entry_update_failed),
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
+                        )
+                    },
+                    onBack = { isEditSheetOpen.value = false }
                 )
             }
         }

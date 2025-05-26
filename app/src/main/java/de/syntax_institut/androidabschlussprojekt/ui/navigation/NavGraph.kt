@@ -26,7 +26,7 @@ fun NavGraph(modifier: Modifier = Modifier) {
         startDestination = Screen.Login.route,
         modifier = modifier
     ) {
-        // 1️⃣ Login-Screen
+        // Login-Screen
         composable(Screen.Login.route) {
             LoginScreen(
                 onLoginSuccess = {
@@ -53,36 +53,27 @@ fun NavGraph(modifier: Modifier = Modifier) {
             )
         }
 
-        // 2️⃣ MainNavigation (BottomNav)
+        //  MainNavigation (BottomNav)
         composable(Screen.List.route) {
             MainNavigation(rootNavController)
         }
 
-        // 3️⃣ Create-Screen
+        //  Create-Screen
         composable(Screen.Create.route) {
             ItemCreateScreen(navController = rootNavController)
         }
 
-        // 4️⃣ Kartenansicht (allgemein)
+        //  Kartenansicht (allgemein)
         composable(Screen.Map.route) {
             MapScreen(navController = rootNavController)
         }
 
-        // 5️⃣ Einstellungen
+        //  Einstellungen
         composable(Screen.Settings.route) {
             SettingsScreen(navController = rootNavController)
         }
 
-        // 6️⃣ Bearbeiten-Screen mit Übergabe der itemId
-        composable(
-            route = Screen.Edit.route,
-            arguments = listOf(navArgument("itemId") { type = NavType.StringType })
-        ) { backStackEntry ->
-            val itemId = backStackEntry.arguments?.getString("itemId") ?: return@composable
-            EditScreen(itemId = itemId, navController = rootNavController)
-        }
-
-        // 7️⃣ Detailansicht eines Items mit Übergabe der itemId
+        // Detailansicht eines Items mit Übergabe der itemId
         composable(
             route = Screen.Detail.route,
             arguments = listOf(navArgument("itemId") { type = NavType.StringType })
@@ -91,7 +82,7 @@ fun NavGraph(modifier: Modifier = Modifier) {
             DetailScreen(itemId = itemId, navController = rootNavController)
         }
 
-        // 8️⃣ Kartenansicht mit spezifischer Location
+        // Kartenansicht mit spezifischer Location
         composable(
             route = Screen.MapWithLocation.route,
             arguments = listOf(
@@ -104,7 +95,7 @@ fun NavGraph(modifier: Modifier = Modifier) {
             MapScreen(navController = rootNavController, lat = lat, lon = lon)
         }
 
-        // 9️⃣ Chat-Screen mit Übergabe von itemId, userId, userName
+        // Chat-Screen mit Übergabe von itemId, userId, userName
         composable(
             route = Screen.Chat.route,
             arguments = listOf(
