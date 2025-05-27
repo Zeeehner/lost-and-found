@@ -16,10 +16,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import de.syntax_institut.androidabschlussprojekt.AdMobBanner
+import de.syntax_institut.androidabschlussprojekt.R
 import de.syntax_institut.androidabschlussprojekt.data.local.model.ChatPartner
 import de.syntax_institut.androidabschlussprojekt.data.local.model.PrivateChatMessage
 import de.syntax_institut.androidabschlussprojekt.ui.component.chat.PrivateMessageBubble
@@ -80,7 +82,7 @@ fun PrivateChatDetailScreen(
                     ) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = "Zurück",
+                            contentDescription = stringResource(id = R.string.back),
                             tint = MaterialTheme.colorScheme.onPrimaryContainer
                         )
                     }
@@ -112,7 +114,7 @@ fun PrivateChatDetailScreen(
                             color = MaterialTheme.colorScheme.onPrimaryContainer
                         )
                         Text(
-                            text = "Online",
+                            text = stringResource(id = R.string.status_online),
                             fontSize = 12.sp,
                             color = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.7f)
                         )
@@ -155,7 +157,7 @@ fun PrivateChatDetailScreen(
                         modifier = Modifier.weight(1f),
                         placeholder = {
                             Text(
-                                "Nachricht schreiben...",
+                                stringResource(id = R.string.write_message),
                                 color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
                             )
                         },
@@ -194,7 +196,7 @@ fun PrivateChatDetailScreen(
                     ) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.Send,
-                            contentDescription = "Senden",
+                            contentDescription = stringResource(id = R.string.send),
                             modifier = Modifier.size(20.dp)
                         )
                     }

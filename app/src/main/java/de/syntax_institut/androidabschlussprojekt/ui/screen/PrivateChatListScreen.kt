@@ -14,11 +14,13 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import de.syntax_institut.androidabschlussprojekt.AdMobBanner
+import de.syntax_institut.androidabschlussprojekt.R
 import de.syntax_institut.androidabschlussprojekt.data.local.model.ChatPartner
 import de.syntax_institut.androidabschlussprojekt.ui.component.chat.ChatListItem
 import de.syntax_institut.androidabschlussprojekt.ui.viewmodel.PrivateChatViewModel
@@ -72,7 +74,7 @@ fun PrivateChatListScreen(
             ) {
                 Column(modifier = Modifier.padding(16.dp)) {
                     Text(
-                        text = "Chats",
+                        text = stringResource(id = R.string.chats_title),
                         fontSize = 28.sp,
                         fontWeight = FontWeight.Bold,
                         color = MaterialTheme.colorScheme.onPrimaryContainer
@@ -84,11 +86,11 @@ fun PrivateChatListScreen(
                         value = searchQuery,
                         onValueChange = { searchQuery = it },
                         modifier = Modifier.fillMaxWidth(),
-                        placeholder = { Text("Chats durchsuchen...") },
+                        placeholder = { Text(stringResource(id = R.string.search_chats_placeholder)) },
                         leadingIcon = {
                             Icon(
                                 imageVector = Icons.Default.Search,
-                                contentDescription = "Suchen"
+                                contentDescription = stringResource(id = R.string.search)
                             )
                         },
                         shape = RoundedCornerShape(24.dp),
@@ -120,7 +122,10 @@ fun PrivateChatListScreen(
                         )
                         Spacer(modifier = Modifier.height(16.dp))
                         Text(
-                            text = if (searchQuery.isBlank()) "Keine Chats vorhanden" else "Keine Chats gefunden",
+                            text = if (searchQuery.isBlank())
+                                stringResource(id = R.string.no_chats_available)
+                            else
+                                stringResource(id = R.string.no_chats_found),
                             fontSize = 18.sp,
                             color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f),
                             fontWeight = FontWeight.Medium
@@ -128,7 +133,7 @@ fun PrivateChatListScreen(
                         if (searchQuery.isBlank()) {
                             Spacer(modifier = Modifier.height(8.dp))
                             Text(
-                                text = "Starte einen neuen Chat",
+                                text = stringResource(id = R.string.start_new_chat),
                                 fontSize = 14.sp,
                                 color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f)
                             )

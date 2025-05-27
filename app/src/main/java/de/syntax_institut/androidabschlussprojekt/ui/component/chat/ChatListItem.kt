@@ -25,13 +25,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import de.syntax_institut.androidabschlussprojekt.data.local.model.ChatPartner
 import java.text.SimpleDateFormat
-import java.util.Calendar
+import de.syntax_institut.androidabschlussprojekt.R
 import java.util.Date
 import java.util.Locale
 
@@ -123,7 +124,7 @@ fun ChatListItem(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
-                        text = partner.lastMessage.ifBlank { "Noch keine Nachrichten" },
+                        text = partner.lastMessage.ifBlank { stringResource(id = R.string.no_messages_yet) },
                         fontSize = 14.sp,
                         color = MaterialTheme.colorScheme.onSurface.copy(
                             alpha = if (partner.lastMessage.isBlank()) 0.4f else 0.7f
