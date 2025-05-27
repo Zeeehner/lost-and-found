@@ -34,7 +34,11 @@ Für ehrliche Finder:innen, verzweifelte Verlierer:innen – und alle, die gern 
 ## 📸 Screenshots
 
 <p align="center">
-  <img src="img/exampleLogin.png" alt="Login Screen" width="200"/>
+  <img src="img/loginScreen.png" alt="Login Screen" width="160"/>
+  <img src="img/screenMain.png" alt="Main Screen" width="160"/>
+  <img src="img/detailScreen.png" alt="Detail Screen" width="160"/>
+  <img src="img/MapScreen.png" alt="Map Screen" width="160"/>
+  <img src="img/chatScreen.png" alt="Chat Screen" width="160"/>
 </p>
 
 ---
