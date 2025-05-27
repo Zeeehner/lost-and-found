@@ -8,7 +8,7 @@
 Für ehrliche Finder:innen, verzweifelte Verlierer:innen – und alle, die gern helfen.
 
 ### ❓ Was macht die App besonders?
-- 💬 Klare Fokussierung auf einen Zweck – ohne Werbung, ohne Ablenkung  
+- 💬 Klare Fokussierung – Werbung hilft, die App kostenlos und verfügbar zu halten
 - 📍 Standortbasiert & visuell – einfach melden, einfach finden  
 - 🔐 Sicherer Login via Firebase  
 - 🎨 Intuitive Bedienung dank moderner Architektur und sauberem Design
