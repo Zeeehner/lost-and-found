@@ -8,7 +8,7 @@
 Für ehrliche Finder:innen, verzweifelte Verlierer:innen – und alle, die gern helfen.
 
 ### ❓ Was macht die App besonders?
-- 💬 Klare Fokussierung auf einen Zweck – ohne Werbung, ohne Ablenkung  
+- 💬 Klare Fokussierung – Werbung hilft, die App kostenlos und verfügbar zu halten
 - 📍 Standortbasiert & visuell – einfach melden, einfach finden  
 - 🔐 Sicherer Login via Firebase  
 - 🎨 Intuitive Bedienung dank moderner Architektur und sauberem Design
@@ -34,7 +34,11 @@ Für ehrliche Finder:innen, verzweifelte Verlierer:innen – und alle, die gern 
 ## 📸 Screenshots
 
 <p align="center">
-  <img src="img/exampleLogin.png" alt="Login Screen" width="200"/>
+  <img src="img/loginScreen.png" alt="Login Screen" width="160"/>
+  <img src="img/screenMain.png" alt="Main Screen" width="160"/>
+  <img src="img/detailScreen.png" alt="Detail Screen" width="160"/>
+  <img src="img/MapScreen.png" alt="Map Screen" width="160"/>
+  <img src="img/chatScreen.png" alt="Chat Screen" width="160"/>
 </p>
 
 ---
