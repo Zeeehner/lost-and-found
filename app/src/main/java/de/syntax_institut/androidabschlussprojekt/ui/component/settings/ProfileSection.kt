@@ -31,8 +31,7 @@ fun ProfileSection(authViewModel: AuthViewModel, cityName: String?) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 8.dp)
-            .shadow(4.dp, RoundedCornerShape(16.dp)),
+            .padding(horizontal = 16.dp, vertical = 8.dp),
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.7f)
         ),
