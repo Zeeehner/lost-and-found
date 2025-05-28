@@ -86,12 +86,12 @@ class SettingsViewModel(
                 requestPermissionLauncher = launcher,
                 showRationale = {
                     _uiState.update {
-                        it.copy(permissionStatus = context.getString(R.string.notification_permission_sub))
+                        it.copy(permissionStatus = context.getString(R.string.permission_granted))
                     }
                 },
                 onGranted = {
                     _uiState.update {
-                        it.copy(permissionStatus = context.getString(R.string.notification_permission))
+                        it.copy(permissionStatus = context.getString(R.string.permission_denied))
                     }
                 }
             )
@@ -100,7 +100,7 @@ class SettingsViewModel(
 
     fun onNotificationPermissionGranted(context: Context) {
         _uiState.update {
-            it.copy(permissionStatus = context.getString(R.string.notification_permission))
+            it.copy(permissionStatus = context.getString(R.string.permission_granted))
         }
 
         viewModelScope.launch {
