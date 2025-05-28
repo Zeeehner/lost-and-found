@@ -22,6 +22,20 @@ class PrivateChatViewModel(
         .map { list -> list.sumOf { it.unreadCount } }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), 0)
 
+
+    fun updateMyLastSeen(currentUserId: String) {
+        repository.updateLastSeen(currentUserId)
+    }
+
+    private val _partnerLastSeen = MutableStateFlow<Long>(0L)
+    val partnerLastSeen: StateFlow<Long> = _partnerLastSeen
+
+    fun observePartnerLastSeen(currentUserId: String, partnerId: String) {
+        repository.getUserLastSeen(currentUserId, partnerId) { time ->
+            _partnerLastSeen.value = time
+        }
+    }
+
     fun loadMessages(currentUserId: String, partnerId: String) {
         repository.observeMessages(currentUserId, partnerId) { msgList ->
             _messages.value = msgList

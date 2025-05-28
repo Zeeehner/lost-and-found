@@ -5,5 +5,6 @@ data class ChatPartner(
     val userName: String = "",
     val lastMessage: String = "",
     val lastMessageTime: Long = System.currentTimeMillis(),
-    val unreadCount: Int = 0
+    val unreadCount: Int = 0,
+    val lastSeen: Long = System.currentTimeMillis()
 )

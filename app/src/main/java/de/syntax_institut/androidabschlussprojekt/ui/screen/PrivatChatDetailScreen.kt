@@ -40,6 +40,20 @@ fun PrivateChatDetailScreen(
     val messages by viewModel.messages.collectAsState()
     var input by remember { mutableStateOf("") }
     val listState = rememberLazyListState()
+    val lastSeen by viewModel.partnerLastSeen.collectAsState()
+    val lastSeenFormatted = remember(lastSeen) {
+        android.text.format.DateUtils.getRelativeTimeSpanString(lastSeen)
+    }
+
+    LaunchedEffect(currentUserId) {
+        viewModel.updateMyLastSeen(currentUserId)
+        kotlinx.coroutines.delay(10_000) // 10 Sekudnen
+    }
+
+    LaunchedEffect(chatPartner.userId) {
+        viewModel.loadMessages(currentUserId, chatPartner.userId)
+        viewModel.observePartnerLastSeen(currentUserId, chatPartner.userId)
+    }
 
     LaunchedEffect(messages.size) {
         if (messages.isNotEmpty()) {
@@ -114,7 +128,7 @@ fun PrivateChatDetailScreen(
                             color = MaterialTheme.colorScheme.onPrimaryContainer
                         )
                         Text(
-                            text = stringResource(id = R.string.status_online),
+                            text = "Last seen: $lastSeenFormatted",
                             fontSize = 12.sp,
                             color = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.7f)
                         )

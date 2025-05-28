@@ -42,6 +42,7 @@ class PrivateChatRepository {
         val docId = UUID.randomUUID().toString()
         val fullMessage = message.copy(id = docId)
 
+
         // 1. Nachricht speichern
         firestore.collection("private_chats")
             .document(chatId)
@@ -55,7 +56,8 @@ class PrivateChatRepository {
             userName = receiverName,
             lastMessage = message.message,
             lastMessageTime = message.timestamp,
-            unreadCount = 0
+            unreadCount = 0,
+            lastSeen = System.currentTimeMillis()
         )
         firestore.collection("chat_partners")
             .document(message.senderId)
@@ -95,6 +97,24 @@ class PrivateChatRepository {
             listener.remove()
         }
     }
+
+    fun getUserLastSeen(currentUserId: String, partnerId: String, onResult: (Long) -> Unit) {
+        firestore.collection("chat_partners")
+            .document(currentUserId)
+            .collection("partners")
+            .document(partnerId)
+            .addSnapshotListener { snapshot, _ ->
+                val lastSeen = snapshot?.getLong("lastSeen") ?: 0L
+                onResult(lastSeen)
+            }
+    }
+
+
+    fun updateLastSeen(userId: String) {
+        val userRef = firestore.collection("users").document(userId)
+        userRef.update("lastSeen", System.currentTimeMillis())
+    }
+
 
     fun resetUnreadCount(currentUserId: String, partnerId: String) {
         firestore.collection("chat_partners")
