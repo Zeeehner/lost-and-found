@@ -44,8 +44,8 @@ class PrivateChatViewModel(
 
     fun loadChatPartners(currentUserId: String) {
         viewModelScope.launch {
-            repository.getChatPartners(currentUserId).collect {
-                _chatPartners.value = it
+            repository.getChatPartners(currentUserId).collect { partners ->
+                _chatPartners.value =  partners.sortedByDescending { it.lastMessageTime }
             }
         }
     }
