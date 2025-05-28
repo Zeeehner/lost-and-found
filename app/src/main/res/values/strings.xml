@@ -169,5 +169,22 @@
     <!-- PrivateChatDetailScreen -->
     <string name="status_online">Online</string>
 
+    <!-- Onboarding -->
+    <string name="hint_report_to_lost_property_office">Fundsachen über 10 € müssen beim Fundbüro gemeldet werden.</string>
+    <string name="hint_public_transport_lost_items">Gefundene Gegenstände in Verkehrsmitteln müssen bei den zuständigen Verkehrsbetrieben abgegeben werden.</string>
+    <string name="hint_retaining_items_is_offense">Das Einbehalten von Fundsachen kann als Unterschlagung gewertet werden.</string>
+    <string name="hint_found_animals_report">Bei Fundtieren ist das Veterinäramt oder ein Tierheim zu informieren.</string>
+    <string name="acknowledged">Bestätigt</string>
+    <string name="acknowledge_hint">Ich habe diesen Hinweis zur Kenntnis genommen</string>
+    <string name="onboarding_header_contact">Kontaktdaten</string>
+    <string name="onboarding_header_legal">Rechtliche Hinweise</string>
+    <string name="onboarding_subtext_contact">Geben Sie optional Ihre Telefonnummer ein</string>
+    <string name="onboarding_subtext_legal">Bitte bestätigen Sie die folgenden Hinweise</string>
+    <string name="hint_accept">Hinweise akzeptiert!</string>
+    <string name="hint_progress">%1$d von %2$d</string>
+
+
+
+
 
 </resources>

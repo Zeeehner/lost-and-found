@@ -1,27 +1,49 @@
 package de.syntax_institut.androidabschlussprojekt.ui.viewmodel
 
 import android.content.Context
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.*
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import de.syntax_institut.androidabschlussprojekt.R
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.SetOptions
+import de.syntax_institut.androidabschlussprojekt.repository.UserRepository
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.tasks.await
 
-class OnboardingViewModel : ViewModel() {
+class OnboardingViewModel(
+    private val userRepository: UserRepository = UserRepository()
+) : ViewModel() {
 
-    var phoneNumber by mutableStateOf("")
     var isSaving by mutableStateOf(false)
     var saveResult by mutableStateOf<Boolean?>(null)
     var errorMessage by mutableStateOf<String?>(null)
 
-    private val firestore = FirebaseFirestore.getInstance()
-    private val currentUser = FirebaseAuth.getInstance().currentUser
+    var currentHintIndex by mutableStateOf(0)
+    var hintAcknowledged by mutableStateOf(false)
+    val isLastHint: Boolean get() = currentHintIndex == 3
+    val allHintsAcknowledged: Boolean get() = currentHintIndex > 3
+
+    var phoneNumber by mutableStateOf("")
+
+    fun getLegalHints(context: Context): List<String> {
+        return listOf(
+            context.getString(R.string.hint_report_to_lost_property_office),
+            context.getString(R.string.hint_public_transport_lost_items),
+            context.getString(R.string.hint_retaining_items_is_offense),
+            context.getString(R.string.hint_found_animals_report)
+        )
+    }
+
+    fun nextHint() {
+        if (hintAcknowledged && currentHintIndex < 3) {
+            currentHintIndex++
+            hintAcknowledged = false
+        } else if (hintAcknowledged && isLastHint) {
+            currentHintIndex++
+        }
+    }
+
+    fun acknowledgeHint() {
+        hintAcknowledged = true
+    }
 
     fun savePhoneNumber(context: Context, onSuccess: () -> Unit) {
         if (phoneNumber.isNotBlank() && !isValidPhoneNumber(phoneNumber)) {
@@ -34,13 +56,7 @@ class OnboardingViewModel : ViewModel() {
                 isSaving = true
                 errorMessage = null
 
-                currentUser?.uid?.let { uid ->
-                    val userRef = firestore.collection("users").document(uid)
-                    userRef.set(
-                        mapOf("phoneNumber" to phoneNumber.takeIf { it.isNotBlank() }),
-                        SetOptions.merge()
-                    ).await()
-                }
+                userRepository.savePhoneNumber(phoneNumber.takeIf { it.isNotBlank() })
 
                 saveResult = true
                 onSuccess()
@@ -53,7 +69,6 @@ class OnboardingViewModel : ViewModel() {
         }
     }
 
-    // Basic international phone number validation
     private fun isValidPhoneNumber(phone: String): Boolean {
         val cleanedPhone = phone.replace("""\s+""".toRegex(), "")
         val phoneRegex = """^(\+\d{1,3}[- ]?)?\d{10,14}$""".toRegex()

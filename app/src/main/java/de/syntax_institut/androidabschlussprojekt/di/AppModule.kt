@@ -13,6 +13,7 @@ import de.syntax_institut.androidabschlussprojekt.repository.MapRepository
 import de.syntax_institut.androidabschlussprojekt.repository.PreferencesRepository
 import de.syntax_institut.androidabschlussprojekt.repository.PrivateChatRepository
 import de.syntax_institut.androidabschlussprojekt.repository.SettingsRepository
+import de.syntax_institut.androidabschlussprojekt.repository.UserRepository
 import de.syntax_institut.androidabschlussprojekt.ui.viewmodel.AuthViewModel
 import de.syntax_institut.androidabschlussprojekt.ui.viewmodel.ChatViewModel
 import de.syntax_institut.androidabschlussprojekt.ui.viewmodel.CreateViewModel
@@ -35,6 +36,7 @@ val appModule = module {
 
     // OnboardingScreen
     viewModel { OnboardingViewModel() }
+    single { UserRepository() }
 
     // ListScreen
     viewModel { LostItemViewModel(get()) }

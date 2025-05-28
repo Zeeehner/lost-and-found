@@ -169,5 +169,21 @@
     <!-- PrivateChatDetailScreen -->
     <string name="status_online">Online</string>
 
+    <!-- Onboarding -->
+    <string name="hint_report_to_lost_property_office">Lost property over €10 must be reported to the lost property office.</string>
+    <string name="hint_public_transport_lost_items">Items found in public transport must be handed in to the respective transport companies.</string>
+    <string name="hint_retaining_items_is_offense">Keeping lost property can be considered misappropriation.</string>
+    <string name="hint_found_animals_report">For found animals, contact the veterinary office or an animal shelter.</string>
+    <string name="acknowledged">Acknowledged</string>
+    <string name="acknowledge_hint">I have read and understood this hint</string>
+    <string name="onboarding_header_contact">Contact Information</string>
+    <string name="onboarding_header_legal">Legal Notices</string>
+    <string name="onboarding_subtext_contact">Optionally provide your phone number</string>
+    <string name="onboarding_subtext_legal">Please confirm the following notices</string>
+    <string name="hint_accept">Hints accepted!</string>
+    <string name="hint_progress">%1$d of %2$d</string>
+
+
+
 
 </resources>
