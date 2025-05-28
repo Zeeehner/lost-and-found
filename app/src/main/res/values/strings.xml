@@ -181,10 +181,5 @@
     <string name="onboarding_subtext_contact">Geben Sie optional Ihre Telefonnummer ein</string>
     <string name="onboarding_subtext_legal">Bitte bestätigen Sie die folgenden Hinweise</string>
     <string name="hint_accept">Hinweise akzeptiert!</string>
-    <string name="hint_progress">%1$d von %2$d</string>
-
-
-
-
-
+    <string name="hint_progress">Hinweis %1$d von %2$d</string>
 </resources>
