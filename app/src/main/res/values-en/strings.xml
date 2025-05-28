@@ -182,4 +182,9 @@
     <string name="onboarding_subtext_legal">Please confirm the following notices</string>
     <string name="hint_accept">Hints accepted!</string>
     <string name="hint_progress">%1$d of %2$d</string>
+
+    <string name="chat_security_notice">
+    For your safety: Please do not share passwords, personal information, or sensitive data in the chat.
+</string>
+
 </resources>
