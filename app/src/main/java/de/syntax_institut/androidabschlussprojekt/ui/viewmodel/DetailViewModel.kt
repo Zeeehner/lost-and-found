@@ -27,8 +27,6 @@ class DetailViewModel(
 
     // Hole aus FB die Daten des Users unter der Tabelle users -> phoneNumber
     private val firestore = FirebaseFirestore.getInstance()
-
-    // tried and not working, phonenumber are always null
     var creatorPhoneNumber by mutableStateOf<String?>(null)
         private set
 

@@ -18,8 +18,8 @@ import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material3.*
-import androidx.compose.material3.OutlinedTextFieldDefaults.contentPadding
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -54,6 +54,11 @@ fun ItemDetailsCard(
     onClose: () -> Unit,
     navController: NavController,
 ) {
+
+    LaunchedEffect(item.userId) {
+        viewModel.loadCreatorPhoneNumber(item.userId)
+    }
+
     val context = LocalContext.current
     val dateFormat = SimpleDateFormat("dd.MM.yyyy", Locale.getDefault())
     val formattedDate = dateFormat.format(Date(item.timestamp))
