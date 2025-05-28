@@ -2,8 +2,13 @@ package de.syntax_institut.androidabschlussprojekt.ui.component.detail
 
 import android.graphics.BitmapFactory
 import android.util.Base64
+import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.foundation.gestures.rememberTransformableState
+import androidx.compose.foundation.gestures.transformable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -16,12 +21,16 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.geometry.Offset
 import de.syntax_institut.androidabschlussprojekt.R
 import de.syntax_institut.androidabschlussprojekt.data.local.model.Item
+import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -38,14 +47,36 @@ fun LostItemCard(
         }
     }
 
+    val scope = rememberCoroutineScope()
+    var isZoomed by remember { mutableStateOf(false) }
+    val scale by animateFloatAsState(
+        targetValue = if (isZoomed) 2f else 1f
+    )
+
+    val offsetX = remember { Animatable(0f) }
+    val offsetY = remember { Animatable(0f) }
+
+    val transformableState = rememberTransformableState { _, panChange, _ ->
+        if (isZoomed) {
+            scope.launch {
+                offsetX.snapTo(offsetX.value + panChange.x)
+                offsetY.snapTo(offsetY.value + panChange.y)
+            }
+        }
+    }
+
+    suspend fun resetZoomAndPosition() {
+        isZoomed = false
+        offsetX.animateTo(0f, animationSpec = tween(300))
+        offsetY.animateTo(0f, animationSpec = tween(300))
+    }
+
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .padding(16.dp),
         shape = RoundedCornerShape(16.dp),
-        elevation = CardDefaults.cardElevation(
-            defaultElevation = 4.dp
-        ),
+        elevation = CardDefaults.cardElevation(4.dp),
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surface
         )
@@ -56,16 +87,42 @@ fun LostItemCard(
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(220.dp)
+                        .clip(RoundedCornerShape(12.dp))
+                        .pointerInput(Unit) {
+                            detectTapGestures(
+                                onDoubleTap = {
+                                    scope.launch {
+                                        if (isZoomed) {
+                                            resetZoomAndPosition()
+                                        } else {
+                                            isZoomed = true
+                                        }
+                                    }
+                                },
+                                onTap = {
+                                    if (isZoomed) {
+                                        scope.launch { resetZoomAndPosition() }
+                                    }
+                                }
+                            )
+                        }
+                        .transformable(state = transformableState)
                 ) {
                     Image(
                         bitmap = it,
                         contentDescription = item.title,
                         modifier = Modifier
                             .fillMaxSize()
-                            .clip(RoundedCornerShape(12.dp)),
+                            .graphicsLayer(
+                                scaleX = scale,
+                                scaleY = scale,
+                                translationX = offsetX.value,
+                                translationY = offsetY.value
+                            ),
                         contentScale = ContentScale.Crop
                     )
                 }
+
                 Spacer(modifier = Modifier.height(16.dp))
             }
 
@@ -78,7 +135,6 @@ fun LostItemCard(
 
             Spacer(modifier = Modifier.height(8.dp))
 
-            // User and date info row
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier.padding(vertical = 4.dp)
@@ -93,7 +149,7 @@ fun LostItemCard(
                         modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp)
                     ) {
                         Icon(
-                            Icons.Default.Person,
+                            imageVector = Icons.Default.Person,
                             contentDescription = null,
                             modifier = Modifier.size(16.dp),
                             tint = MaterialTheme.colorScheme.onPrimaryContainer
@@ -116,7 +172,7 @@ fun LostItemCard(
                         modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp)
                     ) {
                         Icon(
-                            Icons.Default.DateRange,
+                            imageVector = Icons.Default.DateRange,
                             contentDescription = null,
                             modifier = Modifier.size(16.dp),
                             tint = MaterialTheme.colorScheme.onSecondaryContainer
@@ -133,7 +189,6 @@ fun LostItemCard(
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // Description
             Text(
                 text = item.description,
                 style = MaterialTheme.typography.bodyMedium,
@@ -141,13 +196,12 @@ fun LostItemCard(
                 modifier = Modifier.padding(bottom = 16.dp)
             )
 
-            // Location row
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier.padding(bottom = 8.dp)
             ) {
                 Icon(
-                    Icons.Default.LocationOn,
+                    imageVector = Icons.Default.LocationOn,
                     contentDescription = null,
                     tint = MaterialTheme.colorScheme.primary
                 )
@@ -166,7 +220,6 @@ fun LostItemCard(
                 }
             }
 
-            // Map button
             Button(
                 onClick = onMapClick,
                 modifier = Modifier.fillMaxWidth(),
@@ -175,7 +228,7 @@ fun LostItemCard(
                 )
             ) {
                 Icon(
-                    Icons.Default.LocationOn,
+                    imageVector = Icons.Default.LocationOn,
                     contentDescription = null,
                     modifier = Modifier.size(18.dp)
                 )
