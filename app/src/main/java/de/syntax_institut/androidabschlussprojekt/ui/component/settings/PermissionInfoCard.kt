@@ -37,7 +37,7 @@ fun PermissionInfoCard(
             ),
         shape = RoundedCornerShape(12.dp),
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.7f)
+            containerColor = MaterialTheme.colorScheme.primaryContainer.copy()
         ),
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
     ) {
