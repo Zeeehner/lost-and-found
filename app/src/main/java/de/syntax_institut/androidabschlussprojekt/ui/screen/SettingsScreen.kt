@@ -29,6 +29,15 @@ import de.syntax_institut.androidabschlussprojekt.ui.viewmodel.SettingsViewModel
 import org.koin.androidx.compose.koinViewModel
 import de.syntax_institut.androidabschlussprojekt.ui.navigation.Screen
 
+/**
+ * SettingsScreen zeigt alle Einstellungen des Nutzers an, inklusive Profilinfo,
+ * Dark Mode, Standortberechtigungen, Benachrichtigungserlaubnisse,
+ * Telefonnummer und Logout-Option.
+ *
+ * @param navController Navigation Controller für Navigation innerhalb der App.
+ * @param modifier Modifier zum Anpassen des Composables.
+ * @param viewModel ViewModel zur Steuerung der UI-Logik (Standard: Koin Injection).
+ */
 @Composable
 fun SettingsScreen(
     navController: NavController,
@@ -39,10 +48,12 @@ fun SettingsScreen(
     val context = LocalContext.current
     var showLocationRationale by remember { mutableStateOf(false) }
 
+    // Aktion zur Aktualisierung des Standorts
     val locationAction: () -> Unit = {
         viewModel.updateLocation(context)
     }
 
+    // Launcher für Standortberechtigungen
     val requestLocationPermissionsLauncher = rememberLauncherForActivityResult(
         ActivityResultContracts.RequestMultiplePermissions()
     ) { permissions: Map<String, Boolean> ->
@@ -55,6 +66,7 @@ fun SettingsScreen(
         }
     }
 
+    // Launcher für Benachrichtigungsberechtigungen
     val notificationPermissionLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.RequestPermission(),
         onResult = { isGranted ->
@@ -67,6 +79,7 @@ fun SettingsScreen(
         }
     )
 
+    // Logout Dialog anzeigen, falls gewünscht
     if (uiState.showLogoutDialog) {
         LogoutDialog(
             onConfirm = {
@@ -87,28 +100,43 @@ fun SettingsScreen(
                 .padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
+            // Profil-Übersicht
             ProfileSection(viewModel.authViewModel, uiState.cityName)
             Divider()
+
             Text(
                 stringResource(R.string.settings),
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.Bold
             )
+            // Dark Mode Einstellung
             DarkModeSetting(darkMode = uiState.darkMode, onToggle = { viewModel.toggleDarkMode() })
+
+            // Standort-Berechtigungen
             LocationSection(viewModel, requestLocationPermissionsLauncher)
+
+            // Benachrichtigungs-Berechtigungen
             NotificationPermissionSection(viewModel, context, notificationPermissionLauncher)
+
+            // Info Karte bei Berechtigungsstatus
             if (uiState.permissionStatus.isNotEmpty()) {
                 PermissionInfoCard(uiState.permissionStatus)
             }
+
             Divider(modifier = Modifier.padding(vertical = 8.dp))
+
             Text(
                 stringResource(R.string.account),
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.Bold
             )
+            // Telefonnummer Eingabe / Anzeige
             PhoneNumberSection(authViewModel = viewModel.authViewModel)
+
+            // Logout Button
             LogoutButton(onClick = { viewModel.showLogoutDialog() })
 
+            // App Versionsinfo
             Text(
                 stringResource(R.string.app_version, "1.0.0"),
                 style = MaterialTheme.typography.bodySmall,
@@ -116,6 +144,7 @@ fun SettingsScreen(
                 modifier = Modifier.align(Alignment.CenterHorizontally)
             )
         }
+        // AdMob Banner am unteren Rand
         AdMobBanner(
             modifier = Modifier
                 .align(Alignment.BottomCenter)

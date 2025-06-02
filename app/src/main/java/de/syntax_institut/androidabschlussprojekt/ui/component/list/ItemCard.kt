@@ -2,29 +2,20 @@ package de.syntax_institut.androidabschlussprojekt.ui.component.list
 
 import android.graphics.BitmapFactory
 import android.util.Base64
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeOut
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Refresh
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.ElevatedCard
-import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.asImageBitmap
@@ -32,13 +23,16 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.fadeOut
-import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.combinedClickable
-import androidx.compose.runtime.*
 import de.syntax_institut.androidabschlussprojekt.data.local.model.Item
 
+/**
+ * Eine Karte, die die Vorschau eines verlorenen oder gefundenen Gegenstands darstellt.
+ *
+ * @param item Das anzuzeigende [Item]
+ * @param currentUserId ID des aktuell eingeloggten Benutzers zur Rechteprüfung
+ * @param onClick Callback bei kurzem Klick auf die Karte
+ * @param onLongClick Callback bei langem Klick (z. B. für Aktionen wie Bearbeiten oder Löschen)
+ */
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun ItemCard(
@@ -60,11 +54,7 @@ fun ItemCard(
                 .fillMaxWidth()
                 .combinedClickable(
                     onClick = onClick,
-                    onLongClick = {
-                        if (canDelete) {
-                            onLongClick()
-                        }
-                    }
+                    onLongClick = { if (canDelete) onLongClick() }
                 ),
             elevation = CardDefaults.elevatedCardElevation(defaultElevation = 2.dp)
         ) {
@@ -140,7 +130,9 @@ fun ItemCard(
                         overflow = TextOverflow.Ellipsis,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
+
                     Spacer(modifier = Modifier.height(8.dp))
+
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         verticalAlignment = Alignment.CenterVertically

@@ -10,15 +10,29 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import java.util.*
 
+/**
+ * Repository für private 1:1-Chatfunktionen.
+ * Beinhaltet Echtzeitnachrichten, Partnerlisten, letzte Aktivitäten und Benachrichtigungszustände.
+ */
 class PrivateChatRepository {
 
     private val firestore = FirebaseFirestore.getInstance()
     private var messageListener: ListenerRegistration? = null
 
+    /**
+     * Liefert eine deterministische ID für eine private Chat-Konversation zwischen zwei Usern.
+     */
     private fun getChatId(userA: String, userB: String): String {
         return listOf(userA, userB).sorted().joinToString("_")
     }
 
+    /**
+     * Beobachtet Nachrichten in einem privaten Chat zwischen zwei Usern.
+     *
+     * @param currentUserId Aktuelle User-ID.
+     * @param partnerId ID des Chatpartners.
+     * @param onResult Callback mit der Liste von Nachrichten.
+     */
     fun observeMessages(
         currentUserId: String,
         partnerId: String,
@@ -37,11 +51,17 @@ class PrivateChatRepository {
             }
     }
 
+    /**
+     * Sendet eine private Nachricht und aktualisiert ChatPartner-Daten auf beiden Seiten.
+     *
+     * @param message Die zu sendende Nachricht.
+     * @param senderName Anzeigename des Senders.
+     * @param receiverName Anzeigename des Empfängers.
+     */
     fun sendMessage(message: PrivateChatMessage, senderName: String, receiverName: String) {
         val chatId = getChatId(message.senderId, message.receiverId)
         val docId = UUID.randomUUID().toString()
         val fullMessage = message.copy(id = docId)
-
 
         // 1. Nachricht speichern
         firestore.collection("private_chats")
@@ -65,7 +85,7 @@ class PrivateChatRepository {
             .document(message.receiverId)
             .set(senderPartner)
 
-        // 3. ChatPartner für Empfänger aktualisieren (unread + 1)
+        // 3. ChatPartner für Empfänger aktualisieren (Unread +1)
         val receiverDocRef = firestore.collection("chat_partners")
             .document(message.receiverId)
             .collection("partners")
@@ -84,6 +104,12 @@ class PrivateChatRepository {
         }
     }
 
+    /**
+     * Gibt eine kontinuierlich aktualisierte Liste der Chat-Partner des aktuellen Nutzers zurück.
+     *
+     * @param currentUserId Die aktuelle User-ID.
+     * @return Flow mit Liste der ChatPartner.
+     */
     fun getChatPartners(currentUserId: String): Flow<List<ChatPartner>> = callbackFlow {
         val listener = firestore.collection("chat_partners")
             .document(currentUserId)
@@ -92,12 +118,16 @@ class PrivateChatRepository {
                 val list = snapshot?.toObjects(ChatPartner::class.java) ?: emptyList()
                 trySend(list).isSuccess
             }
-
-        awaitClose {
-            listener.remove()
-        }
+        awaitClose { listener.remove() }
     }
 
+    /**
+     * Holt den Zeitstempel, zu dem der Chatpartner zuletzt online war.
+     *
+     * @param currentUserId Aktueller Benutzer.
+     * @param partnerId ID des Chatpartners.
+     * @param onResult Callback mit Unix-Timestamp.
+     */
     fun getUserLastSeen(currentUserId: String, partnerId: String, onResult: (Long) -> Unit) {
         firestore.collection("chat_partners")
             .document(currentUserId)
@@ -109,13 +139,23 @@ class PrivateChatRepository {
             }
     }
 
-
+    /**
+     * Aktualisiert den Zeitstempel, wann ein Nutzer zuletzt aktiv war.
+     *
+     * @param userId ID des Nutzers.
+     */
     fun updateLastSeen(userId: String) {
-        val userRef = firestore.collection("users").document(userId)
-        userRef.update("lastSeen", System.currentTimeMillis())
+        firestore.collection("users")
+            .document(userId)
+            .update("lastSeen", System.currentTimeMillis())
     }
 
-
+    /**
+     * Setzt den Zähler ungelesener Nachrichten eines Chatpartners zurück.
+     *
+     * @param currentUserId Aktueller Benutzer.
+     * @param partnerId ID des Chatpartners.
+     */
     fun resetUnreadCount(currentUserId: String, partnerId: String) {
         firestore.collection("chat_partners")
             .document(currentUserId)
@@ -124,6 +164,10 @@ class PrivateChatRepository {
             .update("unreadCount", 0)
     }
 
+    /**
+     * Entfernt alle aktiven Listener für Chatnachrichten.
+     * Sollte z. B. beim Verlassen eines Screens aufgerufen werden.
+     */
     fun stopObserving() {
         messageListener?.remove()
         messageListener = null

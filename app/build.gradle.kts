@@ -1,6 +1,7 @@
 import java.util.Properties
 import java.io.FileInputStream
 
+// Load local.properties file to get local API keys or sensitive data
 val localProperties = Properties()
 val localPropertiesFile = rootProject.file("local.properties")
 if (localPropertiesFile.exists()) {
@@ -8,11 +9,11 @@ if (localPropertiesFile.exists()) {
 }
 
 plugins {
-    alias(libs.plugins.android.application)
-    alias(libs.plugins.kotlin.android)
-    alias(libs.plugins.kotlin.compose)
-    alias(libs.plugins.kotlin.ksp) // für Room
-    alias(libs.plugins.jetbrains.kotlin.serialization)
+    alias(libs.plugins.android.application)                // Android application plugin
+    alias(libs.plugins.kotlin.android)                    // Kotlin Android plugin
+    alias(libs.plugins.kotlin.compose)                   // Kotlin Compose plugin
+    alias(libs.plugins.kotlin.ksp)                      // Kotlin Symbol Processing for Room
+    alias(libs.plugins.jetbrains.kotlin.serialization) // Kotlin serialization plugin
 }
 
 android {
@@ -28,10 +29,19 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
+        // Read OpenCage API key from local.properties, throw if missing
         val apiKey: String = localProperties.getProperty("OPENCAGE_API_KEY")
             ?: throw GradleException("OPENCAGE_API_KEY not found in local.properties")
 
+        // BuildConfig field to expose OpenCage API key to the app code
         buildConfigField("String", "OPENCAGE_API_KEY", "\"$apiKey\"")
+
+        // Read AdMob Ad Unit ID from local.properties
+        val adKey: String = localProperties.getProperty("AdKey")
+            ?: throw GradleException("AdKey not found in local.properties")
+
+        // BuildConfig field to expose AdMob Ad Unit ID to the app code
+        buildConfigField("String", "AdKey", "\"$adKey\"")
     }
 
     buildTypes {
@@ -44,23 +54,23 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_11     // Use Java 11
         targetCompatibility = JavaVersion.VERSION_11
     }
     kotlinOptions {
-        jvmTarget = "11"
+        jvmTarget = "11"                                 // Target JVM 11
     }
     buildFeatures {
-        compose = true
-        buildConfig = true
+        compose = true                                   // Enable Jetpack Compose
+        buildConfig = true                               // Enable BuildConfig generation
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.3"
+        kotlinCompilerExtensionVersion = "1.5.3"        // Compose Compiler version
     }
 }
 
 dependencies {
-    // AndroidX + Compose
+    // AndroidX and Compose UI dependencies
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.lifecycle.runtime.ktx)
@@ -72,61 +82,63 @@ dependencies {
     implementation(libs.androidx.material3)
     implementation(libs.androidx.runtime.livedata)
 
-    // Navigation
+    // Navigation Compose for screen navigation
     implementation(libs.androidx.navigation.compose)
 
-    // Google Maps & Location
+    // Google Maps and Location services
     implementation(libs.maps.compose)
     implementation(libs.google.maps)
     implementation(libs.play.services.location)
 
-    // Google AdMob
+    // Google AdMob SDK for ads integration
     implementation("com.google.android.gms:play-services-ads:22.6.0")
 
-    // Room (Persistence)
+    // Room database for local persistence with KSP for annotation processing
     implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.room.ktx)
     ksp(libs.androidx.room.compiler)
 
-    // Network / JSON
+    // Network and JSON serialization libraries
     implementation(libs.kotlinx.serialization)
     implementation(libs.moshi)
     implementation(libs.retrofit)
     implementation(libs.converterMoshi)
 
-    // Image Loading
+    // Image loading libraries Coil + OkHttp
     implementation(libs.coil.compose)
     implementation(libs.coil.network.okhttp)
 
-    // DataStore
+    // DataStore Preferences for key-value storage
     implementation(libs.androidx.datastore.preferences)
 
-    // Koin (DI)
+    // Koin for Dependency Injection
     implementation(platform(libs.koin.bom))
     implementation(libs.koin.core)
     implementation(libs.koin.android)
     implementation(libs.koin.androidx.compose)
 
-    // Firebase
+    // Firebase libraries managed by BOM
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.database.ktx)
     implementation(libs.firebase.firestore)
     implementation(libs.firebase.storage)
     implementation(libs.firebase.auth)
 
-    // Tests
+    // Unit and UI testing libraries
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.ui.test.junit4)
 
+    // Debugging tools for Compose UI
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 
-    // ViewModel + Fonts
+    // Lifecycle ViewModel integration and Google Fonts for Compose
     implementation(libs.androidx.lifecycle.viewmodel.compose)
     implementation("androidx.compose.ui:ui-text-google-fonts:1.5.4")
 }
-// Firebase Plugin
+
+// Apply the Google Services plugin to enable Firebase features
 apply(plugin = "com.google.gms.google-services")

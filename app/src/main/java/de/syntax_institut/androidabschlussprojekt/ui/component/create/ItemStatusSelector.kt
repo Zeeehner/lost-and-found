@@ -1,6 +1,5 @@
 package de.syntax_institut.androidabschlussprojekt.ui.component.create
 
-import androidx.compose.ui.draw.clip
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -13,7 +12,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.draw.clip
 
+/**
+ * Auswahlfeld für den Status eines Items ("lost" oder "found").
+ *
+ * @param status Der aktuell gewählte Status.
+ * @param onStatusChange Callback, wenn sich der Status ändert.
+ */
 @Composable
 fun ItemStatusSelector(status: String, onStatusChange: (String) -> Unit) {
     Card(
@@ -25,7 +31,7 @@ fun ItemStatusSelector(status: String, onStatusChange: (String) -> Unit) {
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             Text(
-                "Status",
+                text = "Status",
                 style = MaterialTheme.typography.titleMedium
             )
             Row(

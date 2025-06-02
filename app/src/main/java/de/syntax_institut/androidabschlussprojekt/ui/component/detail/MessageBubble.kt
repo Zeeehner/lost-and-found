@@ -13,6 +13,16 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 
+/**
+ * Zeigt eine Chat-Nachricht als Sprechblase an, mit angepasster Ausrichtung
+ * je nachdem, ob die Nachricht vom aktuellen Benutzer stammt.
+ *
+ * @param message Der Nachrichtentext.
+ * @param userName Der Name des Absenders (nur bei Fremdnachrichten sichtbar).
+ * @param timestamp Der Zeitstempel im formatierten String.
+ * @param isCurrentUser Gibt an, ob der aktuelle Benutzer der Absender ist.
+ * @param modifier Optionaler Modifier für äußeres Layout.
+ */
 @Composable
 fun MessageBubble(
     message: String,

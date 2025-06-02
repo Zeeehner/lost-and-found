@@ -1,33 +1,13 @@
 package de.syntax_institut.androidabschlussprojekt.ui.component.onboarding
 
-import android.R.attr.fontWeight
-import android.R.attr.text
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.outlined.Phone
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.OutlinedTextFieldDefaults
-import androidx.compose.material3.Text
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -39,6 +19,15 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import de.syntax_institut.androidabschlussprojekt.R
 
+/**
+ * Zeigt das finale Onboarding-UI zur Eingabe einer optionalen Telefonnummer.
+ *
+ * @param phoneNumber Aktueller Eingabewert der Telefonnummer.
+ * @param isSaving Gibt an, ob gerade gespeichert wird (für Ladeanzeige).
+ * @param errorMessage Optionaler Fehlertext bei Validierungsfehlern.
+ * @param onPhoneNumberChange Callback bei Änderung der Telefonnummer.
+ * @param onSave Callback bei Klick auf den Weiter-/Speichern-Button.
+ */
 @Composable
 fun OnboardingPhoneSection(
     phoneNumber: String,
@@ -51,18 +40,12 @@ fun OnboardingPhoneSection(
         verticalArrangement = Arrangement.spacedBy(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        // Success Icon
         Card(
             modifier = Modifier.size(72.dp),
-            colors = CardDefaults.cardColors(
-                containerColor = MaterialTheme.colorScheme.primaryContainer
-            ),
+            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer),
             shape = RoundedCornerShape(36.dp)
         ) {
-            Box(
-                modifier = Modifier.fillMaxSize(),
-                contentAlignment = Alignment.Center
-            ) {
+            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                 Icon(
                     imageVector = Icons.Filled.CheckCircle,
                     contentDescription = null,
@@ -81,7 +64,6 @@ fun OnboardingPhoneSection(
 
         Spacer(modifier = Modifier.height(8.dp))
 
-        // Phone Number Input
         OutlinedTextField(
             value = phoneNumber,
             onValueChange = onPhoneNumberChange,
@@ -98,9 +80,7 @@ fun OnboardingPhoneSection(
                 keyboardType = KeyboardType.Phone,
                 imeAction = ImeAction.Done
             ),
-            keyboardActions = KeyboardActions(
-                onDone = { onSave() }
-            ),
+            keyboardActions = KeyboardActions(onDone = { onSave() }),
             colors = OutlinedTextFieldDefaults.colors(
                 focusedBorderColor = MaterialTheme.colorScheme.primary,
                 focusedLabelColor = MaterialTheme.colorScheme.primary
@@ -117,16 +97,13 @@ fun OnboardingPhoneSection(
             modifier = Modifier.padding(horizontal = 8.dp)
         )
 
-        // Action Button
         Button(
             onClick = onSave,
             modifier = Modifier
                 .fillMaxWidth()
                 .height(52.dp),
             enabled = !isSaving,
-            colors = ButtonDefaults.buttonColors(
-                containerColor = MaterialTheme.colorScheme.primary
-            ),
+            colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary),
             shape = RoundedCornerShape(12.dp)
         ) {
             if (isSaving) {
@@ -154,12 +131,9 @@ fun OnboardingPhoneSection(
             }
         }
 
-        // Error Message
         errorMessage?.let { error ->
             Card(
-                colors = CardDefaults.cardColors(
-                    containerColor = MaterialTheme.colorScheme.errorContainer
-                ),
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.errorContainer),
                 shape = RoundedCornerShape(8.dp)
             ) {
                 Text(

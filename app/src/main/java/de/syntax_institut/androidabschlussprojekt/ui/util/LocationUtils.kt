@@ -11,8 +11,20 @@ import com.google.android.gms.tasks.CancellationTokenSource
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlin.coroutines.resume
 
+/**
+ * Utility-Objekt für standortbezogene Funktionen.
+ */
 object LocationUtils {
 
+    /**
+     * Ermittelt den aktuellen Standort des Geräts und ruft [onSuccess] mit der Location auf.
+     *
+     * Benötigt die Berechtigungen [Manifest.permission.ACCESS_FINE_LOCATION] und
+     * [Manifest.permission.ACCESS_COARSE_LOCATION].
+     *
+     * @param context Context zur Initialisierung der Location Services.
+     * @param onSuccess Callback, der mit der ermittelten Location aufgerufen wird.
+     */
     @RequiresPermission(allOf = [Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION])
     fun getLocation(
         context: Context,
@@ -30,6 +42,15 @@ object LocationUtils {
         }
     }
 
+    /**
+     * Suspendierende Funktion, die den aktuellen Standort ermittelt.
+     *
+     * Benötigt die Berechtigungen [Manifest.permission.ACCESS_FINE_LOCATION] und
+     * [Manifest.permission.ACCESS_COARSE_LOCATION].
+     *
+     * @param context Context zur Initialisierung der Location Services.
+     * @return Die ermittelte [Location].
+     */
     @RequiresPermission(allOf = [Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION])
     suspend fun getCurrentLocation(context: Context): Location =
         suspendCancellableCoroutine { cont ->

@@ -26,6 +26,16 @@ import de.syntax_institut.androidabschlussprojekt.ui.component.chat.ChatListItem
 import de.syntax_institut.androidabschlussprojekt.ui.viewmodel.PrivateChatViewModel
 import org.koin.androidx.compose.koinViewModel
 
+/**
+ * Bildschirm für die Anzeige der Liste von Chat-Partnern.
+ *
+ * Ermöglicht die Suche in der Chat-Liste und Auswahl eines Partners zum Öffnen eines Chats.
+ *
+ * @param navController Navigation Controller zur Navigation zu Detailbildschirmen.
+ * @param currentUserId ID des aktuell angemeldeten Benutzers.
+ * @param onChatSelected Callback, wenn ein Chatpartner ausgewählt wird.
+ * @param viewModel ViewModel zur Verwaltung und Beobachtung der Chat-Partnerdaten (Standard: Koin Injection).
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PrivateChatListScreen(
@@ -37,10 +47,12 @@ fun PrivateChatListScreen(
     val partners by viewModel.chatPartners.collectAsState()
     var searchQuery by remember { mutableStateOf("") }
 
+    // Lade Chat-Partner bei Start
     LaunchedEffect(Unit) {
         viewModel.loadChatPartners(currentUserId)
     }
 
+    // Filtere Chatpartner basierend auf Suchbegriff
     val filteredPartners = remember(partners, searchQuery) {
         Log.d("PrivateChatListScreen", "Partners: $partners")
         if (searchQuery.isBlank()) {
@@ -67,6 +79,7 @@ fun PrivateChatListScreen(
                     )
                 )
         ) {
+            // Header mit Titel und Suchfeld
             Surface(
                 modifier = Modifier.fillMaxWidth(),
                 color = MaterialTheme.colorScheme.primaryContainer,
@@ -105,6 +118,7 @@ fun PrivateChatListScreen(
                 }
             }
 
+            // Anzeige bei leerer Liste oder keine Suchtreffer
             if (filteredPartners.isEmpty()) {
                 Box(
                     modifier = Modifier.fillMaxSize(),
@@ -141,6 +155,7 @@ fun PrivateChatListScreen(
                     }
                 }
             } else {
+                // Liste der Chat-Partner mit Klickfunktion
                 LazyColumn(
                     modifier = Modifier.fillMaxSize(),
                     contentPadding = PaddingValues(vertical = 8.dp)
@@ -155,6 +170,7 @@ fun PrivateChatListScreen(
             }
         }
 
+        // Banner für Werbung am unteren Rand
         AdMobBanner(
             modifier = Modifier
                 .align(Alignment.BottomCenter)

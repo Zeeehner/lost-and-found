@@ -29,6 +29,18 @@ import de.syntax_institut.androidabschlussprojekt.ui.component.chat.PrivateMessa
 import de.syntax_institut.androidabschlussprojekt.ui.viewmodel.PrivateChatViewModel
 import org.koin.androidx.compose.koinViewModel
 
+/**
+ * Detailansicht eines privaten Chats zwischen zwei Benutzern.
+ *
+ * Zeigt die Nachrichten im Chatverlauf an, einen Eingabebereich zum Schreiben neuer Nachrichten
+ * sowie Informationen zum Chatpartner (Name, letzter Online-Status).
+ *
+ * @param currentUserId Die ID des aktuell angemeldeten Benutzers.
+ * @param currentUserName Der Anzeigename des aktuell angemeldeten Benutzers.
+ * @param chatPartner Der Chatpartner mit Informationen zu Nutzer-ID und Namen.
+ * @param onBackPressed Callback, wenn die Zurück-Schaltfläche gedrückt wird.
+ * @param viewModel Das ViewModel zur Verwaltung des Chatverlaufs und der Nachrichten (Standard: Koin Injection).
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PrivateChatDetailScreen(
@@ -42,28 +54,29 @@ fun PrivateChatDetailScreen(
     var input by remember { mutableStateOf("") }
     val listState = rememberLazyListState()
     val lastSeen by viewModel.partnerLastSeen.collectAsState()
+
+    // Formatierung des Zeitpunkts "zuletzt online"
     val lastSeenFormatted = remember(lastSeen) {
         android.text.format.DateUtils.getRelativeTimeSpanString(lastSeen)
     }
 
+    // Aktualisiere "last seen" des aktuellen Benutzers alle 10 Sekunden
     LaunchedEffect(currentUserId) {
         viewModel.updateMyLastSeen(currentUserId)
-        kotlinx.coroutines.delay(10_000) // 10 Sekunden
+        kotlinx.coroutines.delay(10_000)
     }
 
+    // Lade Nachrichten und beobachte "last seen" des Partners, wenn sich der Partner ändert
     LaunchedEffect(chatPartner.userId) {
         viewModel.loadMessages(currentUserId, chatPartner.userId)
         viewModel.observePartnerLastSeen(currentUserId, chatPartner.userId)
     }
 
+    // Scroll automatisch zum neuesten Nachrichteneintrag
     LaunchedEffect(messages.size) {
         if (messages.isNotEmpty()) {
             listState.animateScrollToItem(messages.size - 1)
         }
-    }
-
-    LaunchedEffect(chatPartner.userId) {
-        viewModel.loadMessages(currentUserId, chatPartner.userId)
     }
 
     Box(modifier = Modifier.fillMaxSize()) {
@@ -80,6 +93,7 @@ fun PrivateChatDetailScreen(
                     )
                 )
         ) {
+            // Header mit Zurück-Button und Partnerinfo
             Surface(
                 modifier = Modifier.fillMaxWidth(),
                 color = MaterialTheme.colorScheme.primaryContainer,
@@ -137,6 +151,7 @@ fun PrivateChatDetailScreen(
                 }
             }
 
+            // Nachrichtenliste mit Sicherheitshinweis
             LazyColumn(
                 state = listState,
                 modifier = Modifier
@@ -146,6 +161,7 @@ fun PrivateChatDetailScreen(
                 verticalArrangement = Arrangement.spacedBy(8.dp),
                 contentPadding = PaddingValues(vertical = 16.dp)
             ) {
+                // Sicherheitshinweis oben im Chat
                 item {
                     Surface(
                         modifier = Modifier
@@ -178,6 +194,7 @@ fun PrivateChatDetailScreen(
                     }
                 }
 
+                // Chat-Nachrichten darstellen
                 items(messages) { msg ->
                     PrivateMessageBubble(
                         message = msg,
@@ -186,6 +203,7 @@ fun PrivateChatDetailScreen(
                 }
             }
 
+            // Eingabebereich zum Verfassen neuer Nachrichten
             Surface(
                 modifier = Modifier.fillMaxWidth(),
                 color = MaterialTheme.colorScheme.surface,
@@ -251,6 +269,7 @@ fun PrivateChatDetailScreen(
             }
         }
 
+        // Werbebanner am unteren Bildschirmrand
         AdMobBanner(
             modifier = Modifier
                 .align(Alignment.BottomCenter)

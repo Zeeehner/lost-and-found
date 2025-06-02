@@ -1,11 +1,6 @@
 package de.syntax_institut.androidabschlussprojekt.ui.component.list
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material3.Icon
@@ -19,6 +14,12 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import de.syntax_institut.androidabschlussprojekt.R
 
+/**
+ * Zeigt eine Nachricht an, wenn keine Suchergebnisse für eine Filter-/Suchkombination gefunden wurden.
+ *
+ * @param filter Der aktuell ausgewählte Filter ("all", "lost", "found" o.ä.)
+ * @param query Der aktuelle Suchtext
+ */
 @Composable
 fun NoResultsMessage(filter: String, query: String) {
     Box(
@@ -33,24 +34,25 @@ fun NoResultsMessage(filter: String, query: String) {
         ) {
             Icon(
                 Icons.Outlined.Info,
-                contentDescription = null,
+                contentDescription = stringResource(R.string.no_results),
                 modifier = Modifier
                     .size(64.dp)
                     .padding(bottom = 16.dp),
                 tint = MaterialTheme.colorScheme.primary.copy(alpha = 0.7f)
             )
 
+            // Wählt die passende Nachricht je nach Filter- und Suchtext
             val message = when {
                 query.isNotEmpty() ->
                     stringResource(R.string.no_results_for_query, query)
-                filter != "Alle" ->
+                filter != "all" ->
                     stringResource(R.string.no_results_for_filter, filter.lowercase())
                 else ->
                     stringResource(R.string.no_items)
             }
 
             Text(
-                message,
+                text = message,
                 style = MaterialTheme.typography.titleMedium,
                 textAlign = TextAlign.Center
             )

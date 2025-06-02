@@ -25,6 +25,15 @@ import de.syntax_institut.androidabschlussprojekt.ui.viewmodel.DetailViewModel
 import de.syntax_institut.androidabschlussprojekt.ui.viewmodel.EditViewModel
 import org.koin.androidx.compose.koinViewModel
 
+/**
+ * DetailScreen zeigt die Detailansicht eines Items inkl. Chatverlauf und Bearbeitungsoptionen.
+ *
+ * @param itemId Die ID des anzuzeigenden Items
+ * @param navController Navigation Controller zum Navigieren zwischen Screens
+ * @param viewModel ViewModel zur Verwaltung der Detaildaten
+ * @param authViewModel ViewModel für Authentifizierungsdaten
+ * @param editViewModel ViewModel zur Bearbeitung des Items
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DetailScreen(
@@ -47,26 +56,26 @@ fun DetailScreen(
     var title by remember { mutableStateOf(TextFieldValue("")) }
     var description by remember { mutableStateOf(TextFieldValue("")) }
 
-    // Detail-Item laden
+    // Lade das Detail-Item anhand der übergebenen ID
     LaunchedEffect(itemId) {
         viewModel.loadItem(itemId)
     }
 
-    // Wenn das Item geladen ist, dann auch fürs Bearbeiten vorbereiten
+    // Lade Telefonnummer des Erstellers, wenn Item geladen ist
     LaunchedEffect(item) {
         item?.let {
             viewModel.loadCreatorPhoneNumber(it.userId)
         }
     }
 
-    // Wenn das Edit-BottomSheet geöffnet wird, Item fürs Bearbeiten laden
+    // Lade das zu bearbeitende Item, wenn das Bearbeitungs-BottomSheet geöffnet wird
     LaunchedEffect(isEditSheetOpen.value) {
         if (isEditSheetOpen.value) {
             editViewModel.loadItem(itemId)
         }
     }
 
-    // Wenn das Edit-Item geladen ist, Felder befüllen
+    // Befülle Eingabefelder mit Daten aus dem zu bearbeitenden Item
     LaunchedEffect(editItem) {
         editItem?.let {
             title = TextFieldValue(it.title)
@@ -96,6 +105,7 @@ fun DetailScreen(
         }
     ) { paddingValues ->
         if (item == null) {
+            // Ladeanzeige, solange das Item noch nicht geladen ist
             Box(
                 modifier = Modifier
                     .fillMaxSize()
@@ -105,6 +115,7 @@ fun DetailScreen(
                 CircularProgressIndicator()
             }
         } else {
+            // Hauptinhalt mit Item-Details, Chat und Eingabefeld
             Box(
                 modifier = Modifier
                     .fillMaxSize()
@@ -157,10 +168,7 @@ fun DetailScreen(
                                             text = "${chatMessages.size}",
                                             style = MaterialTheme.typography.labelSmall,
                                             color = MaterialTheme.colorScheme.onPrimary,
-                                            modifier = Modifier.padding(
-                                                horizontal = 6.dp,
-                                                vertical = 2.dp
-                                            )
+                                            modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp)
                                         )
                                     }
                                 }
@@ -169,10 +177,7 @@ fun DetailScreen(
                             if (chatMessages.isEmpty()) {
                                 Text(
                                     text = stringResource(R.string.no_messages_yet),
-                                    modifier = Modifier.padding(
-                                        horizontal = 16.dp,
-                                        vertical = 8.dp
-                                    ),
+                                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
                                     style = MaterialTheme.typography.bodyMedium,
                                     color = MaterialTheme.colorScheme.onSurfaceVariant
                                 )
@@ -213,7 +218,7 @@ fun DetailScreen(
         }
     }
 
-    // ModalBottomSheet außerhalb von Scaffold
+    // Bearbeitungs-BottomSheet mit EditForm außerhalb des Scaffold
     if (isEditSheetOpen.value && editItem != null) {
         ModalBottomSheet(
             onDismissRequest = { isEditSheetOpen.value = false },

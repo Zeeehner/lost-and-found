@@ -17,6 +17,13 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import de.syntax_institut.androidabschlussprojekt.R
 
+/**
+ * Eingabefeld für Chat-Nachrichten mit Senden-Button und optionaler Löschfunktion.
+ *
+ * @param message Der aktuelle Inhalt des Textfelds.
+ * @param onMessageChange Callback bei Textänderung.
+ * @param onSend Callback beim Klick auf den Senden-Button.
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MessageInputField(
@@ -62,7 +69,7 @@ fun MessageInputField(
                     ) {
                         IconButton(onClick = { onMessageChange("") }) {
                             Icon(
-                                Icons.Default.Clear,
+                                imageVector = Icons.Default.Clear,
                                 contentDescription = stringResource(R.string.clear),
                                 tint = MaterialTheme.colorScheme.onSurfaceVariant
                             )
@@ -87,7 +94,7 @@ fun MessageInputField(
                 modifier = Modifier.size(48.dp)
             ) {
                 Icon(
-                    Icons.Default.Send,
+                    imageVector = Icons.Default.Send,
                     contentDescription = stringResource(R.string.send)
                 )
             }

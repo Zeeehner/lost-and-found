@@ -8,15 +8,33 @@ import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.compose.runtime.getValue
 import de.syntax_institut.androidabschlussprojekt.R
 import de.syntax_institut.androidabschlussprojekt.ui.viewmodel.CreateViewModel
+import org.koin.androidx.compose.koinViewModel
 
+/**
+ * Komponente für die Standorteingabe beim Erstellen eines Items.
+ *
+ * Zeigt ein Textfeld für den Ortsnamen und optional Felder für Koordinaten.
+ * Unterstützt automatische Standortbestimmung über das ViewModel.
+ *
+ * @param location Der aktuelle Standortname (wird intern über das ViewModel gesetzt).
+ * @param latitude Aktueller Breitengrad.
+ * @param longitude Aktueller Längengrad.
+ * @param onLocationChange Callback bei Änderung des Ortsnamens.
+ * @param onLatChange Callback bei Änderung des Breitengrads.
+ * @param onLongChange Callback bei Änderung des Längengrads.
+ * @param showDetails Ob die Koordinatenfelder sichtbar sein sollen.
+ * @param onToggleDetails Aktion zum Ein-/Ausklappen der Detailfelder.
+ * @param onAutoLocate Aktion zur automatischen Standortermittlung.
+ * @param viewModel Das zugehörige [CreateViewModel] (standardmäßig per Compose bereitgestellt).
+ */
 @Composable
 fun ItemLocationSection(
     location: String,
@@ -28,7 +46,7 @@ fun ItemLocationSection(
     showDetails: Boolean,
     onToggleDetails: () -> Unit,
     onAutoLocate: () -> Unit,
-    viewModel: CreateViewModel = viewModel()
+    viewModel: CreateViewModel = koinViewModel()
 ) {
     val context = LocalContext.current
     val formState by viewModel.formState.collectAsState()
@@ -42,11 +60,14 @@ fun ItemLocationSection(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Text(stringResource(R.string.location), style = MaterialTheme.typography.titleMedium)
+                Text(
+                    text = stringResource(R.string.location),
+                    style = MaterialTheme.typography.titleMedium
+                )
                 TextButton(onClick = onToggleDetails) {
                     Text(if (showDetails) stringResource(R.string.less) else stringResource(R.string.more))
                     Icon(
-                        if (showDetails) Icons.Default.Clear else Icons.Default.LocationOn,
+                        imageVector = if (showDetails) Icons.Default.Clear else Icons.Default.LocationOn,
                         contentDescription = null
                     )
                 }
@@ -61,7 +82,7 @@ fun ItemLocationSection(
             )
 
             AnimatedVisibility(visible = showDetails) {
-                Column {
+                Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
                     OutlinedTextField(
                         value = latitude,
                         onValueChange = onLatChange,

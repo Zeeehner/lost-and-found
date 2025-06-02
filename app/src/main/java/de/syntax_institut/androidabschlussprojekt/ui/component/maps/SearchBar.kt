@@ -1,22 +1,28 @@
 package de.syntax_institut.androidabschlussprojekt.ui.component.maps
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.unit.dp
-import androidx.compose.material3.TextFieldDefaults
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.material.icons.filled.Clear
-import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import de.syntax_institut.androidabschlussprojekt.R
 
+/**
+ * Eine runde Suchleiste für die Kartenansicht mit Icon, Eingabefeld und "Clear"-Button.
+ *
+ * @param onSearch Wird ausgelöst, wenn der Benutzer mit `onDone` eine Suche abschickt.
+ * @param onClose Wird ausgelöst, wenn der Text geleert wird.
+ * @param modifier Ermöglicht die Positionierung im Layout.
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SearchBar(

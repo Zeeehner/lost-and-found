@@ -6,17 +6,21 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import de.syntax_institut.androidabschlussprojekt.ui.viewmodel.OnboardingViewModel
-import androidx.compose.ui.res.stringResource
 import de.syntax_institut.androidabschlussprojekt.R
 
+/**
+ * Header-Komponente für das Onboarding.
+ * Zeigt einen Titel und eine Beschreibung abhängig vom Fortschritt des Nutzers.
+ *
+ * @param allHintsDone True, wenn alle rechtlichen Hinweise bestätigt wurden.
+ */
 @Composable
 fun OnboardingHeader(
-    allHintsDone: Boolean,
-    viewModel: OnboardingViewModel
+    allHintsDone: Boolean
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,

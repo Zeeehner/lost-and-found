@@ -26,6 +26,15 @@ import de.syntax_institut.androidabschlussprojekt.ui.viewmodel.EditViewModel
 import de.syntax_institut.androidabschlussprojekt.ui.viewmodel.LostItemViewModel
 import org.koin.androidx.compose.koinViewModel
 
+/**
+ * Haupt-Listen-Screen für verlorene/fundene Gegenstände.
+ * Zeigt Items, Filter, Suchfunktion und ermöglicht Item-Erstellung und Bearbeitung.
+ *
+ * @param navController Navigation Controller zur Steuerung der Navigation
+ * @param viewModel ViewModel zur Verwaltung der LostItem-Daten
+ * @param authViewModel ViewModel für Authentifizierungsinformationen
+ * @param editViewModel ViewModel zur Bearbeitung von Items
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ListScreen(
@@ -129,7 +138,7 @@ fun ListScreen(
         )
     }
 
-    // ModalBottomSheet
+    // ModalBottomSheet für Item-Bearbeitung
     if (showEditSheet && editItem != null) {
         ModalBottomSheet(
             onDismissRequest = { showEditSheet = false },

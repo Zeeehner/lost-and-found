@@ -2,28 +2,13 @@ package de.syntax_institut.androidabschlussprojekt.ui.component.onboarding
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Info
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
@@ -32,15 +17,20 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import de.syntax_institut.androidabschlussprojekt.R
 
+/**
+ * Eine Karte, die einen rechtlichen Hinweis oder eine wichtige Information darstellt,
+ * die vom Nutzer bestätigt werden muss.
+ *
+ * @param hint Der anzuzeigende Text.
+ * @param isAcknowledged Gibt an, ob der Nutzer den Hinweis bestätigt hat.
+ * @param onAcknowledge Callback, wenn der Nutzer die Checkbox ändert.
+ */
 @Composable
 fun LegalHintCard(
     hint: String,
     isAcknowledged: Boolean,
     onAcknowledge: () -> Unit
 ) {
-    val interactionSource = remember { MutableInteractionSource() }
-    val context = androidx.compose.ui.platform.LocalContext.current
-
     val cardModifier = Modifier
         .fillMaxWidth()
         .shadow(
@@ -91,7 +81,7 @@ fun LegalHintCard(
                     style = MaterialTheme.typography.bodyLarge,
                     color = MaterialTheme.colorScheme.onSurface,
                     modifier = Modifier.weight(1f),
-                    lineHeight = MaterialTheme.typography.bodyLarge.lineHeight * 1.2
+                    lineHeight = MaterialTheme.typography.bodyLarge.lineHeight * 1.2f
                 )
             }
 
@@ -104,7 +94,7 @@ fun LegalHintCard(
             ) {
                 CustomCheckbox(
                     checked = isAcknowledged,
-                    onCheckedChange = { onAcknowledge() }
+                    onCheckedChange = onAcknowledge
                 )
 
                 Text(

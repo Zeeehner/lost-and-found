@@ -13,6 +13,14 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import de.syntax_institut.androidabschlussprojekt.R
 
+/**
+ * Zeigt ein Dialogfenster an, das dem Benutzer die Möglichkeit gibt,
+ * eine Aktion für einen Listeneintrag auszuwählen (Bearbeiten oder Löschen).
+ *
+ * @param onDismiss Callback zum Schließen des Dialogs
+ * @param onEdit Callback zum Bearbeiten des Eintrags
+ * @param onDelete Callback zum Löschen des Eintrags
+ */
 @Composable
 fun ItemActionDialog(
     onDismiss: () -> Unit,

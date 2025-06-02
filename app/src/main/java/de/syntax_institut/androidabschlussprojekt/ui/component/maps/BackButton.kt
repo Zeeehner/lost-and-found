@@ -14,6 +14,14 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 
+/**
+ * Ein runder Zurück-Button für Kartenansichten.
+ *
+ * Wird verwendet, um zur vorherigen Seite im Navigations-Stack zurückzukehren.
+ *
+ * @param navController Der NavController zur Navigation.
+ * @param modifier Optionaler Modifier zur weiteren Anpassung.
+ */
 @Composable
 fun BackButton(
     navController: NavController,
@@ -29,8 +37,8 @@ fun BackButton(
         )
     ) {
         Icon(
-            Icons.Default.ArrowBack,
-            contentDescription = null,
+            imageVector = Icons.Default.ArrowBack,
+            contentDescription = "arrow back",
             modifier = Modifier.size(22.dp)
         )
     }

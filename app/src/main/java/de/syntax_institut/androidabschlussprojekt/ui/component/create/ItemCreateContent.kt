@@ -22,12 +22,21 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import de.syntax_institut.androidabschlussprojekt.AdMobBanner
-import de.syntax_institut.androidabschlussprojekt.ui.viewmodel.AuthViewModel
 import de.syntax_institut.androidabschlussprojekt.R
+import de.syntax_institut.androidabschlussprojekt.ui.viewmodel.AuthViewModel
 import de.syntax_institut.androidabschlussprojekt.ui.viewmodel.CreateViewModel
 import org.koin.androidx.compose.koinViewModel
 
-
+/**
+ * Bildschirminhalt zum Erstellen eines neuen Items.
+ *
+ * Zeigt ein Formular zur Eingabe von Titel, Beschreibung, Bild und Standort.
+ * Unterstützt automatische Standortermittlung sowie Bildauswahl aus der Galerie.
+ *
+ * @param navController Zur Navigation zurück nach erfolgreicher Erstellung.
+ * @param authViewModel ViewModel für aktuelle Benutzerinfos.
+ * @param viewModel ViewModel für die Formularlogik und Datenverarbeitung.
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ItemCreateContent(
@@ -79,7 +88,7 @@ fun ItemCreateContent(
                 navigationIcon = {
                     IconButton(onClick = { navController.popBackStack() }) {
                         Icon(
-                            Icons.Default.ArrowBack,
+                            imageVector = Icons.Default.ArrowBack,
                             contentDescription = stringResource(R.string.back)
                         )
                     }
@@ -87,9 +96,10 @@ fun ItemCreateContent(
             )
         }
     ) { padding ->
-        Box(modifier = Modifier
-            .fillMaxSize()
-            .padding(padding)
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(padding)
         ) {
             Column(
                 modifier = Modifier
@@ -104,9 +114,10 @@ fun ItemCreateContent(
                     onStatusChange = { viewModel.updateField { copy(status = it) } }
                 )
 
-                ItemImagePicker(bitmap = bitmap, onClick = {
-                    imagePickerLauncher.launch("image/*")
-                })
+                ItemImagePicker(
+                    bitmap = bitmap,
+                    onClick = { imagePickerLauncher.launch("image/*") }
+                )
 
                 LostItemForm(
                     title = formState.title,

@@ -21,12 +21,18 @@ import de.syntax_institut.androidabschlussprojekt.ui.viewmodel.AuthViewModel
 import de.syntax_institut.androidabschlussprojekt.ui.viewmodel.PrivateChatViewModel
 import org.koin.androidx.compose.koinViewModel
 
+/**
+ * Definiert die verfügbaren Bildschirme in der Bottom Navigation Bar.
+ */
 sealed class BottomNavScreen(val route: String, val icon: ImageVector) {
     object Home : BottomNavScreen("home", Icons.Default.Home)
     object Chat : BottomNavScreen("chat", Icons.Default.MailOutline)
     object Settings : BottomNavScreen("settings", Icons.Default.Settings)
 }
 
+/**
+ * Gibt die passende String-Ressource für den Labeltext eines BottomNavScreen zurück.
+ */
 @Composable
 fun getLabelRes(screen: BottomNavScreen): Int = when (screen) {
     BottomNavScreen.Home -> R.string.nav_home
@@ -34,6 +40,12 @@ fun getLabelRes(screen: BottomNavScreen): Int = when (screen) {
     BottomNavScreen.Settings -> R.string.nav_settings
 }
 
+/**
+ * Hauptnavigation mit Bottom Navigation für Home, Chat und Settings.
+ *
+ * @param rootNavController Der übergeordnete NavController für das gesamte App-Navigations-Setup
+ * @param modifier Modifier zur externen Gestaltung
+ */
 @Composable
 fun MainNavigation(rootNavController: NavHostController, modifier: Modifier = Modifier) {
     val bottomNavController = rememberNavController()
@@ -47,6 +59,7 @@ fun MainNavigation(rootNavController: NavHostController, modifier: Modifier = Mo
     val chatViewModel: PrivateChatViewModel = koinViewModel()
     val unreadCount by chatViewModel.unreadCount.collectAsState()
 
+    // Lade die Chatpartner, wenn sich die User-ID ändert
     LaunchedEffect(currentUserId) {
         if (currentUserId.isNotEmpty()) {
             chatViewModel.loadChatPartners(currentUserId)
@@ -85,6 +98,7 @@ fun MainNavigation(rootNavController: NavHostController, modifier: Modifier = Mo
                 }
             }
 
+            // Bottom Navigation Bar
             NavigationBar {
                 items.forEach { screen ->
                     NavigationBarItem(
@@ -97,10 +111,16 @@ fun MainNavigation(rootNavController: NavHostController, modifier: Modifier = Mo
                                         }
                                     }
                                 ) {
-                                    Icon(screen.icon, contentDescription = stringResource(getLabelRes(screen)))
+                                    Icon(
+                                        screen.icon,
+                                        contentDescription = stringResource(getLabelRes(screen))
+                                    )
                                 }
                             } else {
-                                Icon(screen.icon, contentDescription = stringResource(getLabelRes(screen)))
+                                Icon(
+                                    screen.icon,
+                                    contentDescription = stringResource(getLabelRes(screen))
+                                )
                             }
                         },
                         label = { Text(stringResource(getLabelRes(screen))) },

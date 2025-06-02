@@ -30,6 +30,16 @@ import de.syntax_institut.androidabschlussprojekt.ui.component.onboarding.Onboar
 import de.syntax_institut.androidabschlussprojekt.ui.component.onboarding.ProgressSection
 import de.syntax_institut.androidabschlussprojekt.ui.viewmodel.OnboardingViewModel
 
+/**
+ * Zeigt den Onboarding-Bildschirm mit:
+ * - Rechtlichen Hinweisen (LegalHintStep),
+ * - Eingabemöglichkeit der Telefonnummer (OnboardingPhoneSection),
+ * - Fortschrittsanzeige (ProgressSection),
+ * - und einem Header (OnboardingHeader).
+ *
+ * @param onFinish Callback, der ausgeführt wird, wenn das Onboarding abgeschlossen ist.
+ * @param viewModel Das ViewModel zur Steuerung des Onboardingprozesses (Standard: Koin Injection).
+ */
 @Composable
 fun OnboardingScreen(
     onFinish: () -> Unit,
@@ -43,7 +53,7 @@ fun OnboardingScreen(
     val phoneNumber = viewModel.phoneNumber
     val errorMessage = viewModel.errorMessage
 
-    // Gradient Background
+    // Vertikaler Farbverlauf als Hintergrund
     val backgroundGradient = Brush.verticalGradient(
         colors = listOf(
             MaterialTheme.colorScheme.primary.copy(alpha = 0.1f),
@@ -71,11 +81,10 @@ fun OnboardingScreen(
 
                 Spacer(modifier = Modifier.height(32.dp))
 
-                // Header Section
-                OnboardingHeader(allHintsDone = allHintsDone, viewModel = viewModel)
+                // Header mit Titel und Untertitel
+                OnboardingHeader(allHintsDone = allHintsDone)
 
-
-                // Main Content with Animation
+                // Animierter Wechsel zwischen rechtlichen Hinweisen und Telefonnummern-Eingabe
                 AnimatedContent(
                     targetState = allHintsDone,
                     transitionSpec = {
@@ -102,7 +111,7 @@ fun OnboardingScreen(
 
                 Spacer(modifier = Modifier.weight(1f))
 
-                // Progress Indicator
+                // Fortschrittsanzeige während der rechtlichen Hinweise
                 if (!allHintsDone) {
                     ProgressSection(viewModel = viewModel, totalHints = legalHints.size + 1)
                     Spacer(modifier = Modifier.height(16.dp))

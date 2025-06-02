@@ -10,6 +10,12 @@ import de.syntax_institut.androidabschlussprojekt.data.local.model.Item
 import de.syntax_institut.androidabschlussprojekt.repository.ItemCreateRepository
 import kotlinx.coroutines.tasks.await
 
+/**
+ * UI-Statusmodell für das Formular zum Erstellen eines Items.
+ *
+ * Enthält Felder für alle Eingaben sowie Methoden zur Validierung, Standortermittlung
+ * und Umwandlung in ein [Item]-Datenmodell.
+ */
 data class LostItemFormState(
     val title: String = "",
     val description: String = "",
@@ -20,6 +26,13 @@ data class LostItemFormState(
     val imageUri: Uri? = null,
     val showLocationDetails: Boolean = false
 ) {
+
+    /**
+     * Prüft, ob alle Pflichtfelder gefüllt und ein Bild vorhanden ist.
+     *
+     * @param bitmap Das ausgewählte Bild.
+     * @return `true`, wenn alle Felder valide sind.
+     */
     fun isValid(bitmap: android.graphics.Bitmap?): Boolean {
         return title.isNotBlank() && title.length >= 3 &&
                 description.isNotBlank() &&
@@ -27,6 +40,13 @@ data class LostItemFormState(
                 bitmap != null
     }
 
+    /**
+     * Holt den aktuellen Standort des Geräts und ergänzt ihn mit einem Ortsnamen.
+     *
+     * @param context Anwendungskontext.
+     * @param repository Repository zur Ortsauflösung (Reverse-Geocoding).
+     * @return Eine neue Instanz mit aktualisierten Koordinaten und Ortsname.
+     */
     @RequiresPermission(allOf = [Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION])
     suspend fun setCurrentLocation(context: Context, repository: ItemCreateRepository): LostItemFormState {
         return try {
@@ -50,6 +70,12 @@ data class LostItemFormState(
         }
     }
 
+    /**
+     * Führt eine Forward-Geocoding-Anfrage basierend auf dem eingegebenen Ort durch.
+     *
+     * @param repository Repository zur Koordinatenbestimmung.
+     * @return Eine neue Instanz mit aktualisierten Koordinaten.
+     */
     suspend fun updateCoordinatesFromLocation(repository: ItemCreateRepository): LostItemFormState {
         return try {
             val coords = repository.getCoordinatesForLocation(location)
@@ -62,6 +88,13 @@ data class LostItemFormState(
         }
     }
 
+    /**
+     * Wandelt den aktuellen Formularzustand in ein persistierbares [Item] um.
+     *
+     * @param userId ID des Erstellers.
+     * @param userName Name des Erstellers.
+     * @return Neues [Item] mit allen eingegebenen Daten.
+     */
     fun toLostItem(userId: String, userName: String): Item {
         return Item(
             userId = userId,

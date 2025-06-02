@@ -8,9 +8,16 @@ import de.syntax_institut.androidabschlussprojekt.data.local.model.ChatMessage
 import java.text.SimpleDateFormat
 import java.util.*
 
+/**
+ * Einzelne Chat-Nachricht in der Chatliste.
+ *
+ * @param message Die anzuzeigende Nachricht.
+ * @param currentUserId Die User-ID des aktuellen Nutzers zur Unterscheidung eigener Nachrichten.
+ */
 @Composable
 fun MessageList(message: ChatMessage, currentUserId: String) {
     val isCurrentUser = message.userId == currentUserId
+
     val timeFormatter = SimpleDateFormat("HH:mm", Locale.getDefault())
     val dateFormatter = SimpleDateFormat("dd MMM yyyy", Locale.getDefault())
 
@@ -20,7 +27,8 @@ fun MessageList(message: ChatMessage, currentUserId: String) {
         val messageDate = Calendar.getInstance().apply { time = date }
 
         if (today.get(Calendar.YEAR) == messageDate.get(Calendar.YEAR) &&
-            today.get(Calendar.DAY_OF_YEAR) == messageDate.get(Calendar.DAY_OF_YEAR)) {
+            today.get(Calendar.DAY_OF_YEAR) == messageDate.get(Calendar.DAY_OF_YEAR)
+        ) {
             "Today, ${timeFormatter.format(date)}"
         } else {
             "${dateFormatter.format(date)}, ${timeFormatter.format(date)}"

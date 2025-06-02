@@ -1,11 +1,6 @@
 package de.syntax_institut.androidabschlussprojekt.ui.component.create
 
-import android.R.attr.minLines
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.heightIn
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.Send
@@ -16,6 +11,14 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import de.syntax_institut.androidabschlussprojekt.R
 
+/**
+ * Formular zur Eingabe von Titel und Beschreibung für ein verlorenes oder gefundenes Item.
+ *
+ * @param title Der aktuelle Text im Titel-Feld.
+ * @param description Der aktuelle Text im Beschreibungs-Feld.
+ * @param onTitleChange Callback bei Änderungen am Titel.
+ * @param onDescChange Callback bei Änderungen an der Beschreibung.
+ */
 @Composable
 fun LostItemForm(
     title: String,
@@ -31,7 +34,10 @@ fun LostItemForm(
             modifier = Modifier.padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-            Text(stringResource(R.string.add_entry_description), style = MaterialTheme.typography.titleMedium)
+            Text(
+                text = stringResource(R.string.add_entry_description),
+                style = MaterialTheme.typography.titleMedium
+            )
 
             OutlinedTextField(
                 value = title,
@@ -52,7 +58,9 @@ fun LostItemForm(
                 onValueChange = onDescChange,
                 label = { Text(stringResource(R.string.description)) },
                 leadingIcon = { Icon(Icons.Outlined.Info, contentDescription = null) },
-                modifier = Modifier.fillMaxWidth().heightIn(min = 20.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .heightIn(min = 20.dp),
                 minLines = 3
             )
         }

@@ -10,7 +10,19 @@ import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.http.GET
 import retrofit2.http.Query
 
+/**
+ * Retrofit-Serviceinterface zur Kommunikation mit der OpenCage Geocoding API.
+ */
 interface GeocodingApiService {
+
+    /**
+     * Führt eine Reverse-Geocoding-Anfrage durch (Koordinaten → Adresse).
+     *
+     * @param coordinates Breiten- und Längengrad im Format "lat,lng".
+     * @param apiKey API-Schlüssel für OpenCage.
+     * @param language Sprache der Rückgabe (Standard: Deutsch).
+     * @return [GeocodingResponse] mit den passenden Ortsinformationen.
+     */
     @GET("json")
     suspend fun reverseGeocode(
         @Query("q") coordinates: String,
@@ -18,6 +30,14 @@ interface GeocodingApiService {
         @Query("language") language: String = "de"
     ): GeocodingResponse
 
+    /**
+     * Führt eine Forward-Geocoding-Anfrage durch (Adresse → Koordinaten).
+     *
+     * @param locationName Name oder Beschreibung eines Ortes.
+     * @param apiKey API-Schlüssel für OpenCage.
+     * @param language Sprache der Rückgabe (Standard: Deutsch).
+     * @return [GeocodingResponse] mit den passenden Koordinaten.
+     */
     @GET("json")
     suspend fun forwardGeocode(
         @Query("q") locationName: String,
@@ -26,6 +46,9 @@ interface GeocodingApiService {
     ): GeocodingResponse
 }
 
+/**
+ * Singleton-Client zum Bereitstellen des [GeocodingApiService].
+ */
 object GeocodingApiClient {
 
     private val moshi: Moshi = Moshi.Builder()
@@ -41,7 +64,9 @@ object GeocodingApiClient {
     }
 }
 
-
+/**
+ * Hauptfunktion zu Testzwecken (kann im Debug-Modus verwendet werden).
+ */
 fun main() = runBlocking {
     val coordinates = "52.5200,13.4050" // Berlin
     val apiKey = BuildConfig.OPENCAGE_API_KEY

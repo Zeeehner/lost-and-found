@@ -2,75 +2,65 @@ package de.syntax_institut.androidabschlussprojekt.di
 
 import androidx.room.Room
 import de.syntax_institut.androidabschlussprojekt.data.local.AppDatabase
-import de.syntax_institut.androidabschlussprojekt.repository.AuthRepository
-import de.syntax_institut.androidabschlussprojekt.repository.ChatRepository
-import de.syntax_institut.androidabschlussprojekt.repository.DetailRepository
-import de.syntax_institut.androidabschlussprojekt.repository.EditRepository
-import de.syntax_institut.androidabschlussprojekt.repository.ItemCreateRepository
-import de.syntax_institut.androidabschlussprojekt.repository.LocationRepository
-import de.syntax_institut.androidabschlussprojekt.repository.LostItemRepository
-import de.syntax_institut.androidabschlussprojekt.repository.MapRepository
-import de.syntax_institut.androidabschlussprojekt.repository.PreferencesRepository
-import de.syntax_institut.androidabschlussprojekt.repository.PrivateChatRepository
-import de.syntax_institut.androidabschlussprojekt.repository.SettingsRepository
-import de.syntax_institut.androidabschlussprojekt.repository.UserRepository
-import de.syntax_institut.androidabschlussprojekt.ui.viewmodel.AuthViewModel
-import de.syntax_institut.androidabschlussprojekt.ui.viewmodel.ChatViewModel
-import de.syntax_institut.androidabschlussprojekt.ui.viewmodel.CreateViewModel
-import de.syntax_institut.androidabschlussprojekt.ui.viewmodel.DetailViewModel
-import de.syntax_institut.androidabschlussprojekt.ui.viewmodel.EditViewModel
-import de.syntax_institut.androidabschlussprojekt.ui.viewmodel.LostItemViewModel
-import de.syntax_institut.androidabschlussprojekt.ui.viewmodel.MapViewModel
-import de.syntax_institut.androidabschlussprojekt.ui.viewmodel.OnboardingViewModel
-import de.syntax_institut.androidabschlussprojekt.ui.viewmodel.PrivateChatViewModel
-import de.syntax_institut.androidabschlussprojekt.ui.viewmodel.SettingsViewModel
+import de.syntax_institut.androidabschlussprojekt.repository.*
+import de.syntax_institut.androidabschlussprojekt.ui.viewmodel.*
 import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
 import org.koin.androidx.viewmodel.dsl.viewModel
 
+/**
+ * Koin-Modul zur Bereitstellung aller Abhängigkeiten der App, wie ViewModels, Repositories und Datenbankzugriffe.
+ */
 val appModule = module {
 
-    // LoginScreen
+    // --- LoginScreen ---
     viewModel { AuthViewModel(get()) }
     single { AuthRepository() }
 
-    // OnboardingScreen
+    // --- OnboardingScreen ---
     viewModel { OnboardingViewModel() }
     single { UserRepository() }
 
-    // ListScreen
+    // --- ListScreen (z.B. verlorene Gegenstände) ---
     viewModel { LostItemViewModel(get()) }
     single { LostItemRepository() }
 
-    // DetailScreen
+    // --- DetailScreen ---
     viewModel { DetailViewModel(get()) }
     single { DetailRepository() }
 
-    // MapScreen
+    // --- MapScreen ---
     viewModel { MapViewModel(get()) }
     single { MapRepository() }
 
-    // CreateScreen
+    // --- CreateScreen ---
     viewModel { CreateViewModel(get()) }
     single { ItemCreateRepository() }
 
-    // EditScreen
+    // --- EditScreen ---
     viewModel { EditViewModel(get()) }
     single { EditRepository() }
 
-    // ChatScreen
+    // --- ChatScreens ---
     viewModel { ChatViewModel(get()) }
     single { ChatRepository() }
+
     viewModel { PrivateChatViewModel(get()) }
     single { PrivateChatRepository() }
 
-    // SettingsScreen
+    // --- SettingsScreen ---
     viewModel { SettingsViewModel(get(), get(), get()) }
     single { SettingsRepository() }
     single { LocationRepository() }
     single { PreferencesRepository(get()) }
 
-    // Room
-    single { Room.databaseBuilder(androidContext(), AppDatabase::class.java, "app_db").build() }
+    // --- Room-Datenbank ---
+    single {
+        Room.databaseBuilder(
+            androidContext(),
+            AppDatabase::class.java,
+            "app_db"
+        ).build()
+    }
     single { get<AppDatabase>().settingsDao() }
 }

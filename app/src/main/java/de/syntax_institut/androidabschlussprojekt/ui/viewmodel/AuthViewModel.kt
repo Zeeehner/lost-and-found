@@ -19,10 +19,20 @@ import kotlinx.coroutines.tasks.await
 import java.util.regex.Pattern
 import de.syntax_institut.androidabschlussprojekt.R
 
+/**
+ * ViewModel für die Authentifizierung (Login/Registrierung) und Benutzerverwaltung.
+ *
+ * @property repository Repository für Authentifizierungs-Operationen
+ */
 class AuthViewModel(private val repository: AuthRepository) : ViewModel() {
 
+    /** E-Mail Eingabe */
     var emailInput by mutableStateOf("")
+
+    /** Passwort Eingabe */
     var passwordInput by mutableStateOf("")
+
+    /** Name Eingabe (für Registrierung) */
     var nameInput by mutableStateOf("")
 
     private val _navigateToOnboarding = MutableStateFlow(false)
@@ -43,11 +53,17 @@ class AuthViewModel(private val repository: AuthRepository) : ViewModel() {
     private val _phoneNumber = MutableStateFlow<String?>(null)
     val phoneNumber: StateFlow<String?> = _phoneNumber.asStateFlow()
 
+    /** Aktuell eingeloggter Firebase Benutzer */
     val currentUser: FirebaseUser?
         get() = FirebaseAuth.getInstance().currentUser
 
+    /** Aktueller Benutzername */
     fun getCurrentUserName(): String? = currentUser?.displayName
+
+    /** Aktuelle E-Mail Adresse */
     fun getCurrentUserEmail(): String? = currentUser?.email
+
+    /** Aktuelle User-ID */
     fun getCurrentUserId(): String? = currentUser?.uid
 
     init {
@@ -57,6 +73,7 @@ class AuthViewModel(private val repository: AuthRepository) : ViewModel() {
         }
     }
 
+    /** Wechsel zwischen Login- und Registrierungsmodus */
     fun toggleMode() {
         _isRegistrationMode.value = !_isRegistrationMode.value
         nameInput = ""
@@ -64,10 +81,16 @@ class AuthViewModel(private val repository: AuthRepository) : ViewModel() {
         clearError()
     }
 
+    /** Fehlernachricht löschen */
     fun clearError() {
         _errorMessage.value = null
     }
 
+    /**
+     * Startet Login oder Registrierung je nach Modus.
+     *
+     * @param context Kontext für Ressourcen und Toasts
+     */
     fun onLoginClick(context: Context) {
         viewModelScope.launch {
             try {
@@ -87,6 +110,7 @@ class AuthViewModel(private val repository: AuthRepository) : ViewModel() {
         }
     }
 
+    /** Intern: Login mit E-Mail und Passwort */
     private suspend fun loginUser(context: Context) {
         try {
             val result = repository.loginUser(emailInput, passwordInput)
@@ -99,6 +123,7 @@ class AuthViewModel(private val repository: AuthRepository) : ViewModel() {
         }
     }
 
+    /** Intern: Registrierung mit E-Mail, Passwort und Name */
     private suspend fun registerUser(context: Context) {
         try {
             val result = repository.registerUser(emailInput, passwordInput)
@@ -117,11 +142,13 @@ class AuthViewModel(private val repository: AuthRepository) : ViewModel() {
         }
     }
 
+    /** Navigation Flags zurücksetzen */
     fun resetNavigationFlags() {
         _navigateToOnboarding.value = false
         _loginResult.value = null
     }
 
+    /** Fehlerhandling bei Authentifizierungsfehlern */
     private fun handleAuthError(e: Exception, context: Context) {
         val errorMessage = when {
             e.message?.contains("email-already-in-use") == true -> context.getString(R.string.error_email_in_use)
@@ -135,9 +162,11 @@ class AuthViewModel(private val repository: AuthRepository) : ViewModel() {
         _errorMessage.value = errorMessage
     }
 
+    /** Überprüft ob alle Eingaben gültig sind (E-Mail, Passwort und ggf. Name) */
     fun validateInputs(): Boolean =
         isValidEmail() && isValidPassword() && (!_isRegistrationMode.value || isValidName())
 
+    /** Prüft, ob die E-Mail-Adresse gültig ist */
     fun isValidEmail(): Boolean {
         val emailPattern = Pattern.compile(
             "[a-zA-Z0-9+._%-+]{1,256}@[a-zA-Z0-9][a-zA-Z0-9-]{0,64}(\\.[a-zA-Z0-9][a-zA-Z0-9-]{0,25})+"
@@ -145,9 +174,13 @@ class AuthViewModel(private val repository: AuthRepository) : ViewModel() {
         return emailInput.isNotBlank() && emailPattern.matcher(emailInput).matches()
     }
 
+    /** Prüft, ob das Passwort mindestens 6 Zeichen lang ist */
     fun isValidPassword(): Boolean = passwordInput.length >= 6
+
+    /** Prüft, ob der Name mindestens 3 Zeichen lang ist */
     fun isValidName(): Boolean = nameInput.length >= 3
 
+    /** Führt Logout durch und setzt Status zurück */
     fun logout() {
         viewModelScope.launch {
             try {
@@ -164,6 +197,7 @@ class AuthViewModel(private val repository: AuthRepository) : ViewModel() {
         }
     }
 
+    /** Lädt die Telefonnummer des aktuellen Benutzers aus Firestore */
     fun loadPhoneNumber() {
         viewModelScope.launch {
             try {
@@ -176,6 +210,7 @@ class AuthViewModel(private val repository: AuthRepository) : ViewModel() {
                     _phoneNumber.value = doc.getString("phoneNumber")
                 }
             } catch (e: Exception) {
+                // Fehler ignorieren oder loggen, hier einfach false zurück
                 false
             }
         }

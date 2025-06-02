@@ -6,6 +6,12 @@ import de.syntax_institut.androidabschlussprojekt.ui.component.create.ItemCreate
 import de.syntax_institut.androidabschlussprojekt.ui.viewmodel.AuthViewModel
 import org.koin.androidx.compose.koinViewModel
 
+/**
+ * Composable für den Bildschirm zum Erstellen eines neuen Items.
+ *
+ * @param navController Navigation Controller zum Navigieren zwischen Screens
+ * @param authViewModel ViewModel für Authentifizierungsdaten (standardmäßig vom Koin bereitgestellt)
+ */
 @Composable
 fun ItemCreateScreen(
     navController: NavController,

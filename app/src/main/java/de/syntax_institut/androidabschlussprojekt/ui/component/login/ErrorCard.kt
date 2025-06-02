@@ -10,10 +10,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import de.syntax_institut.androidabschlussprojekt.ui.util.spacing
 
+/**
+ * Zeigt eine Fehlernachricht in einer hervorgehobenen Karte an.
+ *
+ * @param error Der anzuzeigende Fehlertext.
+ */
 @Composable
 fun ErrorCard(error: String) {
     Card(
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.errorContainer),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.errorContainer
+        ),
         modifier = Modifier
             .fillMaxWidth()
             .padding(bottom = MaterialTheme.spacing.medium)
@@ -28,7 +35,10 @@ fun ErrorCard(error: String) {
                 tint = MaterialTheme.colorScheme.error
             )
             Spacer(modifier = Modifier.width(8.dp))
-            Text(text = error, color = MaterialTheme.colorScheme.onErrorContainer)
+            Text(
+                text = error,
+                color = MaterialTheme.colorScheme.onErrorContainer
+            )
         }
     }
 }

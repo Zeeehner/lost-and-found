@@ -3,22 +3,10 @@ package de.syntax_institut.androidabschlussprojekt.ui.component.chat
 import android.text.format.DateUtils.isToday
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -30,12 +18,18 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import de.syntax_institut.androidabschlussprojekt.R
 import de.syntax_institut.androidabschlussprojekt.data.local.model.ChatPartner
 import java.text.SimpleDateFormat
-import de.syntax_institut.androidabschlussprojekt.R
 import java.util.Date
 import java.util.Locale
 
+/**
+ * UI-Komponente für ein einzelnes Chat-Element in der Chatliste.
+ *
+ * @param partner Der [ChatPartner], dessen Chatdaten angezeigt werden.
+ * @param onClick Callback beim Klicken auf das Element.
+ */
 @Composable
 fun ChatListItem(
     partner: ChatPartner,
@@ -61,7 +55,7 @@ fun ChatListItem(
                 .padding(16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            // Avatar
+            // Avatar-Kugel mit Initiale
             Box(
                 modifier = Modifier
                     .size(48.dp)
@@ -86,10 +80,8 @@ fun ChatListItem(
 
             Spacer(modifier = Modifier.width(16.dp))
 
-            // Chat Info
-            Column(
-                modifier = Modifier.weight(1f)
-            ) {
+            // Chatdetails (Name, Zeit, letzte Nachricht)
+            Column(modifier = Modifier.weight(1f)) {
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween,
@@ -124,7 +116,9 @@ fun ChatListItem(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
-                        text = partner.lastMessage.ifBlank { stringResource(id = R.string.no_messages_yet) },
+                        text = partner.lastMessage.ifBlank {
+                            stringResource(id = R.string.no_messages_yet)
+                        },
                         fontSize = 14.sp,
                         color = MaterialTheme.colorScheme.onSurface.copy(
                             alpha = if (partner.lastMessage.isBlank()) 0.4f else 0.7f

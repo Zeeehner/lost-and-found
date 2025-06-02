@@ -6,14 +6,11 @@
     <uses-feature
         android:name="android.hardware.telephony"
         android:required="false" />
-    <uses-permission android:name="android.permission.INTERNET"/>
-
-    <!-- Notification -->
-    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
 
     <!-- Muss explizit vom User freigegeben werden -->
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
 
     <!-- Call Permission -->
     <uses-permission android:name="android.permission.CALL_PHONE" />

@@ -6,22 +6,20 @@ import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
-import de.syntax_institut.androidabschlussprojekt.ui.screen.LoginScreen
-import de.syntax_institut.androidabschlussprojekt.ui.screen.OnboardingScreen
-import de.syntax_institut.androidabschlussprojekt.ui.screen.SettingsScreen
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import de.syntax_institut.androidabschlussprojekt.data.local.model.ChatPartner
-import de.syntax_institut.androidabschlussprojekt.ui.screen.DetailScreen
-import de.syntax_institut.androidabschlussprojekt.ui.screen.ItemCreateScreen
-import de.syntax_institut.androidabschlussprojekt.ui.screen.MapScreen
 import de.syntax_institut.androidabschlussprojekt.ui.screen.*
 import de.syntax_institut.androidabschlussprojekt.ui.viewmodel.AuthViewModel
 import org.koin.androidx.compose.koinViewModel
 
+/**
+ * Definiert die Navigationsstruktur der App mit allen verfügbaren Screens.
+ *
+ * @param modifier Ein optionaler Modifier für das NavHost.
+ */
 @Composable
 fun NavGraph(modifier: Modifier = Modifier) {
-
     val rootNavController: NavHostController = rememberNavController()
 
     NavHost(
@@ -45,7 +43,7 @@ fun NavGraph(modifier: Modifier = Modifier) {
             )
         }
 
-        // Onboarding nach Registrierung
+        // Onboarding-Screen nach Registrierung
         composable(Screen.Onboarding.route) {
             OnboardingScreen(
                 onFinish = {
@@ -56,27 +54,27 @@ fun NavGraph(modifier: Modifier = Modifier) {
             )
         }
 
-        //  MainNavigation (BottomNav)
+        // Main-Screen mit Bottom Navigation (Home, Chat, Settings)
         composable(Screen.List.route) {
             MainNavigation(rootNavController)
         }
 
-        //  Create-Screen
+        // Item-Erstellung
         composable(Screen.Create.route) {
             ItemCreateScreen(navController = rootNavController)
         }
 
-        //  Kartenansicht (allgemein)
+        // Kartenansicht (ohne Koordinaten)
         composable(Screen.Map.route) {
             MapScreen(navController = rootNavController)
         }
 
-        //  Einstellungen
+        // Einstellungen
         composable(Screen.Settings.route) {
             SettingsScreen(navController = rootNavController)
         }
 
-        // Detailansicht eines Items mit Übergabe der itemId
+        // Detailansicht eines Items (via itemId)
         composable(
             route = Screen.Detail.route,
             arguments = listOf(navArgument("itemId") { type = NavType.StringType })
@@ -85,7 +83,7 @@ fun NavGraph(modifier: Modifier = Modifier) {
             DetailScreen(itemId = itemId, navController = rootNavController)
         }
 
-        // Kartenansicht mit spezifischer Location
+        // Kartenansicht mit spezifischen Koordinaten
         composable(
             route = Screen.MapWithLocation.route,
             arguments = listOf(
@@ -98,6 +96,7 @@ fun NavGraph(modifier: Modifier = Modifier) {
             MapScreen(navController = rootNavController, lat = lat, lon = lon)
         }
 
+        // Private Chat Detail mit Benutzerinformationen
         composable(
             route = Screen.PrivateChat.route,
             arguments = listOf(

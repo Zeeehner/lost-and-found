@@ -15,6 +15,12 @@ import androidx.compose.ui.unit.dp
 import de.syntax_institut.androidabschlussprojekt.R
 import de.syntax_institut.androidabschlussprojekt.ui.viewmodel.OnboardingViewModel
 
+/**
+ * Zeigt den Fortschritt des Onboarding-Prozesses in Form eines Textes und eines Fortschrittsbalkens.
+ *
+ * @param viewModel Das OnboardingViewModel, das den aktuellen Fortschritt liefert.
+ * @param totalHints Die Gesamtanzahl der Onboarding-Hinweise.
+ */
 @Composable
 fun ProgressSection(viewModel: OnboardingViewModel, totalHints: Int) {
     Column(
@@ -33,7 +39,9 @@ fun ProgressSection(viewModel: OnboardingViewModel, totalHints: Int) {
         )
 
         LinearProgressIndicator(
-            progress = { (viewModel.currentHintIndex + 1).toFloat() / totalHints },
+            progress = {
+                (viewModel.currentHintIndex + 1).toFloat() / totalHints
+            },
             modifier = Modifier
                 .fillMaxWidth()
                 .height(6.dp)

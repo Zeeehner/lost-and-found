@@ -33,6 +33,15 @@ import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
 
+/**
+ * Zeigt die Detailansicht eines verlorenen oder gefundenen Gegenstands als Card.
+ *
+ * Enthält Bild, Titel, Beschreibung, Benutzerinformationen, Datum, Ort und eine Karte-Schaltfläche.
+ * Unterstützt Zoomen und Bewegen des Bildes.
+ *
+ * @param item Das anzuzeigende Item mit allen Metadaten.
+ * @param onMapClick Callback, wenn der Benutzer auf "Auf Karte anzeigen" klickt.
+ */
 @Composable
 fun LostItemCard(
     item: Item,
@@ -48,9 +57,7 @@ fun LostItemCard(
 
     val scope = rememberCoroutineScope()
     var isZoomed by remember { mutableStateOf(false) }
-    val scale by animateFloatAsState(
-        targetValue = if (isZoomed) 2f else 1f
-    )
+    val scale by animateFloatAsState(targetValue = if (isZoomed) 2f else 1f)
 
     val offsetX = remember { Animatable(0f) }
     val offsetY = remember { Animatable(0f) }
@@ -76,9 +83,7 @@ fun LostItemCard(
             .padding(16.dp),
         shape = RoundedCornerShape(16.dp),
         elevation = CardDefaults.cardElevation(4.dp),
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surface
-        )
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
             imageBitmap?.let {
@@ -91,11 +96,8 @@ fun LostItemCard(
                             detectTapGestures(
                                 onDoubleTap = {
                                     scope.launch {
-                                        if (isZoomed) {
-                                            resetZoomAndPosition()
-                                        } else {
-                                            isZoomed = true
-                                        }
+                                        if (isZoomed) resetZoomAndPosition()
+                                        else isZoomed = true
                                     }
                                 },
                                 onTap = {
@@ -222,9 +224,7 @@ fun LostItemCard(
             Button(
                 onClick = onMapClick,
                 modifier = Modifier.fillMaxWidth(),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = MaterialTheme.colorScheme.primary
-                )
+                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
             ) {
                 Icon(
                     imageVector = Icons.Default.LocationOn,
@@ -237,5 +237,8 @@ fun LostItemCard(
         }
     }
 }
-// Helper function to format coordinates
+
+/**
+ * Formatiert eine Double-Zahl mit einer festen Anzahl Nachkommastellen.
+ */
 private fun Double.format(digits: Int) = "%.${digits}f".format(this)

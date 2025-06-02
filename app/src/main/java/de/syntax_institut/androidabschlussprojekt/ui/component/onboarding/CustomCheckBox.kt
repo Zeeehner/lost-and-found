@@ -1,11 +1,7 @@
 package de.syntax_institut.androidabschlussprojekt.ui.component.onboarding
 
-import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.*
 import androidx.compose.animation.core.tween
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.animation.scaleIn
-import androidx.compose.animation.scaleOut
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -23,6 +19,12 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 
+/**
+ * Eine anpassbare Checkbox mit animiertem Haken.
+ *
+ * @param checked Ob die Checkbox aktiv ist.
+ * @param onCheckedChange Lambda, das beim Klicken ausgelöst wird.
+ */
 @Composable
 fun CustomCheckbox(
     checked: Boolean,
@@ -33,10 +35,7 @@ fun CustomCheckbox(
             .size(24.dp)
             .clip(RoundedCornerShape(6.dp))
             .background(
-                if (checked)
-                    MaterialTheme.colorScheme.primary
-                else
-                    Color.Transparent
+                if (checked) MaterialTheme.colorScheme.primary else Color.Transparent
             )
             .border(
                 width = 2.dp,

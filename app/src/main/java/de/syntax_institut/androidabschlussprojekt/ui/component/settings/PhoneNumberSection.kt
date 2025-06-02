@@ -18,18 +18,27 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewModelScope
-import de.syntax_institut.androidabschlussprojekt.ui.viewmodel.AuthViewModel
 import de.syntax_institut.androidabschlussprojekt.R
+import de.syntax_institut.androidabschlussprojekt.ui.viewmodel.AuthViewModel
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.SetOptions
 
+/**
+ * Anzeige- und Bearbeitungssektion für die Telefonnummer in den Einstellungen.
+ *
+ * @param authViewModel ViewModel für Authentifizierungs- und Benutzerdaten.
+ */
 @Composable
 fun PhoneNumberSection(authViewModel: AuthViewModel) {
     val phoneNumber by authViewModel.phoneNumber.collectAsState()
     var isEditing by remember { mutableStateOf(false) }
     var inputNumber by remember { mutableStateOf(phoneNumber ?: "") }
+
     val isInputValid = remember(inputNumber) {
-        inputNumber.isBlank() || Regex("""^(\+\d{1,3}[- ]?)?\d{10,14}$""").matches(inputNumber.replace("\\s".toRegex(), ""))
+        inputNumber.isBlank() || Regex("""^(\+\d{1,3}[- ]?)?\d{10,14}$""")
+            .matches(inputNumber.replace("\\s".toRegex(), ""))
     }
 
     Column(modifier = Modifier.fillMaxWidth()) {
@@ -61,8 +70,8 @@ fun PhoneNumberSection(authViewModel: AuthViewModel) {
                         keyboardType = KeyboardType.Phone,
                         imeAction = ImeAction.Done
                     ),
-                    modifier = Modifier.fillMaxWidth(),
-                    isError = !isInputValid && inputNumber.isNotBlank()
+                    isError = !isInputValid && inputNumber.isNotBlank(),
+                    modifier = Modifier.fillMaxWidth()
                 )
 
                 Spacer(modifier = Modifier.height(12.dp))
@@ -72,11 +81,14 @@ fun PhoneNumberSection(authViewModel: AuthViewModel) {
                         if (isInputValid) {
                             authViewModel.viewModelScope.launch {
                                 authViewModel.currentUser?.uid?.let { uid ->
-                                    val firestore = com.google.firebase.firestore.FirebaseFirestore.getInstance()
-                                    firestore.collection("users").document(uid)
-                                        .set(mapOf("phoneNumber" to inputNumber.takeIf { it.isNotBlank() }),
-                                            com.google.firebase.firestore.SetOptions.merge()
-                                        ).await()
+                                    FirebaseFirestore.getInstance()
+                                        .collection("users")
+                                        .document(uid)
+                                        .set(
+                                            mapOf("phoneNumber" to inputNumber.takeIf { it.isNotBlank() }),
+                                            SetOptions.merge()
+                                        )
+                                        .await()
                                     authViewModel.loadPhoneNumber()
                                     isEditing = false
                                 }
@@ -87,7 +99,7 @@ fun PhoneNumberSection(authViewModel: AuthViewModel) {
                     shape = RoundedCornerShape(8.dp),
                     modifier = Modifier.fillMaxWidth()
                 ) {
-                    Text(stringResource(R.string.save))
+                    Text(text = stringResource(R.string.save))
                 }
             }
         }

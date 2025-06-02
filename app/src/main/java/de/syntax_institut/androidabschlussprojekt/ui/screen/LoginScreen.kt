@@ -7,6 +7,14 @@ import de.syntax_institut.androidabschlussprojekt.ui.component.login.LoginScreen
 import de.syntax_institut.androidabschlussprojekt.ui.viewmodel.AuthViewModel
 import org.koin.androidx.compose.koinViewModel
 
+/**
+ * Composable für den Login-Screen.
+ * Beobachtet Login- und Navigationszustände im AuthViewModel und ruft entsprechende Callbacks auf.
+ *
+ * @param authViewModel ViewModel für Authentifizierung (Standard: Koin Injection)
+ * @param onLoginSuccess Callback, wenn Login erfolgreich ist
+ * @param onNavigateToOnboarding Callback, wenn Navigation zum Onboarding erfolgen soll (nach Registrierung)
+ */
 @Composable
 fun LoginScreen(
     authViewModel: AuthViewModel = koinViewModel(),
@@ -32,7 +40,7 @@ fun LoginScreen(
         }
     }
 
-    // UI Content
+    // UI Content anzeigen
     LoginScreenContent(
         authViewModel = authViewModel,
         onLoginSuccess = onLoginSuccess

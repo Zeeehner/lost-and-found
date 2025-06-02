@@ -2,7 +2,6 @@ package de.syntax_institut.androidabschlussprojekt.ui.screen
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.*
-import de.syntax_institut.androidabschlussprojekt.ui.component.maps.SearchBar
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -13,14 +12,25 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.compose.*
-import org.koin.androidx.compose.koinViewModel
 import de.syntax_institut.androidabschlussprojekt.AdMobBanner
 import de.syntax_institut.androidabschlussprojekt.data.local.model.Item
 import de.syntax_institut.androidabschlussprojekt.ui.component.maps.BackButton
 import de.syntax_institut.androidabschlussprojekt.ui.component.maps.ItemDetailsCard
+import de.syntax_institut.androidabschlussprojekt.ui.component.maps.SearchBar
 import de.syntax_institut.androidabschlussprojekt.ui.viewmodel.DetailViewModel
 import de.syntax_institut.androidabschlussprojekt.ui.viewmodel.MapViewModel
+import org.koin.androidx.compose.koinViewModel
 
+/**
+ * Composable für die Kartenansicht.
+ * Zeigt alle Items als Marker auf der Karte an.
+ * Ermöglicht das Anzeigen von Details zu einem ausgewählten Item.
+ *
+ * @param navController Navigationscontroller für Navigation
+ * @param lat optionale Startbreitengrad (wenn null oder 0.0 → Deutschland-Standard)
+ * @param lon optionale Startlängengrad (wenn null oder 0.0 → Deutschland-Standard)
+ * @param viewModel ViewModel für Karten-Daten (Standard: Koin Injection)
+ */
 @Composable
 fun MapScreen(
     navController: NavHostController,
@@ -35,13 +45,12 @@ fun MapScreen(
     val targetLocation = if (lat != null && lon != null && lat != 0.0 && lon != 0.0) {
         LatLng(lat, lon)
     } else {
-        LatLng(51.1657, 10.4515)
+        LatLng(51.1657, 10.4515) // Deutschland
     }
 
     val cameraPositionState = rememberCameraPositionState {
         position = CameraPosition.fromLatLngZoom(targetLocation, if (lat != null) 15f else 5f)
     }
-
 
     Box(modifier = Modifier.fillMaxSize()) {
         GoogleMap(
@@ -68,7 +77,7 @@ fun MapScreen(
             }
         }
 
-        // Overlay UI
+        // Overlay UI: Back Button & SearchBar
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -85,7 +94,7 @@ fun MapScreen(
             )
         }
 
-        // Item detail model z1
+        // Item Details anzeigen, falls ein Item ausgewählt ist
         AnimatedVisibility(
             visible = selectedItem != null,
             modifier = Modifier
@@ -103,7 +112,7 @@ fun MapScreen(
             }
         }
 
-        // AdMob Banner z0
+        // AdMob Banner am unteren Rand
         Box(
             modifier = Modifier
                 .fillMaxWidth()

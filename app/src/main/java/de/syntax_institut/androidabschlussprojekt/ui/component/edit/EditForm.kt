@@ -10,6 +10,14 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import de.syntax_institut.androidabschlussprojekt.R
 
+/**
+ * Formular zur Bearbeitung eines bereits bestehenden Eintrags.
+ *
+ * @param title Der aktuelle Titel als [TextFieldValue].
+ * @param onTitleChange Callback, das bei Änderung des Titels aufgerufen wird.
+ * @param description Die aktuelle Beschreibung als [TextFieldValue].
+ * @param onDescriptionChange Callback, das bei Änderung der Beschreibung aufgerufen wird.
+ */
 @Composable
 fun EditForm(
     title: TextFieldValue,

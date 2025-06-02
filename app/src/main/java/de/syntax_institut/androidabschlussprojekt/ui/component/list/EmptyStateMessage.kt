@@ -15,6 +15,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import de.syntax_institut.androidabschlussprojekt.R
 
+/**
+ * Zeigt eine leere Zustand-Nachricht an, wenn keine Elemente in einer Liste vorhanden sind.
+ * Beinhaltet ein Info-Icon sowie Hinweistexte für den Benutzer.
+ */
 @Composable
 fun EmptyStateMessage() {
     Box(

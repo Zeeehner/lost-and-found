@@ -14,6 +14,19 @@ import androidx.compose.ui.unit.dp
 import de.syntax_institut.androidabschlussprojekt.R
 import de.syntax_institut.androidabschlussprojekt.data.local.model.Item
 
+/**
+ * Zeigt eine gefilterte Liste von Items (verloren/gefunden) mit Filterchips und Ergebnisanzeige.
+ *
+ * @param items Die gesamte Liste an Items
+ * @param searchQuery Der aktuelle Suchbegriff
+ * @param selectedFilter Aktiver Filter: "all", "lost" oder "found"
+ * @param onFilterChange Callback zur Filteränderung
+ * @param onItemClick Callback bei Klick auf ein Item
+ * @param onItemLongClick Callback bei Long-Press auf ein Item (z. B. für Aktionen)
+ * @param currentUserId ID des aktuellen Nutzers (wird an ItemCard weitergegeben)
+ * @param modifier Optionaler Modifier für Layout-Anpassungen
+ * @param listState Zustand der LazyColumn für z. B. Scrollposition
+ */
 @Composable
 fun ItemListContent(
     items: List<Item>,
@@ -84,23 +97,27 @@ fun ItemListContent(
             }
         }
 
-        if (items.isEmpty()) {
-            EmptyStateMessage()
-        } else if (filteredItems.isEmpty()) {
-            NoResultsMessage(selectedFilter, searchQuery)
-        } else {
-            LazyColumn(
-                state = listState,
-                verticalArrangement = Arrangement.spacedBy(12.dp),
-                contentPadding = PaddingValues(bottom = 80.dp)
-            ) {
-                items(filteredItems) { item ->
-                    ItemCard(
-                        item = item,
-                        onClick = { onItemClick(item) },
-                        onLongClick = { onItemLongClick(item) },
-                        currentUserId = currentUserId
-                    )
+        when {
+            items.isEmpty() -> {
+                EmptyStateMessage()
+            }
+            filteredItems.isEmpty() -> {
+                NoResultsMessage(selectedFilter, searchQuery)
+            }
+            else -> {
+                LazyColumn(
+                    state = listState,
+                    verticalArrangement = Arrangement.spacedBy(12.dp),
+                    contentPadding = PaddingValues(bottom = 80.dp)
+                ) {
+                    items(filteredItems) { item ->
+                        ItemCard(
+                            item = item,
+                            onClick = { onItemClick(item) },
+                            onLongClick = { onItemLongClick(item) },
+                            currentUserId = currentUserId
+                        )
+                    }
                 }
             }
         }

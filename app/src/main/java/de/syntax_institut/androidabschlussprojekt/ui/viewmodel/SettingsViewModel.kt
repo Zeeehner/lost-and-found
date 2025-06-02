@@ -17,6 +17,15 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
+/**
+ * ViewModel für die Einstellungen des Nutzers.
+ *
+ * Verwaltet UI-Status und Aktionen für Dark Mode, Standort, Berechtigungen und Logout.
+ *
+ * @property authViewModel Authentifizierungs-ViewModel für Logout.
+ * @property locationRepository Repository für Standortdaten.
+ * @property preferencesRepository Repository für lokale Einstellungen.
+ */
 class SettingsViewModel(
     internal val authViewModel: AuthViewModel,
     private val locationRepository: LocationRepository,
@@ -24,13 +33,17 @@ class SettingsViewModel(
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(SettingsUiState())
+    /** UI-Zustand der Einstellungen als StateFlow */
     val uiState: StateFlow<SettingsUiState> = _uiState
 
     init {
-        // Direkt beim Start laden
+        // Dark Mode direkt beim Start laden
         loadDarkMode()
     }
 
+    /**
+     * Wechselt den Dark Mode und speichert den Wert.
+     */
     fun toggleDarkMode() {
         viewModelScope.launch {
             val newValue = !_uiState.value.darkMode
@@ -40,6 +53,9 @@ class SettingsViewModel(
         }
     }
 
+    /**
+     * Lädt den gespeicherten Dark Mode Wert.
+     */
     fun loadDarkMode() {
         viewModelScope.launch {
             val dark = preferencesRepository.getDarkMode()
@@ -47,10 +63,18 @@ class SettingsViewModel(
         }
     }
 
+    /**
+     * Schaltet die Sichtbarkeit der Standort-Informationen um.
+     */
     fun toggleLocationInfo() {
         _uiState.update { it.copy(showLocationInfo = !it.showLocationInfo) }
     }
 
+    /**
+     * Aktualisiert den Standort und den Stadtnamen (vorausgesetzt die erforderlichen Berechtigungen sind erteilt).
+     *
+     * @param context Context zur Standortabfrage.
+     */
     @RequiresPermission(allOf = [Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION])
     fun updateLocation(context: Context) {
         viewModelScope.launch {
@@ -64,18 +88,33 @@ class SettingsViewModel(
         }
     }
 
+    /**
+     * Zeigt den Logout-Dialog an.
+     */
     fun showLogoutDialog() {
         _uiState.update { it.copy(showLogoutDialog = true) }
     }
 
+    /**
+     * Versteckt den Logout-Dialog.
+     */
     fun dismissLogoutDialog() {
         _uiState.update { it.copy(showLogoutDialog = false) }
     }
 
+    /**
+     * Führt den Logout durch.
+     */
     fun logout() {
         authViewModel.logout()
     }
 
+    /**
+     * Fordert die Benachrichtigungsberechtigung an, falls erforderlich (ab Android 13).
+     *
+     * @param context Context für die Berechtigungsabfrage.
+     * @param launcher Launcher zum Starten der Berechtigungsanfrage.
+     */
     fun requestNotificationPermission(
         context: Context,
         launcher: ActivityResultLauncher<String>
@@ -98,6 +137,11 @@ class SettingsViewModel(
         }
     }
 
+    /**
+     * Wird aufgerufen, wenn die Benachrichtigungsberechtigung erteilt wurde.
+     *
+     * @param context Context für Speicherung der Einstellung.
+     */
     fun onNotificationPermissionGranted(context: Context) {
         _uiState.update {
             it.copy(permissionStatus = context.getString(R.string.permission_granted))
@@ -108,6 +152,12 @@ class SettingsViewModel(
         }
     }
 
+    /**
+     * Aktualisiert die Anzeige der Berechtigungs-Statusmeldung.
+     *
+     * @param context Context für String-Ressource.
+     * @param statusResId Ressourcen-ID der Statusmeldung.
+     */
     fun updatePermissionStatus(context: Context, statusResId: Int) {
         _uiState.update { it.copy(permissionStatus = context.getString(statusResId)) }
     }

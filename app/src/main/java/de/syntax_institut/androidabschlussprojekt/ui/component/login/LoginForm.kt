@@ -1,12 +1,7 @@
 package de.syntax_institut.androidabschlussprojekt.ui.component.login
 
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -28,16 +23,23 @@ import de.syntax_institut.androidabschlussprojekt.ui.util.spacing
 import de.syntax_institut.androidabschlussprojekt.R
 import de.syntax_institut.androidabschlussprojekt.ui.viewmodel.AuthViewModel
 
+/**
+ * Login- und Registrierungsformular.
+ *
+ * @param authViewModel Das zugehörige ViewModel für Authentifizierung.
+ * @param isLoading Gibt an, ob ein Ladevorgang aktiv ist.
+ */
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun LoginForm(authViewModel: AuthViewModel, isLoading: Boolean) {
-
     val context = LocalContext.current
     val focusManager = LocalFocusManager.current
     val keyboardController = LocalSoftwareKeyboardController.current
+
     val emailFocusRequester = remember { FocusRequester() }
     val passwordFocusRequester = remember { FocusRequester() }
     val nameFocusRequester = remember { FocusRequester() }
+
     val isRegistrationMode by authViewModel.isRegistrationMode.collectAsState()
 
     var isEmailError by remember { mutableStateOf(false) }
@@ -50,6 +52,8 @@ fun LoginForm(authViewModel: AuthViewModel, isLoading: Boolean) {
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
     ) {
         Column(modifier = Modifier.padding(MaterialTheme.spacing.medium)) {
+
+            // Namefeld nur im Registrierungsmodus sichtbar
             AnimatedVisibility(visible = isRegistrationMode) {
                 Column {
                     OutlinedTextField(
@@ -57,10 +61,7 @@ fun LoginForm(authViewModel: AuthViewModel, isLoading: Boolean) {
                         onValueChange = { authViewModel.nameInput = it },
                         label = { Text(stringResource(R.string.name)) },
                         leadingIcon = { Icon(Icons.Default.Person, contentDescription = null) },
-                        keyboardOptions = KeyboardOptions(
-                            keyboardType = KeyboardType.Text,
-                            imeAction = ImeAction.Next
-                        ),
+                        keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Next),
                         keyboardActions = KeyboardActions(onNext = { emailFocusRequester.requestFocus() }),
                         modifier = Modifier
                             .fillMaxWidth()
@@ -71,6 +72,7 @@ fun LoginForm(authViewModel: AuthViewModel, isLoading: Boolean) {
                 }
             }
 
+            // E-Mail Feld
             OutlinedTextField(
                 value = authViewModel.emailInput,
                 onValueChange = {
@@ -90,6 +92,7 @@ fun LoginForm(authViewModel: AuthViewModel, isLoading: Boolean) {
 
             Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
 
+            // Passwortfeld mit Toggle für Sichtbarkeit
             OutlinedTextField(
                 value = authViewModel.passwordInput,
                 onValueChange = {
@@ -127,6 +130,7 @@ fun LoginForm(authViewModel: AuthViewModel, isLoading: Boolean) {
 
             Spacer(modifier = Modifier.height(MaterialTheme.spacing.large))
 
+            // Login/Register Button mit Ladeanzeige
             Button(
                 onClick = {
                     keyboardController?.hide()

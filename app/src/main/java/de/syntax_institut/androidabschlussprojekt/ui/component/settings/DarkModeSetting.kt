@@ -10,6 +10,13 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import de.syntax_institut.androidabschlussprojekt.R
 
+/**
+ * Einstellungsoption für den Dark Mode, inklusive Schalter zur Aktivierung/Deaktivierung.
+ *
+ * @param darkMode Gibt an, ob der Dark Mode aktuell aktiviert ist.
+ * @param onToggle Wird aufgerufen, wenn der Nutzer den Schalter betätigt.
+ * @param icon Optionales Symbol, das angezeigt wird (Standard: Werkzeugsymbol).
+ */
 @Composable
 fun DarkModeSetting(
     darkMode: Boolean,

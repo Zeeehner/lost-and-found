@@ -20,6 +20,12 @@ import androidx.compose.ui.unit.dp
 import de.syntax_institut.androidabschlussprojekt.ui.viewmodel.AuthViewModel
 import de.syntax_institut.androidabschlussprojekt.R
 
+/**
+ * Zeigt Benutzerinformationen wie Name, E-Mail, Telefonnummer und aktuelle Stadt an.
+ *
+ * @param authViewModel ViewModel zur Authentifizierung und Benutzerdatenverwaltung
+ * @param cityName Der Name der Stadt, sofern bekannt
+ */
 @Composable
 fun ProfileSection(authViewModel: AuthViewModel, cityName: String?) {
     LaunchedEffect(Unit) {
@@ -75,7 +81,7 @@ fun ProfileSection(authViewModel: AuthViewModel, cityName: String?) {
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
 
-                if (!phoneNumber.isNullOrEmpty()) {
+                phoneNumber?.takeIf { it.isNotBlank() }?.let {
                     Spacer(modifier = Modifier.height(8.dp))
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Icon(
@@ -86,14 +92,14 @@ fun ProfileSection(authViewModel: AuthViewModel, cityName: String?) {
                         )
                         Spacer(modifier = Modifier.width(4.dp))
                         Text(
-                            text = phoneNumber ?: "",
+                            text = it,
                             style = MaterialTheme.typography.bodyMedium,
                             color = MaterialTheme.colorScheme.secondary
                         )
                     }
                 }
 
-                if (!cityName.isNullOrEmpty()) {
+                cityName?.takeIf { it.isNotBlank() }?.let {
                     Spacer(modifier = Modifier.height(8.dp))
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Icon(
@@ -104,7 +110,7 @@ fun ProfileSection(authViewModel: AuthViewModel, cityName: String?) {
                         )
                         Spacer(modifier = Modifier.width(4.dp))
                         Text(
-                            text = cityName,
+                            text = it,
                             style = MaterialTheme.typography.bodyMedium,
                             color = MaterialTheme.colorScheme.secondary
                         )

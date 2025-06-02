@@ -13,6 +13,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import de.syntax_institut.androidabschlussprojekt.R
 
+/**
+ * Button zum Ausloggen, dargestellt mit Icon und Text.
+ *
+ * @param onClick Callback, das beim Klick auf den Button ausgeführt wird.
+ * @param modifier Optionaler Modifier für das äußere Layout.
+ */
 @Composable
 fun LogoutButton(
     onClick: () -> Unit,
@@ -24,13 +30,12 @@ fun LogoutButton(
             .fillMaxWidth()
             .padding(horizontal = 16.dp, vertical = 8.dp)
             .shadow(4.dp, RoundedCornerShape(8.dp)),
-        shape = RoundedCornerShape(8.dp),
-
-        ) {
+        shape = RoundedCornerShape(8.dp)
+    ) {
         Icon(
-            Icons.Default.Lock,
-            contentDescription = null,
-            modifier = Modifier.padding(end = 4.dp)
+            imageVector = Icons.Default.Lock,
+            contentDescription = stringResource(R.string.logout),
+            modifier = Modifier.size(20.dp)
         )
         Spacer(modifier = Modifier.width(8.dp))
         Text(
