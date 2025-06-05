@@ -49,8 +49,8 @@ val appModule = module {
     single { PrivateChatRepository() }
 
     // --- SettingsScreen ---
-    viewModel { SettingsViewModel(get(), get(), get()) }
-    single { SettingsRepository() }
+    viewModel { SettingsViewModel(get(), get(), get(), get()) }
+    single { SettingsRepository(get()) }
     single { LocationRepository() }
     single { PreferencesRepository(get()) }
 

@@ -4,14 +4,17 @@ import android.Manifest
 import android.content.Context
 import android.location.Location
 import androidx.annotation.RequiresPermission
+import de.syntax_institut.androidabschlussprojekt.data.local.dao.SettingsDao
+import de.syntax_institut.androidabschlussprojekt.data.local.entity.SettingsEntity
 import de.syntax_institut.androidabschlussprojekt.ui.util.LocationUtils
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlin.coroutines.resume
 
 /**
  * Repository für die Einstellungen, insbesondere Standort- und Benachrichtigungsfunktionen.
  */
-class SettingsRepository {
+class SettingsRepository(private val settingsDao: SettingsDao) {
 
     private val lostItemRepository = LostItemRepository()
 
@@ -40,6 +43,11 @@ class SettingsRepository {
 
         return location to cityName
     }
+
+    /**
+     * Speichert die aktuellen Einstellungen in der Datenbank.
+     */
+    fun observeSettings(): Flow<SettingsEntity?> = settingsDao.observeSettings()
 
     /**
      * Platzhalter für das Speichern der Benachrichtigungs-Einstellung.

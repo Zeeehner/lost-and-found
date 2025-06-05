@@ -2,6 +2,7 @@ package de.syntax_institut.androidabschlussprojekt.data.local.dao
 
 import androidx.room.*
 import de.syntax_institut.androidabschlussprojekt.data.local.entity.SettingsEntity
+import kotlinx.coroutines.flow.Flow
 
 /**
  * Data Access Object (DAO) für den Zugriff auf die Einstellungen in der lokalen Room-Datenbank.
@@ -14,6 +15,10 @@ interface SettingsDao {
      *
      * @return [SettingsEntity] mit den aktuellen Einstellungen oder `null`, wenn keine gespeichert sind.
      */
+    @Query("SELECT * FROM settings WHERE id = 1")
+    fun observeSettings(): Flow<SettingsEntity?>
+
+
     @Query("SELECT * FROM settings WHERE id = 1")
     suspend fun getSettings(): SettingsEntity?
 

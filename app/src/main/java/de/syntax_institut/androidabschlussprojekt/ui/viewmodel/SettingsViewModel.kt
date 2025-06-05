@@ -12,6 +12,7 @@ import de.syntax_institut.androidabschlussprojekt.repository.PreferencesReposito
 import de.syntax_institut.androidabschlussprojekt.ui.util.PermissionUtils
 import de.syntax_institut.androidabschlussprojekt.ui.util.SettingsUiState
 import de.syntax_institut.androidabschlussprojekt.R
+import de.syntax_institut.androidabschlussprojekt.repository.SettingsRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
@@ -25,20 +26,30 @@ import kotlinx.coroutines.launch
  * @property authViewModel Authentifizierungs-ViewModel für Logout.
  * @property locationRepository Repository für Standortdaten.
  * @property preferencesRepository Repository für lokale Einstellungen.
+ * @property settingsRepository Repository für globale Einstellungen.
  */
 class SettingsViewModel(
     internal val authViewModel: AuthViewModel,
     private val locationRepository: LocationRepository,
-    private val preferencesRepository: PreferencesRepository
+    private val preferencesRepository: PreferencesRepository,
+    private val settingsRepository: SettingsRepository,
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(SettingsUiState())
     /** UI-Zustand der Einstellungen als StateFlow */
     val uiState: StateFlow<SettingsUiState> = _uiState
 
+
+    /**
+     * Initialisiert den Dark Mode aus den Einstellungen.
+     */
     init {
-        // Dark Mode direkt beim Start laden
-        loadDarkMode()
+        viewModelScope.launch {
+            settingsRepository.observeSettings().collect { entity ->
+                val darkMode = entity?.darkMode ?: false
+                _uiState.update { it.copy(darkMode = darkMode) }
+            }
+        }
     }
 
     /**

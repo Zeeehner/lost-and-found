@@ -253,6 +253,7 @@ fun AppTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     content: @Composable () -> Unit
 ) {
+    println("🌗 AppTheme: darkTheme = $darkTheme")
     val colorScheme = if (darkTheme) darkScheme else lightScheme
     MaterialTheme(
         colorScheme = colorScheme,
