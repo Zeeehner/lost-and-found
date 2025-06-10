@@ -27,6 +27,8 @@ import de.syntax_institut.androidabschlussprojekt.data.local.model.ChatPartner
 import de.syntax_institut.androidabschlussprojekt.data.local.model.PrivateChatMessage
 import de.syntax_institut.androidabschlussprojekt.ui.component.chat.PrivateMessageBubble
 import de.syntax_institut.androidabschlussprojekt.ui.viewmodel.PrivateChatViewModel
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 
 /**
@@ -54,6 +56,10 @@ fun PrivateChatDetailScreen(
     var input by remember { mutableStateOf("") }
     val listState = rememberLazyListState()
     val lastSeen by viewModel.partnerLastSeen.collectAsState()
+
+    // Debounce Mechanismus für den Zurück-Button
+    val coroutineScope = rememberCoroutineScope()
+    var backPressedOnce by remember { mutableStateOf(false) }
 
     // Formatierung des Zeitpunkts "zuletzt online"
     val lastSeenFormatted = remember(lastSeen) {
@@ -105,8 +111,18 @@ fun PrivateChatDetailScreen(
                         .padding(horizontal = 8.dp, vertical = 12.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
+                    // Debounce Mechanismus
                     IconButton(
-                        onClick = onBackPressed,
+                        onClick = {
+                            if (!backPressedOnce) {
+                                backPressedOnce = true
+                                onBackPressed()
+                                coroutineScope.launch {
+                                    kotlinx.coroutines.delay(1000)
+                                    backPressedOnce = false
+                                }
+                            }
+                        },
                         modifier = Modifier.size(40.dp)
                     ) {
                         Icon(

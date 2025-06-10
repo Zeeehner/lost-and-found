@@ -25,6 +25,8 @@ import de.syntax_institut.androidabschlussprojekt.AdMobBanner
 import de.syntax_institut.androidabschlussprojekt.R
 import de.syntax_institut.androidabschlussprojekt.ui.viewmodel.AuthViewModel
 import de.syntax_institut.androidabschlussprojekt.ui.viewmodel.CreateViewModel
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 
 /**
@@ -54,6 +56,10 @@ fun ItemCreateContent(
     val success by viewModel.success.collectAsState()
 
     val scrollState = rememberScrollState()
+
+    // Debounce Mechanismus für den Back-Button
+    val coroutineScope = rememberCoroutineScope()
+    var backPressedOnce by remember { mutableStateOf(false) }
 
     val imagePickerLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent()
@@ -86,7 +92,17 @@ fun ItemCreateContent(
             TopAppBar(
                 title = { Text(stringResource(R.string.create_entry)) },
                 navigationIcon = {
-                    IconButton(onClick = { navController.popBackStack() }) {
+                    // Debounce Mechanismus
+                    IconButton(onClick = {
+                        if (!backPressedOnce) {
+                            backPressedOnce = true
+                            navController.popBackStack()
+                            coroutineScope.launch {
+                                kotlinx.coroutines.delay(1000)
+                                backPressedOnce = false
+                            }
+                        }
+                    }) {
                         Icon(
                             imageVector = Icons.Default.ArrowBack,
                             contentDescription = stringResource(R.string.back)
