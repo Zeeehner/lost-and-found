@@ -1,5 +1,7 @@
 package de.syntax_institut.androidabschlussprojekt.ui.component.create
 
+import android.Manifest
+import androidx.activity.result.ActivityResultLauncher
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
@@ -13,9 +15,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import de.syntax_institut.androidabschlussprojekt.R
+import de.syntax_institut.androidabschlussprojekt.ui.util.PermissionUtils
 import de.syntax_institut.androidabschlussprojekt.ui.viewmodel.CreateViewModel
+import de.syntax_institut.androidabschlussprojekt.ui.viewmodel.SettingsViewModel
 import org.koin.androidx.compose.koinViewModel
 
 /**
@@ -34,6 +37,8 @@ import org.koin.androidx.compose.koinViewModel
  * @param onToggleDetails Aktion zum Ein-/Ausklappen der Detailfelder.
  * @param onAutoLocate Aktion zur automatischen Standortermittlung.
  * @param viewModel Das zugehörige [CreateViewModel] (standardmäßig per Compose bereitgestellt).
+ * @param requestLocationPermissionsLauncher Launcher zur Berechtigungsabfrage.
+ * @param settingsViewModel Das zugehörige [SettingsViewModel] (standardmäßig per Compose bereitgestellt).
  */
 @Composable
 fun ItemLocationSection(
@@ -46,8 +51,11 @@ fun ItemLocationSection(
     showDetails: Boolean,
     onToggleDetails: () -> Unit,
     onAutoLocate: () -> Unit,
-    viewModel: CreateViewModel = koinViewModel()
+    requestLocationPermissionsLauncher: ActivityResultLauncher<Array<String>>,
+    viewModel: CreateViewModel = koinViewModel(),
+    settingsViewModel: SettingsViewModel = koinViewModel()
 ) {
+
     val context = LocalContext.current
     val formState by viewModel.formState.collectAsState()
 
@@ -104,9 +112,32 @@ fun ItemLocationSection(
                     ) {
                         Text(stringResource(R.string.set_coordinates_automatically))
                     }
-
+                    // Button zur automatischen Standortbestimmung
                     Button(
-                        onClick = { viewModel.fetchCurrentLocation(context) },
+                        onClick = {
+                            PermissionUtils.handleActionWithPermissions(
+                                context = context,
+                                requestMultiplePermissionLauncher = requestLocationPermissionsLauncher,
+                                permissions = listOf(
+                                    Manifest.permission.ACCESS_COARSE_LOCATION,
+                                    Manifest.permission.ACCESS_FINE_LOCATION
+                                ),
+                                action = @androidx.annotation.RequiresPermission(
+                                    allOf = [
+                                        Manifest.permission.ACCESS_FINE_LOCATION,
+                                        Manifest.permission.ACCESS_COARSE_LOCATION
+                                    ]
+                                ) {
+                                    viewModel.fetchCurrentLocation(context)
+                                },
+                                showRationale = {
+                                    settingsViewModel.updatePermissionStatus(
+                                        context = context,
+                                        statusResId = R.string.location_permission_needed
+                                    )
+                                }
+                            )
+                        },
                         modifier = Modifier.fillMaxWidth()
                     ) {
                         Text(stringResource(R.string.set_location_automatically))

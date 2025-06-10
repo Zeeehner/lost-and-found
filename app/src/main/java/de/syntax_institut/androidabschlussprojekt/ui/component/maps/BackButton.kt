@@ -4,20 +4,19 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material3.FilledIconButton
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButtonDefaults
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.runtime.Composable
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 /**
- * Ein runder Zurück-Button für Kartenansichten.
+ * Ein runder Zurück-Button mit Debounce-Schutz für Kartenansichten.
  *
- * Wird verwendet, um zur vorherigen Seite im Navigations-Stack zurückzukehren.
+ * Verhindert versehentliches mehrfaches Poppen des BackStacks.
  *
  * @param navController Der NavController zur Navigation.
  * @param modifier Optionaler Modifier zur weiteren Anpassung.
@@ -27,8 +26,23 @@ fun BackButton(
     navController: NavController,
     modifier: Modifier = Modifier
 ) {
+    // Debounce Mechanismus für den Back-Button
+    val coroutineScope = rememberCoroutineScope()
+    var backPressedOnce by remember { mutableStateOf(false) }
+
     FilledIconButton(
-        onClick = { navController.popBackStack() },
+        onClick = {
+            if (!backPressedOnce) {
+                backPressedOnce = true
+                if (navController.previousBackStackEntry != null) {
+                    navController.popBackStack()
+                }
+                coroutineScope.launch {
+                    delay(1000)
+                    backPressedOnce = false
+                }
+            }
+        },
         modifier = modifier.shadow(4.dp, CircleShape),
         shape = CircleShape,
         colors = IconButtonDefaults.filledIconButtonColors(

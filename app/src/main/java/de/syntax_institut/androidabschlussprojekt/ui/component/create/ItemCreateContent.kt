@@ -25,6 +25,10 @@ import de.syntax_institut.androidabschlussprojekt.AdMobBanner
 import de.syntax_institut.androidabschlussprojekt.R
 import de.syntax_institut.androidabschlussprojekt.ui.viewmodel.AuthViewModel
 import de.syntax_institut.androidabschlussprojekt.ui.viewmodel.CreateViewModel
+import de.syntax_institut.androidabschlussprojekt.ui.viewmodel.SettingsViewModel
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 
 /**
@@ -42,11 +46,33 @@ import org.koin.androidx.compose.koinViewModel
 fun ItemCreateContent(
     navController: NavController,
     authViewModel: AuthViewModel = koinViewModel(),
-    viewModel: CreateViewModel = koinViewModel()
+    viewModel: CreateViewModel = koinViewModel(),
+    settingsViewModel: SettingsViewModel = koinViewModel()
 ) {
     val context = LocalContext.current
     val currentUserName =
         authViewModel.getCurrentUserName() ?: stringResource(R.string.anonymous_user)
+
+    // Anzeige des Rationale für Standortberechtigungen
+    var showLocationRationale by remember { mutableStateOf(false) }
+
+    // Aktion zur Aktualisierung des Standorts
+    val locationAction: () -> Unit = @androidx.annotation.RequiresPermission(allOf = [android.Manifest.permission.ACCESS_FINE_LOCATION, android.Manifest.permission.ACCESS_COARSE_LOCATION]) {
+        settingsViewModel.updateLocation(context)
+    }
+
+    // Launcher für Standortberechtigungen
+    val requestLocationPermissionsLauncher = rememberLauncherForActivityResult(
+        ActivityResultContracts.RequestMultiplePermissions()
+    ) { permissions: Map<String, Boolean> ->
+        if (permissions.values.all { it }) {
+            settingsViewModel.updatePermissionStatus(context, R.string.permission_granted)
+            locationAction()
+        } else {
+            settingsViewModel.updatePermissionStatus(context, R.string.permission_denied)
+            showLocationRationale = true
+        }
+    }
 
     val formState by viewModel.formState.collectAsState()
     val bitmap by viewModel.bitmap.collectAsState()
@@ -54,6 +80,10 @@ fun ItemCreateContent(
     val success by viewModel.success.collectAsState()
 
     val scrollState = rememberScrollState()
+
+    // Debounce Mechanismus für den Back-Button
+    val coroutineScope = rememberCoroutineScope()
+    var backPressedOnce by remember { mutableStateOf(false) }
 
     val imagePickerLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent()
@@ -86,7 +116,17 @@ fun ItemCreateContent(
             TopAppBar(
                 title = { Text(stringResource(R.string.create_entry)) },
                 navigationIcon = {
-                    IconButton(onClick = { navController.popBackStack() }) {
+                    // Debounce Mechanismus
+                    IconButton(onClick = {
+                        if (!backPressedOnce) {
+                            backPressedOnce = true
+                            navController.popBackStack()
+                            coroutineScope.launch {
+                                delay(1000)
+                                backPressedOnce = false
+                            }
+                        }
+                    }) {
                         Icon(
                             imageVector = Icons.Default.ArrowBack,
                             contentDescription = stringResource(R.string.back)
@@ -135,7 +175,10 @@ fun ItemCreateContent(
                     onLongChange = { viewModel.updateField { copy(longitude = it) } },
                     showDetails = formState.showLocationDetails,
                     onToggleDetails = { viewModel.toggleLocationDetails() },
-                    onAutoLocate = { viewModel.fetchCurrentLocation(context) }
+                    onAutoLocate = { viewModel.fetchCurrentLocation(context) },
+                    requestLocationPermissionsLauncher = requestLocationPermissionsLauncher,
+                    viewModel = viewModel,
+                    settingsViewModel = settingsViewModel
                 )
 
                 Button(
