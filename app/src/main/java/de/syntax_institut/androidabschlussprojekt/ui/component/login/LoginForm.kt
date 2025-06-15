@@ -16,6 +16,7 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.*
 import androidx.compose.ui.unit.dp
@@ -100,18 +101,34 @@ fun LoginForm(authViewModel: AuthViewModel, isLoading: Boolean) {
                     isPasswordError = false
                 },
                 label = { Text(stringResource(R.string.password)) },
-                leadingIcon = { Icon(Icons.Default.PlayArrow, contentDescription = null) },
+                leadingIcon = {
+                    Icon(
+                        imageVector = Icons.Default.Lock,
+                        contentDescription = null
+                    )
+                },
                 trailingIcon = {
                     IconButton(onClick = { passwordVisible = !passwordVisible }) {
                         Icon(
-                            imageVector = if (passwordVisible) Icons.Default.Close else Icons.Default.Lock,
-                            contentDescription = null
+                            painter = painterResource(
+                                id = if (passwordVisible)
+                                    R.drawable.eye
+                                else
+                                    R.drawable.eye_slash
+                            ),
+                            contentDescription = if (passwordVisible)
+                                "Hide Password"
+                            else
+                                "Show Password"
                         )
                     }
                 },
                 visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
                 isError = isPasswordError,
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password, imeAction = ImeAction.Done),
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Password,
+                    imeAction = ImeAction.Done
+                ),
                 keyboardActions = KeyboardActions(onDone = {
                     keyboardController?.hide()
                     focusManager.clearFocus()
@@ -127,6 +144,7 @@ fun LoginForm(authViewModel: AuthViewModel, isLoading: Boolean) {
                     .focusRequester(passwordFocusRequester),
                 singleLine = true
             )
+
 
             Spacer(modifier = Modifier.height(MaterialTheme.spacing.large))
 
