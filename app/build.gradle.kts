@@ -42,6 +42,17 @@ android {
 
         // BuildConfig field to expose AdMob Ad Unit ID to the app code
         buildConfigField("String", "AdKey", "\"$adKey\"")
+
+        // Read Google Maps API key from local.properties
+        val mapsKey: String = localProperties.getProperty("MAPS_API_KEY")
+            ?: throw GradleException("MAPS_API_KEY not found in local.properties")
+
+        manifestPlaceholders["MAPS_API_KEY"] = mapsKey
+
+        val admobAppId: String = localProperties.getProperty("ADMOB_APP_ID")
+            ?: throw GradleException("ADMOB_APP_ID not found in local.properties")
+
+        manifestPlaceholders["ADMOB_APP_ID"] = admobAppId
     }
 
     buildTypes {

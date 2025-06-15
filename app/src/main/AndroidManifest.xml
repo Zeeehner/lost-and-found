@@ -34,12 +34,12 @@
         <!-- Google AdMob App-ID -->
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
-            android:value="ca-app-pub-8139090832536639~3598412735"/>
+            android:value="${ADMOB_APP_ID}" />
 
         <!-- Google Maps API Key -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyDa91e0UYipsHmjf7DYRKKmpw4IEKbMdMo" />
+            android:value="${MAPS_API_KEY}"/>
 
         <activity
             android:name=".MainActivity"
