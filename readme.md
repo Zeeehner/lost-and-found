@@ -1,33 +1,39 @@
-# Lost & Found – "Finde, was verloren ging."
+# Lost & Found – *Find what’s been lost.*
 
-**Du hast etwas verloren oder gefunden? Unsere App verbindet Menschen, um verlorene Dinge wiederzufinden. Schnell, lokal und anonym.**
+**Lost something or found an item? Our app connects people to help reunite lost belongings – quickly, locally, and anonymously.**
 
-**Lost & Found** ist eine schlanke Android-App, mit der du Gegenstände als *verloren* oder *gefunden* melden kannst. Du lädst ein Foto hoch, beschreibst den Gegenstand, gibst den Fund-/Verlustort an und hilfst damit anderen, ihre Sachen wiederzufinden.
+**Lost & Found** is a streamlined Android app that lets users report lost or found items. Upload a photo, describe the object, set the location and time, and help others reclaim what’s theirs.
 
-### 🎯 Für wen?
-Für ehrliche Finder:innen, verzweifelte Verlierer:innen – und alle, die gern helfen.
+---
 
-### ❓ Was macht die App besonders?
-- 💬 Klare Fokussierung – Werbung hilft, die App kostenlos und verfügbar zu halten
-- 📍 Standortbasiert & visuell – einfach melden, einfach finden  
-- 🔐 Sicherer Login via Firebase  
-- 🎨 Intuitive Bedienung dank moderner Architektur und sauberem Design
+### 🎯 Who is it for?
+
+For honest finders, desperate searchers – and everyone who wants to help.
+
+---
+
+### ❓ What makes it special?
+
+- 💬 Ad-supported model keeps the app free and available  
+- 📍 Location-based & visual reporting – fast, intuitive, clear  
+- 🔐 Secure Firebase login  
+- 🎨 Built with clean architecture and modern UI patterns
 
 ---
 
 ## 📲 Features
 
--  📸 Gegenstand melden (Foto, Beschreibung, Standort, Zeit)
--  🔐 Login / Registrierung via Firebase
--  📍 Standortabfrage (GPS oder manuelle Eingabe)
--  🗂️ Liste mit Filter (Verloren / Gefunden / Zeit)
--  🧭 Navigation (Login → Dashboard → Details → Neue Meldung)
--  💾 Datenspeicherung in Firestore
--  🔎 API-Integration: Reverse-Geocoding (Ort aus Koordinaten)
--  🛡️ Fehlerhandling bei Login, Upload & Netzwerk
--  🧪 Testdaten, um die App zu demonstrieren
--  🗨️ Kommentare unter Meldungen
--  🌐 Mehrsprachigkeit (DE/EN)
+- 📸 Report lost/found items (photo, description, location, time)  
+- 🔐 Firebase-based login and registration  
+- 📍 Location detection (via GPS or manual entry)  
+- 🗂️ Filterable item list (Lost / Found / Date)  
+- 🧭 App navigation: Login → Dashboard → Details → New Report  
+- 💾 Cloud-based Firestore storage  
+- 🔎 Reverse geocoding via external API (e.g., OpenCage)  
+- 🛡️ Error handling (auth, upload, network)  
+- 🧪 Built-in test data for demo purposes  
+- 🗨️ Commenting under posts  
+- 🌐 Multilingual support (DE/EN)
 
 ---
 
@@ -43,40 +49,43 @@ Für ehrliche Finder:innen, verzweifelte Verlierer:innen – und alle, die gern 
 
 ---
 
-## 🛠 Technischer Aufbau
+## 🛠 Technical Overview
 
-### 🧱 Projektstruktur & Architektur
-Die App folgt dem **MVVM-Pattern** mit **Repository Layer**, um eine saubere Trennung von Logik, UI und Datenzugriff zu gewährleisten.  
-Die Navigation erfolgt mit der Jetpack Navigation Component, und UI-Elemente sind in wiederverwendbare **Komponenten** ausgelagert.
+### 🧱 Architecture
 
-### 💾 Datenspeicherung
-Die App nutzt **Firebase Firestore** zur Speicherung von Meldungen und **Firebase Auth** für sichere Nutzeranmeldung.  
-Gründe für die Wahl:
-- Cloudbasiert & skalierbar
-- Echtzeit-Updates
-- Offline-Support mit automatischer Synchronisierung
+The app follows the **MVVM** pattern with a **Repository Layer** to separate UI, business logic, and data handling.  
+Navigation is implemented using Jetpack Navigation; UI is broken into reusable **components** (Composables).
 
-### 🌐 API Calls
-Für Standortdaten wird eine Reverse-Geocoding-API (z. B. **OpenCage Geocoder**) verwendet.  
-Die Anbindung erfolgt über **Retrofit** und **Moshi** für JSON-Verarbeitung.
+### 💾 Data Storage
 
-### 📦 Verwendete Libraries
+Uses **Firebase Firestore** for item reports and **Firebase Auth** for user login.  
+Chosen for:
+- Cloud scalability  
+- Realtime updates  
+- Offline support with auto-sync
+
+### 🌐 API Integration
+
+Location names are resolved using a reverse geocoding API (e.g., **OpenCage**), accessed via **Retrofit** and parsed with **Moshi**.
+
+### 📦 Tech Stack
+
 - 🔥 Firebase Auth & Firestore  
 - 📡 Retrofit & Moshi  
 - 📍 Google Maps / Location Services  
 - 🧭 Jetpack Navigation  
-- 🧪 ggf. Room für spätere lokale Speicherung
+- 🧪 *(Planned)* Room for local persistence
 
 ---
 
-## 🔮 Ausblick – Geplante Erweiterungen
+## 🔮 Roadmap
 
-✨ Die Basis steht – aber Lost & Found soll weiter wachsen. Hier ein Blick in die Zukunft:
+✨ The foundation is set – future enhancements planned:
 
-- 🚨 **Push-Benachrichtigungen**: Lass dich benachrichtigen, wenn ein passender Fund in deiner Nähe gemeldet wird.
-- 🗺️ **Kartendarstellung**: Alle Meldungen direkt auf einer Map anzeigen – visuelle Suche wird einfacher.
-- 🛡️ **Admin-Modus**: Unangemessene oder doppelte Inhalte moderieren.
-- 🧑‍🤝‍🧑 **Mehr Interaktion**: Bewertungen, Nachrichten oder Dankes-Funktion.
-- 🌓 **Dark Mode**: Für angenehmes Browsen auch nachts.
-- 📱 **iOS-Port (Kotlin Multiplatform)**: Damit niemand ausgeschlossen ist.
-- 🌐 **Internationalisierung (DE/EN/...)**: Damit auch Touristen verlorene Dinge melden können.
+- 🚨 Push notifications for nearby matches  
+- 🗺️ Map view to browse all reports visually  
+- 🛡️ Admin mode for content moderation  
+- 🧑‍🤝‍🧑 Social features (thank-you notes, messaging, rating)  
+- 🌙 Dark Mode  
+- 📱 iOS version (Kotlin Multiplatform)  
+- 🌐 Full internationalization (DE/EN/...)
